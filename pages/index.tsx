@@ -37,7 +37,7 @@ const Content = ({
 }:ContentProps) => {
 
   return ([
-    <div key={0} className={styles.main} onClick={(e) => taskManager.anyclick()}>
+    <div key={0} className={styles.main} onClick={() => taskManager.anyclick()}>
       <Desktop shortCuts={shortCuts} taskManager={taskManager}></Desktop>
       <WindowManager taskManager={taskManager}></WindowManager>
     </div>,
