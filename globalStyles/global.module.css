@@ -1,0 +1,102 @@
+.screenArea {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: "Ubuntu Titling Rg", "sans-serif";
+  background-color: var(--background);
+  color: var(--black);
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 10000;
+  position: relative;
+}
+.loading{
+  background-color: var(--black);
+}
+
+.error{
+  color: var(--red);
+  font-size: 30px;
+}
+
+.hidden{
+  display: none;
+}
+
+.shutDownNow, .shutDown{
+  cursor: none;
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  z-index: 200000000;
+  .topshutter, .bottomshutter{
+    background-color: black;
+    position: absolute;
+    height: 0;
+    width: 100%;
+    overflow: hidden;
+  }
+  .topshutter{
+    top: 0;
+    .shutterline{
+      bottom: 0;
+    }
+  }
+  .bottomshutter{
+    bottom: 0;
+    .shutterline{
+      top: 0;
+    }
+  }
+  .shutterline {
+    position: absolute;
+    height: 1px;
+    width: 100%;
+    left: 0;
+    background-color: white;
+  }
+
+}
+
+.shutDownNow{
+  .topshutter, .bottomshutter{
+    animation: shutShutters 0.3s 0s linear forwards 1;
+  }
+  .shutterline {
+    animation: shutShutterline 0.2s 0.3s linear forwards 1;
+  }
+  .shutDownBye{
+    display: none;
+  }
+}
+@keyframes shutShutters {
+  to {height: 50%}
+}
+@keyframes shutShutterline {
+  to {width: 0; left: 50%}
+}
+
+.shutDown{
+  .topshutter, .bottomshutter{
+    animation: shutShutters 0.3s 5s linear forwards 1;
+  }
+  .shutterline {
+    animation: shutShutterline 0.2s 5.3s linear forwards 1;
+  }
+  .shutDownBye{
+    animation: growFromLeft 0.5s 0s ease-in-out forwards 1;
+    background-color: var(--red-dark);
+    color: var(--white);
+    font-size: 72px;
+    line-height: 100vh;
+    text-align: center;
+    overflow: hidden;
+  }
+}
+@keyframes growFromLeft {
+  from {width: 0}
+  to {width: 100%}
+}

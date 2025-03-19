@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="31.4mm"
+   height="31.4mm"
+   viewBox="0 0 31.399999 31.399999"
+   version="1.1"
+   id="svg94230"
+   sodipodi:docname="maximize.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview190"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="4.7785068"
+     inkscape:cx="64.978457"
+     inkscape:cy="49.806353"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1-2" />
+  <defs
+     id="defs94227">
+    <rect
+       x="197.28707"
+       y="28.839354"
+       width="188.79495"
+       height="205.76654"
+       id="rect108830" />
+    <rect
+       x="197.28706"
+       y="28.839354"
+       width="188.79495"
+       height="205.76654"
+       id="rect108830-3" />
+    <rect
+       x="197.28706"
+       y="28.839354"
+       width="188.79495"
+       height="205.76654"
+       id="rect108830-6" />
+  </defs>
+  <g
+     id="layer1-2"
+     transform="rotate(90,15.022575,15.722574)">
+    <path
+       id="rect29306-1"
+       style="fill:none;stroke:#08150e;stroke-width:1.4;stroke-linejoin:round;stroke-miterlimit:3.5;stroke-dashoffset:11.2252"
+       d="M 2.3470769,2.3922219 H 27.652922 V 27.698073 H 2.3470769 Z"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       id="rect29306-0-2"
+       style="fill:#2d503f;stroke:#08150e;stroke-width:0.3;stroke-linejoin:round;stroke-miterlimit:3.5;stroke-dashoffset:11.2252;fill-opacity:1"
+       d="M 2.3470769,2.3922219 H 27.652922 V 27.698073 H 2.3470769 Z"
+       sodipodi:nodetypes="ccccc" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,-1.5971411,11.952926)"
+       id="text108828-7"
+       style="font-size:96px;line-height:1;font-family:'Ubuntu Titling';-inkscape-font-specification:'Ubuntu Titling, Normal';white-space:pre;shape-inside:url(#rect108830-6);display:inline;fill:#5d33b9;stroke:#08150e;stroke-width:5.29134;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:3.5;stroke-dashoffset:11.2252;paint-order:stroke markers fill" />
+  </g>
+  <g
+     id="layer1-6"
+     transform="translate(0.69999908,-22.036065)">
+    <g
+       id="g36713-7"
+       transform="matrix(0.93800494,0,0,0.93800494,-189.77244,-12.254282)"
+       style="stroke-width:1.06609">
+      <rect
+         style="opacity:1;fill:none;fill-opacity:1;stroke:#08150e;stroke-width:1.49253;stroke-linejoin:round;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:11.2252;stroke-opacity:1;paint-order:normal"
+         id="rect29306-5"
+         width="26.978374"
+         height="2.78776"
+         x="204.81717"
+         y="39.805145" />
+      <rect
+         style="fill:#3493be;fill-opacity:1;stroke:#08150e;stroke-width:0.319828;stroke-linejoin:round;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:11.2252;stroke-opacity:1;paint-order:normal"
+         id="rect29306-0-3"
+         width="26.978374"
+         height="2.7877595"
+         x="204.81717"
+         y="39.805145" />
+      <text
+         xml:space="preserve"
+         transform="matrix(0.2820703,0,0,0.2820703,201.5687,12.317933)"
+         id="text108828-5"
+         style="font-size:96px;line-height:1;font-family:'Ubuntu Titling';-inkscape-font-specification:'Ubuntu Titling, Normal';white-space:pre;shape-inside:url(#rect108830-3);display:inline;fill:#5d33b9;stroke:#08150e;stroke-width:5.29134;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:3.5;stroke-dashoffset:11.2252;paint-order:stroke markers fill" />
+    </g>
+  </g>
+</svg>

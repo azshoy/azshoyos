@@ -1,0 +1,153 @@
+
+.taskBar{
+    height: var(--bar-height);
+    background-color: var(--task-bar);
+    border-top: var(--task-bar-light) 2px solid;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 3px;
+    gap: 8px;
+    z-index: 100000000;
+}
+
+.startHolder{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap:0;
+    justify-content: center;
+
+}
+.tasks{
+    gap: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+    flex-grow: 10000;
+}
+
+.taskBarButton{
+    height: 90%;
+    border-top: var(--task-bar-light) 2px solid;
+    border-left: var(--task-bar-light) 2px solid;
+    border-bottom: var(--task-bar-shadow) 2px solid;
+    border-right: var(--task-bar-shadow) 2px solid;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 4px;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+    .icon {
+        height: 100%;
+        max-height: 100%;
+        aspect-ratio: 1;
+        pointer-events: none;
+    }
+    .tittle {
+        font-size: 24px;
+        padding: 4px;
+        pointer-events: none;
+
+    }
+}
+.taskBarButton:not(.startButton){
+    width: 220px;
+    max-width: 220px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.taskBarButton:hover{
+    background-color: var(--task-bar-light);
+    .icon {
+        opacity: 0.8;
+    }
+    .tittle {
+        color: var(--gray-1);
+    }
+}
+.verticalSeparator{
+    height: 80%;
+    width: 2px;
+    background-color: var(--gray-2);
+}
+.horizontalSeparator{
+    width: 80%;
+    height: 2px;
+    margin: 3px auto;
+    background-color: var(--gray-2);
+}
+
+.startMenuHolder{
+    height: 0;
+    width: 0;
+}
+.startMenu{
+    position: absolute;
+    left:8px;
+    bottom:50px;
+    background-color: var(--gray-4);
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+    gap:2px;
+    padding: 2px 2px 6px 2px;
+    border-top: var(--gray-5) 2px solid;
+    border-left: var(--gray-5) 2px solid;
+    border-right: var(--gray-3) 2px solid;
+}
+
+.startMenuHead{
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 4px;
+    gap: 4px;
+    user-select: none;
+    .icon {
+        height: 100%;
+        max-height: 100%;
+        aspect-ratio: 1;
+        pointer-events: none;
+    }
+    .tittle {
+        font-size: 34px;
+        padding: 4px;
+        pointer-events: none;
+        color: var(--gray-2)
+
+    }
+}
+.startMenuButton{
+    height: 50px;
+    border-top: var(--gray-5) 2px solid;
+    border-left: var(--gray-5) 2px solid;
+    border-bottom: var(--gray-3) 2px solid;
+    border-right: var(--gray-3) 2px solid;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 4px;
+    gap: 4px;
+    user-select: none;
+    .icon {
+        height: 100%;
+        max-height: 100%;
+        aspect-ratio: 1;
+        pointer-events: none;
+    }
+    .tittle {
+        font-size: 24px;
+        padding: 4px;
+        pointer-events: none;
+
+    }
+    cursor: pointer;
+}
+.startMenuButton:hover{
+    background-color: var(--gray-3);
+}

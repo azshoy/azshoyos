@@ -1,0 +1,72 @@
+:root {
+
+  --gray-0: #08150e;
+  --gray-1: #13261c;
+  --gray-2: #2d503f;
+  --gray-3: #599275;
+  --gray-4: #a3c8b5;
+  --gray-5: #f2faf6;
+  --black: var(--gray-0);
+  --white: var(--gray-5);
+  --orange: #b85d33;
+  --orange-dark: #5c2e19;
+  --green: #34bc5d;
+  --green-dark: #195c2c;
+  --yellowish: #92bc34;
+  --yellowish-dark: #475c19;
+  --violet: #5d33b9;
+  --violet-dark: #2e195c;
+  --red: #b93390;
+  --red-dark: #5c1947;
+  --blue: #3493be;
+  --blue-dark: #1c485c;
+
+  --background: var(--blue-dark);
+  --window-bar: var(--blue);
+  --window-bar-light: var(--gray-4);
+  --window-bar-shadow: var(--blue-dark);
+  --task-bar: var(--gray-3);
+  --task-bar-light: var(--gray-4);
+  --task-bar-shadow: var(--gray-2);
+
+  --bar-height: 50px;
+  --console-font: "console", "monospace"
+}
+
+@font-face {
+  src: url("UbuntuTitling.ttf");
+  font-family: "basic";
+}
+
+@font-face {
+  src: url("UbuntuMono-Regular.ttf");
+  font-family: "console";
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+
+body {
+  font-family: "basic", "sans-serif";
+  background-color: var(--background);
+  color: var(--black);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+

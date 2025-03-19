@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="31.4mm"
+   height="31.4mm"
+   viewBox="0 0 31.399999 31.399999"
+   version="1.1"
+   id="svg94230"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs94227">
+    <rect
+       x="197.28707"
+       y="28.839354"
+       width="188.79495"
+       height="205.76654"
+       id="rect108830" />
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(0.69999999,0.69999999)">
+    <g
+       id="g36713"
+       transform="matrix(0.93800494,0,0,0.93800494,-189.77244,-12.254282)"
+       style="stroke-width:1.06609">
+      <rect
+         style="opacity:1;fill:none;fill-opacity:1;stroke:#08150e;stroke-width:1.49253;stroke-linejoin:round;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:11.2252;stroke-opacity:1;paint-order:normal"
+         id="rect29306"
+         width="26.978374"
+         height="2.78776"
+         x="204.81717"
+         y="39.805145" />
+      <rect
+         style="fill:#3493be;fill-opacity:1;stroke:#08150e;stroke-width:0.319828;stroke-linejoin:round;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:11.2252;stroke-opacity:1;paint-order:normal"
+         id="rect29306-0"
+         width="26.978374"
+         height="2.7877595"
+         x="204.81717"
+         y="39.805145" />
+      <text
+         xml:space="preserve"
+         transform="matrix(0.2820703,0,0,0.2820703,201.5687,12.317933)"
+         id="text108828"
+         style="font-size:96px;-inkscape-font-specification:'Ubuntu Titling, Normal';font-family:'Ubuntu Titling';line-height:1;stroke-miterlimit:3.5;stroke-dashoffset:11.22523306;fill:#5d33b9;stroke-width:5.29133858;text-orientation:auto;stroke-linecap:round;stroke:#08150e;stroke-linejoin:round;paint-order:stroke markers fill;white-space:pre;shape-inside:url(#rect108830)" />
+    </g>
+  </g>
+</svg>
