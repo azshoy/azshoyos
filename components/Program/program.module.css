@@ -3,12 +3,13 @@
     position: absolute;
     background-color: var(--white);
     pointer-events: bounding-box;
+    max-width: 100vw;
+    max-height: 100vh;
 }
 
 
 
 .slot{
-    --scale: 1;
     position: absolute;
     transform: translate(-50%,-50%);
     display: flex;
@@ -55,7 +56,7 @@
 .tittleBar{
 
     user-select: none;
-    height: var(--bar-height);
+    height: var(--tittle-bar-height);
     border-top: var(--window-bar-light) 2px solid;
     border-left: var(--window-bar-light) 2px solid;
     border-bottom: var(--window-bar-shadow) 2px solid;
@@ -74,9 +75,11 @@
         pointer-events: none;
     }
     .tittle {
-        font-size: 24px;
+        font-size: calc(var(--scale) * 24px);
         padding: 4px;
         flex-grow: 10000;
+        white-space: nowrap;
+        overflow: hidden;
 
     }
     .minimize, .close{
@@ -111,7 +114,7 @@
 
 .program{
     width: 100%;
-    height: calc(100% -  var(--bar-height));
+    height: calc(100% -  var(--tittle-bar-height));
     border-left: var(--gray-3) 2px solid;
     border-bottom: var(--gray-2) 2px solid;
     border-right: var(--gray-2) 2px solid;
@@ -131,8 +134,8 @@
     font-family: var(--console-font);
     display: flex;
     flex-direction: column;
-    font-size: 20px;
-    line-height: 23px;
+    font-size: calc(var(--scale) * 20px);
+    line-height: calc(var(--scale) * 23px);
     border-top: var(--gray-0) 2px solid;
     border-left: var(--gray-0) 2px solid;
     border-bottom: var(--gray-1) 2px solid;
@@ -140,10 +143,10 @@
     overflow-y: scroll;
     overflow-x: hidden;
     .consolez{
-        height: 24px;
-        margin-bottom: -6px;
+        height: calc(var(--scale) * 24px);
+        margin-bottom: calc(var(--scale) * -6px);
         display: inline-block;
-        margin-right: -4px;
+        margin-right: calc(var(--scale) * -4px);
     }
     .inputLine{
         display: flex;
@@ -163,7 +166,7 @@
         border: none;
         font-family: var(--console-font);
 
-        font-size: 20px;
+        font-size: calc(var(--scale) * 20px);
         flex-grow: 10000;
 
 
@@ -178,8 +181,8 @@
 .document{
     display: flex;
     flex-direction: column;
-    font-size: 30px;
-    line-height: 35px;
+    font-size: calc(var(--scale) * 30px);
+    line-height: calc(var(--scale) * 35px);
     border-top: var(--gray-4) 2px solid;
     border-left: var(--gray-4) 2px solid;
     border-bottom: var(--gray-3) 2px solid;

@@ -1,5 +1,6 @@
 :root {
 
+  --scale: 1;
   --gray-0: #08150e;
   --gray-1: #13261c;
   --gray-2: #2d503f;
@@ -30,7 +31,8 @@
   --task-bar-shadow: var(--gray-2);
 
   --bar-height: 50px;
-  --console-font: "console", "monospace"
+  --console-font: "console", "monospace";
+  --tittle-bar-height: calc(var(--scale) * var(--bar-height))
 }
 
 @font-face {

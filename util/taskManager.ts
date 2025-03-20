@@ -27,7 +27,7 @@ export class TaskManager {
     size: new Vector2(),
     slot: new Vector2()
   }
-
+  root: HTMLElement | null = null
 
   constructor(screenArea:HTMLDivElement) {
     this.screenAreaElement = screenArea
@@ -36,8 +36,9 @@ export class TaskManager {
     this.resizeObserver.observe(this.screenAreaElement)
     this.updateSize()
     const s = this.defaultWindowSize
-    this.nextWindowPos.x = this.screenSize.x/2 - s.x/2
-    this.nextWindowPos.y = this.screenSize.y/2 - s.y/2
+    this.nextWindowPos.x = Math.max(0, this.screenSize.x/2 - s.x/2)
+    this.nextWindowPos.y = Math.max(0, this.screenSize.y/2 - s.y/2)
+    this.root = document.querySelector(':root');
 
   }
   updateSize(){
@@ -53,11 +54,15 @@ export class TaskManager {
   }
 
   setGrid(){
-    this.scale = (Math.min(this.screenSize.x, this.screenSize.y) < 800) ? 0.8 : (this.screenSize.x < 2000) ? 1 : 1.6
-    this.grid.size.x = Math.floor(this.screenSize.x / 150*this.scale)
-    this.grid.size.y = Math.floor(this.screenSize.y / 150*this.scale)
+    this.scale = (Math.min(this.screenSize.x, this.screenSize.y) < 600) ? 0.6 : (Math.min(this.screenSize.x, this.screenSize.y) < 800) ? 0.8 : (this.screenSize.x < 2000) ? 1 : 1.6
+    this.grid.size.x = Math.floor(this.screenSize.x / (150*this.scale))
+    this.grid.size.y = Math.floor(this.screenSize.y / (150*this.scale))
     this.grid.slot.x = this.screenSize.x / this.grid.size.x
     this.grid.slot.y = this.screenSize.y / this.grid.size.y
+    console.log(this.scale)
+    console.log(this.grid.size)
+    console.log(this.grid.slot)
+    if (this.root) this.root.style.setProperty('--scale', this.scale.toString())
   }
 
   callUpdate(updateType:Update){
@@ -86,7 +91,7 @@ export class TaskManager {
     return {wid:this.wid, zIndex:this.zIndex, size:this.defaultWindowSize.clone, position: this.nextWindowPos.clone}
   }
   get defaultWindowSize(){
-    return new Vector2(800*this.scale, 600*this.scale)
+    return new Vector2(Math.min(800*this.scale, this.screenSize.x), Math.min(800*this.scale, this.screenSize.y))
   }
 
   setNextValues(){
@@ -96,10 +101,10 @@ export class TaskManager {
     this.nextWindowPos.x += this.screenSize.x*0.05
     this.nextWindowPos.y += this.screenSize.y*0.05
     if (this.nextWindowPos.x + s.x > this.screenSize.x){
-      this.nextWindowPos.x = this.screenSize.x/3 - s.x/2
+      this.nextWindowPos.x = Math.max(0, this.screenSize.x/3 - s.x/2)
     }
     if (this.nextWindowPos.y + s.y > this.screenSize.y){
-      this.nextWindowPos.y = this.screenSize.y/3 - s.y/2
+      this.nextWindowPos.y = Math.max(0, this.screenSize.y/3 - s.y/2)
     }
   }
   createWindow(properties:ProgramProperties, parameters:string[]){
