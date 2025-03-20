@@ -127,7 +127,7 @@ export class Program extends Component<ProgramProps> {
 
   render(){
     return (
-      <div id={"azshwindow" + this.key} key={this.key} className={styles.window} onClick={(e) => this.pop()} style={this.maximized ?
+      <div id={"azshwindow" + this.key} key={this.key} className={styles.window} onClick={() => this.pop()} style={this.maximized ?
       {
         width: 100 + "%",
         height: 100 + "%",

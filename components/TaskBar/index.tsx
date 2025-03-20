@@ -46,7 +46,7 @@ export const StartMenuButton = ({
   taskManager,
 }:startMenuProps) => {
   return (
-      <div className={`${styles.taskBarButton} ${styles.startButton}`} onClick={(e) => taskManager.toggleStartMenu()}>
+      <div className={`${styles.taskBarButton} ${styles.startButton}`} onClick={() => taskManager.toggleStartMenu()}>
         <img src={'/icons/start.svg'} alt={''} className={styles.icon}></img>
         <div className={styles.tittle}>
           MENU
@@ -65,8 +65,8 @@ export const TaskBarButton = ({
   program
 }:TaskBarButtonProps) => {
   return (
-    <div className={styles.taskBarButton} onClick={(e) => program.pop()}>
-      <img src={programProperties.icon} alt={programProperties.description} className={styles.icon}></img>
+    <div className={styles.taskBarButton} onClick={() => program.pop()}>
+      <img src={programProperties.icon} alt={programProperties.description || ""} className={styles.icon}></img>
       <div className={styles.tittle}>
         {programProperties.tittle}
       </div>

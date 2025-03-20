@@ -4,6 +4,7 @@ import {Component, ReactElement} from "react";
 import {CommandHandler} from "@/components/Program/Console/commandHandler";
 
 
+
 export class Console extends  Component<BasicProgramProps> {
   parameters: string[]
   txtId:number = 0
@@ -38,7 +39,7 @@ export class Console extends  Component<BasicProgramProps> {
   doAction(command:string|undefined, param:string[], input:string){
     const output:{success:boolean, output:ReactElement[] | undefined} = command ? this.commandHandler.handleCommand(command, param) : {success:true, output:[]}
     this.lineId += 1
-    this.lines.push(<Line key={this.lineId} text={[this.commandHandler.toTxt(input), <br/>, ...(output.output || [])]} fail={this.latestFailed}/>)
+    this.lines.push(<Line key={this.lineId} text={[this.commandHandler.toTxt(input), <br key={`br-${this.lineId}`}/>, ...(output.output || [])]} fail={this.latestFailed}/>)
     this.latestFailed = !output.success
   }
 
@@ -61,7 +62,7 @@ export class Console extends  Component<BasicProgramProps> {
       <div className={styles.inputLine}>
         <div className={styles.line}>
           <span className={this.latestFailed ? styles.error : ""}>~</span>
-          <img src={'/icons/consolez.svg'} className={styles.consolez} style={{filter: this.latestFailed ? "hue-rotate(-120deg) brightness(70%)" : "none"}}/>
+          <img src={'/icons/consolez.svg'} alt="Console icon" className={styles.consolez} style={{filter: this.latestFailed ? "hue-rotate(-120deg) brightness(70%)" : "none"}}/>
           <span>&nbsp;</span>
         </div>
         <input type={"text"} className={styles.inputArea} onKeyDown={(e) => this.getInput(e)}/>
@@ -90,7 +91,7 @@ export class Line extends Component<LineProps> {
   render() {
     return (
         <div className={styles.line}>
-          <span className={this.fail ? styles.error : ""}>~</span><img src={'/icons/consolez.svg'} className={styles.consolez} style={{filter: this.fail ? "hue-rotate(-120deg) brightness(70%)" : "none"}}/>
+          <span className={this.fail ? styles.error : ""}>~</span><img src={'/icons/consolez.svg'} alt="Console icon" className={styles.consolez} style={{filter: this.fail ? "hue-rotate(-120deg) brightness(70%)" : "none"}}/>
           <span>&nbsp;</span>
           {this.text}
         </div>

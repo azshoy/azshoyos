@@ -46,10 +46,10 @@ export class CommandHandler {
   }
   cHelp(param: string[]):{success: boolean, output: ReactElement[]|undefined} {
     if (param.length == 0) {
-      const clist: ReactElement[] = [this.toTxt("Usage: help <command>"), <br/>, this.toTxt("Try these commands:")]
+      const clist: ReactElement[] = [this.toTxt("Usage: help <command>"), <br key="br-help-1"/>, this.toTxt("Try these commands:")]
       for (let c = 0; c < this.commands.length; c++) {
-        clist.push(<br/>)
-        clist.push(<span>&nbsp;&nbsp;&nbsp;</span>)
+        clist.push(<br key={`br-help-cmd-${c}`}/>)
+        clist.push(<span key={`span-help-cmd-${c}`}>&nbsp;&nbsp;&nbsp;</span>)
         clist.push(this.toTxt(this.commands[c].command))
       }
       return {success: true, output: clist}
