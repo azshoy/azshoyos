@@ -4,6 +4,7 @@ import styles from "./program.module.css";
 import {Vector2} from "@/util/types";
 
 
+
 export type ShortCutProps = {
   properties: ProgramProperties
   parameters: string[]
@@ -76,10 +77,9 @@ export class ShortCut extends Component<ShortCutProps> {
   render(){
     return (
       <div key={this.key} className={styles.slot} style={{left: this.position.x +"px", top: this.position.y +"px", width: this.taskManager.grid.slot.x + "px", height: this.taskManager.grid.slot.y + "px"} as CSSProperties }>
-        <div draggable={true} className={styles.shortCut} onDrag={(e) => this.handleDrag(e)} onDragEnd={(e) => this.endDrag(e)} onClick={(e) => {
-          this.handleDoubleClick()
-        }}>
-          <img src={this.properties.extra == "trash" && this.taskManager.trash.length > 0 ? "/icons/trash_full.svg" : this.properties.icon} alt={this.properties.description} className={styles.icon}></img>
+        <div draggable={true} className={styles.shortCut} onDrag={(e) => this.handleDrag(e)} onDragEnd={(e) => this.endDrag(e)} onClick={() => {
+          this.handleDoubleClick()}}>
+          <img src={this.properties.extra == "trash" && this.taskManager.trash.length > 0 ? "/icons/trash_full.svg" : this.properties.icon} alt={this.properties.description || ""} className={styles.icon}></img>
           <div className={styles.tittle}>
             {this.properties.tittle}
           </div>
@@ -90,10 +90,10 @@ export class ShortCut extends Component<ShortCutProps> {
 
   get startMenuShortcut() {
     return (
-        <div key={this.key}  className={styles.startMenuShortCut} onClick={(e) => {this.handleClick()}}>
+        <div key={this.key}  className={styles.startMenuShortCut} onClick={() => {this.handleClick()}}>
           <img
             src={this.properties.extra == "trash" && this.taskManager.trash.length > 0 ? "/icons/trash_full.svg" : this.properties.icon}
-            alt={this.properties.description} className={styles.icon}></img>
+            alt={this.properties.description || ""} className={styles.icon}></img>
           <div className={styles.tittle}>
             {this.properties.tittle}
           </div>
