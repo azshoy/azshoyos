@@ -20,12 +20,13 @@
 
 }
 .tasks{
-    gap: 8px;
+    gap: calc(var(--scale) * 8px);
     display: flex;
     flex-direction: row;
     align-items: center;
     height: 100%;
     flex-grow: 10000;
+    overflow: hidden;
 }
 
 .taskBarButton{
@@ -48,15 +49,14 @@
         pointer-events: none;
     }
     .tittle {
-        font-size: 24px;
+        font-size: calc(var(--scale) * 20px);
         padding: 4px;
         pointer-events: none;
 
     }
 }
 .taskBarButton:not(.startButton){
-    width: 220px;
-    max-width: 220px;
+    max-width: calc(var(--scale) * 220px);
     overflow: hidden;
     white-space: nowrap;
 }
@@ -151,3 +151,17 @@
 .startMenuButton:hover{
     background-color: var(--gray-3);
 }
+
+.clock{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0 8px 0 4px;
+    width: 50px;
+    .num{
+        flex: 1 1 0;
+        width: 20%;
+        text-align: center;
+    }
+}
+

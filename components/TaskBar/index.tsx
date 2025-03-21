@@ -1,6 +1,6 @@
 import styles from "./taskBar.module.css";
 import {ProgramProperties, TaskManager} from "@/util/taskManager";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Program} from "@/components/Program";
 
 export type TaskBarProps = {
@@ -33,8 +33,22 @@ export const TaskBar = ({
 
 
 export const Clock = () => {
+  const [, setTime] = useState(Date.now());
+  useEffect(() => {
+    const interval = setInterval(() => setTime(Date.now()), 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+  const digits = new Date().toLocaleString('fi-Fi', {hour: '2-digit', minute: '2-digit',  hour12: false, timeZone: 'Europe/Helsinki' })
   return (
-    <div className={styles.clock}>13:37</div>
+    <div className={styles.clock}>
+      <div className={styles.num}>{digits[0]}</div>
+      <div className={styles.num}>{digits[1]}</div>
+      <div>{digits[2]}</div>
+      <div className={styles.num}>{digits[3]}</div>
+      <div className={styles.num}>{digits[4]}</div>
+    </div>
   );
 }
 

@@ -10,7 +10,14 @@ export class Console extends  Component<BasicProgramProps> {
   txtId:number = 0
   lineId:number = 0
   commandHandler = new CommandHandler
-  lines = [<Line key={this.lineId} text={[this.commandHandler.toTxt("this is a console :--D")]}/>]
+  lines = [<Line key={this.lineId} text={[
+      this.commandHandler.toTxt("    Welcome.             _"),  <br key={"sbr1"}/>,
+    this.commandHandler.toTxt("    Running version 1.1   /  /"), <br key={"sbr2"}/>,
+    this.commandHandler.toTxt("   _____  _____     ____ /  /___"), <br key={"sbr3"}/>,
+    this.commandHandler.toTxt(" /      /___   /  /   __/   _   /"), <br key={"sbr4"}/>,
+    this.commandHandler.toTxt("/  /   /.'  .' _  _\\  \\/  / /  /"), <br key={"sbr5"}/>,
+    this.commandHandler.toTxt("\\___._/______/__/_____/__/ /__/")
+  ]}/>]
   latestFailed = false
   constructor(props:BasicProgramProps) {
     super(props);
@@ -32,6 +39,7 @@ export class Console extends  Component<BasicProgramProps> {
         const command = param.shift()
         this.doAction(command, param, input)
         this.forceUpdate()
+        setTimeout(() => inputElement.scrollIntoView({ behavior: "instant", block: "end", inline: "end" }), 100)
       }
     }
   }
@@ -41,17 +49,6 @@ export class Console extends  Component<BasicProgramProps> {
     this.lineId += 1
     this.lines.push(<Line key={this.lineId} text={[this.commandHandler.toTxt(input), <br key={`br-${this.lineId}`}/>, ...(output.output || [])]} fail={this.latestFailed}/>)
     this.latestFailed = !output.success
-  }
-
-  success(text:ReactElement[]=[]){
-    this.latestFailed = false
-    this.lineId += 1
-    this.lines.push(<Line key={this.lineId} text={text}/>)
-  }
-  error(text:ReactElement[]=[]) {
-    this.latestFailed = true
-    this.lineId += 1
-    this.lines.push(<Line key={this.lineId} text={text} fail={true}/>)
   }
   render() {
     return (

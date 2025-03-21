@@ -24,6 +24,7 @@ export class ShortCut extends Component<ShortCutProps> {
   key:number
   dragging = false
   drag: Vector2 = new Vector2()
+  clickedOnce = false
   constructor(props:ShortCutProps) {
     super(props)
     this.properties = props.properties
@@ -40,7 +41,17 @@ export class ShortCut extends Component<ShortCutProps> {
   joinGrid(){
     this.position = this.taskManager.joinGrid(this)
   }
+  handleDoubleClick(){
+    if (this.clickedOnce){
+      this.handleClick()
+    } else {
+      this.clickedOnce = true
+      setTimeout(() => this.clickedOnce = false, 500)
+    }
+
+  }
   handleClick(){
+    this.clickedOnce = false
     if (this.properties.extra == "openTab"){
       window.open("https://www.google.com/")
       return
@@ -65,10 +76,9 @@ export class ShortCut extends Component<ShortCutProps> {
 
   render(){
     return (
-      <div key={this.key} className={styles.slot} style={{left: this.position.x +"px", top: this.position.y +"px", "--scale": this.taskManager.scale, width: this.taskManager.grid.slot.x + "px", height: this.taskManager.grid.slot.y + "px"} as CSSProperties }>
-        <div draggable={true} className={styles.shortCut} onDrag={(e) => this.handleDrag(e)} onDragEnd={(e) => this.endDrag(e)} onDoubleClick={() => {
-          this.handleClick()
-        }}>
+      <div key={this.key} className={styles.slot} style={{left: this.position.x +"px", top: this.position.y +"px", width: this.taskManager.grid.slot.x + "px", height: this.taskManager.grid.slot.y + "px"} as CSSProperties }>
+        <div draggable={true} className={styles.shortCut} onDrag={(e) => this.handleDrag(e)} onDragEnd={(e) => this.endDrag(e)} onClick={() => {
+          this.handleDoubleClick()}}>
           <img src={this.properties.extra == "trash" && this.taskManager.trash.length > 0 ? "/icons/trash_full.svg" : this.properties.icon} alt={this.properties.description || ""} className={styles.icon}></img>
           <div className={styles.tittle}>
             {this.properties.tittle}

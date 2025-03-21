@@ -1,5 +1,6 @@
 :root {
 
+  --scale: 1;
   --gray-0: #08150e;
   --gray-1: #13261c;
   --gray-2: #2d503f;
@@ -30,7 +31,8 @@
   --task-bar-shadow: var(--gray-2);
 
   --bar-height: 50px;
-  --console-font: "console", "monospace"
+  --console-font: "console", "monospace";
+  --tittle-bar-height: calc(var(--scale) * var(--bar-height))
 }
 
 @font-face {
@@ -46,6 +48,7 @@
 html,
 body {
   max-width: 100vw;
+  max-height: 100vh;
   overflow: hidden;
   height: 100vh;
   width: 100vw;
@@ -56,6 +59,9 @@ body {
   font-family: "basic", "sans-serif";
   background-color: var(--background);
   color: var(--black);
+}
+body > div {
+  height: 100vh;
 }
 
 * {
