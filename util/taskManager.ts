@@ -91,7 +91,7 @@ export class TaskManager {
     return {wid:this.wid, zIndex:this.zIndex, size:this.defaultWindowSize.clone, position: this.nextWindowPos.clone}
   }
   get defaultWindowSize(){
-    return new Vector2(Math.min(800*this.scale, this.screenSize.x), Math.min(800*this.scale, this.screenSize.y))
+    return new Vector2(Math.min(800*this.scale, this.screenSize.x), Math.min(600*this.scale, this.screenSize.y))
   }
 
   setNextValues(){

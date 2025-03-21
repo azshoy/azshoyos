@@ -153,6 +153,7 @@
         flex-direction: row;
     }
     .line{
+        white-space: pre;
         .error{
             color: var(--red)
         }

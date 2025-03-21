@@ -30,36 +30,36 @@ const getContent = (parameter:string)=> {
     case 'readme':
       return (
         <div>
-          This is the readmefile yes. <br/>
-          formating very easy. <br/>
-          is html file actually.
-          .<br/>
-          .<br/>
-          .<br/>
-          .<br/>
-          .<br/>
-          .<br/>
-          .<br/>
-          .<br/>
-          .<br/>
-          .<br/>
-          .<br/>
-          .<br/>
-          .<br/>
-          .<br/>
-          .<br/>
-          .<br/>
-          .<br/>
-          .<br/>
-          .<br/>
-          .
-          HELLO :D
+          # az.sh oy <br/>
+          <br/>
+          ## TL;DR:<br/>
+          DAO:n johto ja web2/3 ohjelmointiprojektit lohkottuina kokonaisuuksina.
+          <br/>
+          <br/>
+          Yrityksen yhteistiedot löydät Contact Information pikakuvakkeen takaa.<br/>
         </div>
       )
     case 'contact':
-      return (<div>
-        Call a sakke! 342542542
-      </div>)
+      return (
+        <div>
+          # az.sh oy <br/>
+          <br/>
+          ## Yhteystiedot <br/>
+          <br/>
+          Y-tunnus:<br/>
+          3474773-5<br/>
+          <br/>
+          Sähköposti:<br/>
+          info@azsh.fi<br/>
+          Puhelin:<br/>
+          050 432 4719<br/>
+          <br/>
+          Postiosoite:<br/>
+          az.sh oy<br/>
+          Isokatu 56<br/>
+          90100 Oulu<br/>
+        </div>
+      )
     default:
       return (<div>{parameter}</div>)
   }
