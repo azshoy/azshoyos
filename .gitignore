@@ -19,7 +19,7 @@
 
 # production
 /build
-build.sh
+deploy.sh
 
 # misc
 .DS_Store
