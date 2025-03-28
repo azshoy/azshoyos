@@ -36,7 +36,6 @@ export class Program extends Component<ProgramProps> {
     this.key = this.taskManager.programs.length
   }
   minimize(e:React.MouseEvent){
-    console.log("minim")
     e.stopPropagation()
     this.minimized = true
     this.taskManager.callUpdate('window')
@@ -158,7 +157,7 @@ export class Program extends Component<ProgramProps> {
           </button>
         </div>
         <div className={styles.program}>
-          {getProgram(this.properties.program, this.parameters)}
+          {getProgram(this.properties.program, this.parameters, this.taskManager)}
         </div>
       </div>
     )
@@ -172,21 +171,22 @@ export class Program extends Component<ProgramProps> {
 
 
 
-const getProgram = (program:string, parameters:string[])=> {
+const getProgram = (program:string, parameters:string[], taskManager:TaskManager)=> {
   switch (program){
     case 'console':
-      return (<Console parameters={parameters}/>)
+      return (<Console parameters={parameters} taskManager={taskManager}/>)
     case 'document':
-      return (<DocumentReader parameters={parameters}/>)
+      return (<DocumentReader parameters={parameters} taskManager={taskManager}/>)
     case 'files':
-      return (<FileExplorer parameters={parameters}/>)
+      return (<FileExplorer parameters={parameters} taskManager={taskManager}/>)
   }
-  return (<BasicProgram parameters={parameters}/>)
+  return (<BasicProgram parameters={parameters} taskManager={taskManager}/>)
 }
 type Parameters = string[]
 
 export type BasicProgramProps = {
   parameters: Parameters
+  taskManager: TaskManager
 }
 
 export class BasicProgram extends Component<BasicProgramProps> {

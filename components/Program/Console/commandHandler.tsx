@@ -1,83 +1,54 @@
-import styles from "@/components/Program/program.module.css";
-import {ReactElement} from "react";
+import {helpCommand} from "@/components/Program/Console/Commands/help";
+import {helloCommand} from "@/components/Program/Console/Commands/hello";
+import {TaskManager} from "@/util/taskManager";
+import {discoCommand} from "@/components/Program/Console/Commands/disco";
+import {timeCommand} from "@/components/Program/Console/Commands/time";
+import {shutdownCommand} from "@/components/Program/Console/Commands/shutdown";
+
+
+export const commands:{[key: string]: Command} = {
+  help: helpCommand,
+  hello: helloCommand,
+  disco: discoCommand,
+  time: timeCommand,
+  shutdown: shutdownCommand,
+}
+
+export type Command = {
+  args: [number, number]
+  help?: string
+  description?: string
+  unlisted?: boolean
+  run: CallableFunction
+}
 
 type textColor = "default" | "error" | "highlight"
 
+export type Txt = {
+  s: string,
+  c?: textColor
+}
+
+export type Result = {
+  exitStatus: number,
+  output?: Txt | Txt[]
+}
+
+
 export class CommandHandler {
-  txtId = 0
-  commands = [
-    {
-      command: "help",
-      param: [0, 1],
-      func: this.cHelp
-    }
-  ]
-  helpTexts: { [key: string]: ReactElement[] } = {
-    "help": [
-      this.toTxt("help gives you help!")
-    ]
-  }
-
-  handleCommand(command: string, param: string[]):{success: boolean, output: ReactElement[]|undefined} {
-    for (let c = 0; c < this.commands.length; c++) {
-      if (this.commands[c].command == command) {
-        if (param.length >= this.commands[c].param[0] && param.length <= this.commands[c].param[1]) {
-          return this.commands[c].func.call(this, param)
+  handleCommand(c: string, args: string[], taskManager:TaskManager):Result {
+    if (c in commands) {
+      const command = commands[c]
+      if (args.length >= command.args[0] && args.length <= command.args[1]) {
+        return command.run(args, taskManager)
+      } else {
+        if (command.args[0] != command.args[1]) {
+          return {exitStatus: 1, output: {s: "Error: Expected " + command.args[0].toString() + " to " + command.args[1].toString() + " parameters, but received " + args.length.toString(), c: "error"}}
         } else {
-          if (this.commands[c].param[0] != this.commands[c].param[1]) {
-            return {
-              success: false, output: [
-                this.toTxt("Error: Expected " + this.commands[c].param[0].toString() + " to " + this.commands[c].param[1].toString() + " parameters, but received " + param.length.toString(), "error")
-              ]
-            }
-          } else {
-            return {
-              success: false, output: [
-                this.toTxt("Error: Expected " + this.commands[c].param[0].toString() + " parameter, but received " + param.length.toString(), "error")]
-            }
-          }
+          return {exitStatus: 1, output: {s: "Error: Expected " + command.args[0].toString() + " parameter, but received " + args.length.toString(), c:"error"}}
         }
       }
     }
-    return {success: false, output: [
-      this.toTxt("Error: Command " + command + " not found!", "error")
-      ]
-    }
-  }
-  cHelp(param: string[]):{success: boolean, output: ReactElement[]|undefined} {
-    if (param.length == 0) {
-      const clist: ReactElement[] = [this.toTxt("Usage: help <command>"), <br key="br-help-1"/>, this.toTxt("Try these commands:")]
-      for (let c = 0; c < this.commands.length; c++) {
-        clist.push(<br key={`br-help-cmd-${c}`}/>)
-        clist.push(<span key={`span-help-cmd-${c}`}>&nbsp;&nbsp;&nbsp;</span>)
-        clist.push(this.toTxt(this.commands[c].command))
-      }
-      return {success: true, output: clist}
-    } else {
-      for (let c = 0; c < this.commands.length; c++) {
-        if (this.commands[c].command == param[0]) {
-          const helptext = this.helpTexts[param[0]]
-          if (helptext) {
-            return {success: true, output: helptext}
-          }
-          return {
-            success: false, output: [this.toTxt("Sorry, there is no help with this command..", "error")]
-          }
-
-        }
-      }
-      return {
-        success: false, output: [this.toTxt("Sorry, can't help with nonexistent command. '" + param[0] + "' :(")]
-      }
-    }
-  }
-
-
-
-
-  toTxt(txt: string, t: textColor = "default"): ReactElement {
-    this.txtId += 1
-    return <span key={this.txtId}
-                 className={t == "error" ? styles.error : t == "highlight" ? styles.highlight : ""}>{txt}</span>
+    return {exitStatus: 1, output: {s: "Error: Command " + c + " not found!", c:"error"}}
   }
 }

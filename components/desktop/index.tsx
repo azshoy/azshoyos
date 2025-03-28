@@ -24,7 +24,7 @@ export const Desktop = ({
   }
 
   return (
-    <div className={styles.desktop}>
+    <div id={"azshDesktop"} className={styles.desktop}>
       {scr}
     </div>
   );

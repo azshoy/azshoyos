@@ -2,35 +2,48 @@
 .window{
     position: absolute;
     background-color: var(--white);
-    pointer-events: bounding-box;
+    pointer-events: visible;
     max-width: 100vw;
     max-height: 100vh;
 }
 
 
-
-.slot{
+.shortCutHolder{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.slot, .dragSlot{
     position: absolute;
     transform: translate(-50%,-50%);
     display: flex;
     align-items: center;
     justify-content: center;
 }
+.dragSlot{
+    display: none;
+    pointer-events: none;
+    .shortCut {
+        opacity: 0.5;
+    }
+}
 .shortCut{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 2px;
     user-select: none;
     width: calc(var(--scale) * 150px);
     height: calc(var(--scale) * 150px);
     > .icon {
         width: 70%;
+        max-height: 65%;
         pointer-events: none;
     }
     > .tittle {
         font-size: calc(var(--scale) * 20px);
+        line-height: calc(var(--scale) * 20px);
         color: var(--white);
         text-shadow: var(--black) 0 0 3px, var(--black) 0 0 3px, var(--black) 0 0 3px, var(--black) 0 0 3px;
         pointer-events: none;
@@ -38,13 +51,12 @@
     }
     cursor: pointer;
 }
-.shortCut:hover{
+.slot .shortCut:hover{
     background-color: var(--gray-2);
     border-radius: 15px;
 }
-.shortCut:active {
+.slot .shortCut:active {
     background-color: transparent;
-
 }
 .shortCut:active > *{
     animation: dragging 0s 0.1s linear forwards;

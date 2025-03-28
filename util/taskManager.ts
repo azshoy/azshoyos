@@ -59,9 +59,6 @@ export class TaskManager {
     this.grid.size.y = Math.floor(this.screenSize.y / (150*this.scale))
     this.grid.slot.x = this.screenSize.x / this.grid.size.x
     this.grid.slot.y = this.screenSize.y / this.grid.size.y
-    console.log(this.scale)
-    console.log(this.grid.size)
-    console.log(this.grid.slot)
     if (this.root) this.root.style.setProperty('--scale', this.scale.toString())
   }
 
@@ -176,8 +173,8 @@ export class TaskManager {
   dropShortCut(shortCut:ShortCut){
     const index = this.shortCuts.indexOf(shortCut)
     const pos = new Vector2(
-      Math.floor(Math.max(this.grid.slot.x/4, Math.min(this.screenSize.x-this.grid.slot.x/4, shortCut.position.x-shortCut.drag.x))/this.grid.slot.x)*this.grid.slot.x + this.grid.slot.x/2,
-      Math.floor(Math.max(this.grid.slot.y/4, Math.min(this.screenSize.y-this.grid.slot.y/4, shortCut.position.y-shortCut.drag.y))/this.grid.slot.y)*this.grid.slot.y + this.grid.slot.y/2
+      Math.floor(Math.max(this.grid.slot.x/4, Math.min(this.screenSize.x-this.grid.slot.x/4, shortCut.drag.x - shortCut.dragOffset.x))/this.grid.slot.x)*this.grid.slot.x + this.grid.slot.x/2,
+      Math.floor(Math.max(this.grid.slot.y/4, Math.min(this.screenSize.y-this.grid.slot.y/4, shortCut.drag.y - shortCut.dragOffset.y))/this.grid.slot.y)*this.grid.slot.y + this.grid.slot.y/2
     ).withFunc(Math.floor)
     let trash = false
     for (let s = 0; s < this.shortCuts.length; s++) {

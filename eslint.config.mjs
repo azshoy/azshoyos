@@ -14,7 +14,9 @@ const eslintConfig = [
   ...compat.config({
     extends: ['next'],
       rules: {
-        "@next/next/no-img-element": "off"
+        "@next/next/no-img-element": "off",
+        "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
       }
   }),
 ];
