@@ -23,7 +23,9 @@
 .dragSlot{
     display: none;
     pointer-events: none;
+    z-index: 10000;
     .shortCut {
+        z-index: 10000;
         opacity: 0.5;
     }
 }
