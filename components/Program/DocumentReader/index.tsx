@@ -36,7 +36,7 @@ const getContent = (parameter:string)=> {
           DAO:n johto ja web2/3 ohjelmointiprojektit lohkottuina kokonaisuuksina.
           <br/>
           <br/>
-          Yrityksen yhteistiedot löydät Contact Information pikakuvakkeen takaa.<br/>
+          Yrityksen yhteystiedot löydät Contact Information pikakuvakkeen takaa.<br/>
         </div>
       )
     case 'contact':
