@@ -28,6 +28,8 @@ export class Console extends  Component<BasicProgramProps> {
   }
   getInput(e:React.KeyboardEvent){
     if (e.key === 'Enter') {
+      e.preventDefault();
+      e.stopPropagation();
       const inputElement: HTMLInputElement = e.currentTarget as HTMLInputElement
       if (inputElement){
         const input = inputElement.value
@@ -43,7 +45,7 @@ export class Console extends  Component<BasicProgramProps> {
         this.print({s: input})
         if (command) this.doAction(command, param); else this.latestFailed = false;
         this.forceUpdate()
-        setTimeout(() => inputElement.scrollIntoView({ behavior: "instant", block: "end", inline: "end" }), 100)
+        setTimeout(() => inputElement.scrollIntoView({ behavior: "instant", block: "nearest", inline: "end" }), 100)
       }
     }
   }

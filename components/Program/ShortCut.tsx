@@ -73,7 +73,7 @@ export class ShortCut extends Component<ShortCutProps> {
     this.updateDrag(e.touches[0].pageX, e.touches[0].pageY)
   }
   onTouchEnd(e:TouchEvent){
-    this.endDrag(e.touches[0].pageX, e.touches[0].pageY, false)
+    this.endDrag(e.changedTouches[0].pageX, e.changedTouches[0].pageY, false)
   }
   endDrag(posX:number, posY:number, mouse:boolean){
     if (this.dragActive){

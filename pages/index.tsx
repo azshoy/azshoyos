@@ -7,22 +7,43 @@ import {Desktop} from "@/components/desktop";
 import {useEffect, useRef, useState} from "react";
 import {ShortCut, ShortCutProps} from "@/components/Program/ShortCut";
 import {Vector2} from "@/util/types";
+import Head from 'next/head'
 
 
 export const Home = ()=> {
   const [taskManager, setWindowManager] = useState<TaskManager|null>(null)
   const screenArea = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
+    setViewportHeight();
+    window.addEventListener('resize', setViewportHeight);
+
     if (screenArea && screenArea.current) {
       setWindowManager(new TaskManager(screenArea.current))
     }
+
+    return () => {
+      window.removeEventListener('resize', setViewportHeight);
+    };
   }, [screenArea]);
+
+  // Function to set the viewport height as a CSS variable
+  const setViewportHeight = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  };
+
   const content = taskManager ? <Content taskManager={taskManager} shortCuts={getShortCuts(taskManager)}/> : <div key={0} className={styles.loading}></div>
 
   return (
+    <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+      </Head>
       <div ref={screenArea} className={styles.screenArea}>
         {content}
       </div>
+    </>
   );
 }
 
