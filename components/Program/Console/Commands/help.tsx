@@ -1,9 +1,11 @@
-import {Command, commands, Result, Txt} from "@/components/Program/Console/commandHandler";
+import {Result} from "@/components/Program/Console/commandHandler";
+import {Command, commands} from "@/components/Program/Console/availableCommands";
+import {Txt} from "@/components/Program/Console/commandHandler";
 import {TaskManager} from "@/util/taskManager";
 
 
 export const helpCommand:Command = {
-  args: [0, 1],
+  argCount: [0, 1],
   help: "help gives you help!",
   description: "a great help.",
   unlisted: false,

@@ -1,26 +1,5 @@
-import {helpCommand} from "@/components/Program/Console/Commands/help";
-import {helloCommand} from "@/components/Program/Console/Commands/hello";
 import {TaskManager} from "@/util/taskManager";
-import {discoCommand} from "@/components/Program/Console/Commands/disco";
-import {timeCommand} from "@/components/Program/Console/Commands/time";
-import {shutdownCommand} from "@/components/Program/Console/Commands/shutdown";
-
-
-export const commands:{[key: string]: Command} = {
-  help: helpCommand,
-  hello: helloCommand,
-  disco: discoCommand,
-  time: timeCommand,
-  shutdown: shutdownCommand,
-}
-
-export type Command = {
-  args: [number, number]
-  help?: string
-  description?: string
-  unlisted?: boolean
-  run: CallableFunction
-}
+import {commands} from "@/components/Program/Console/availableCommands";
 
 type textColor = "default" | "error" | "highlight"
 
@@ -39,13 +18,13 @@ export class CommandHandler {
   handleCommand(c: string, args: string[], taskManager:TaskManager):Result {
     if (c in commands) {
       const command = commands[c]
-      if (args.length >= command.args[0] && args.length <= command.args[1]) {
+      if (args.length >= command.argCount[0] && args.length <= command.argCount[1]) {
         return command.run(args, taskManager)
       } else {
-        if (command.args[0] != command.args[1]) {
-          return {exitStatus: 1, output: {s: "Error: Expected " + command.args[0].toString() + " to " + command.args[1].toString() + " parameters, but received " + args.length.toString(), c: "error"}}
+        if (command.argCount[0] != command.argCount[1]) {
+          return {exitStatus: 1, output: {s: "Error: Expected " + command.argCount[0].toString() + " to " + command.argCount[1].toString() + " parameters, but received " + args.length.toString(), c: "error"}}
         } else {
-          return {exitStatus: 1, output: {s: "Error: Expected " + command.args[0].toString() + " parameter, but received " + args.length.toString(), c:"error"}}
+          return {exitStatus: 1, output: {s: "Error: Expected " + command.argCount[0].toString() + " parameter, but received " + args.length.toString(), c:"error"}}
         }
       }
     }

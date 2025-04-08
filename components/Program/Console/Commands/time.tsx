@@ -1,9 +1,11 @@
-import {Command, Result} from "@/components/Program/Console/commandHandler";
+import {Result} from "@/components/Program/Console/commandHandler";
+import {Command} from "@/components/Program/Console/availableCommands";
 import {TaskManager} from "@/util/taskManager";
 
 
+
 export const timeCommand:Command = {
-  args: [0, 0],
+  argCount: [0, 0],
   help: "Tells you the current time",
   description: "What time is it?",
   unlisted: false,

@@ -1,9 +1,10 @@
-import {Command, Result} from "@/components/Program/Console/commandHandler";
+import {Result} from "@/components/Program/Console/commandHandler";
+import {Command} from "@/components/Program/Console/availableCommands";
 import {TaskManager} from "@/util/taskManager";
 
 
 export const discoCommand:Command = {
-  args: [0, 0],
+  argCount: [0, 0],
   help: "Starts a disco!",
   description: "Wanna party?",
   unlisted: false,
