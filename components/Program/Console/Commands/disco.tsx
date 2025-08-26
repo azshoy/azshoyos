@@ -11,8 +11,14 @@ export const discoCommand:Command = {
   run: (_args: string[], _tm:TaskManager):Result => {
     const r: HTMLElement|null = document.querySelector(':root')
     if (r) {
-      r.style.setProperty('--background', 'url("/misc/disco.gif")');
-      return {exitStatus: 0, output: [{s: "Party time!"}]}
+      const background = r.style.getPropertyValue('--background')
+      if (background === 'url("/misc/disco.gif")') {
+        r.style.setProperty('--background', 'var(--blue-dark)');
+        return {exitStatus: 0, output: [{s: "Party time is over!"}]}
+      } else {
+        r.style.setProperty('--background', 'url("/misc/disco.gif")');
+        return {exitStatus: 0, output: [{s: "Party time!"}]}
+      }
     }
     return {exitStatus: 1, output: [{s: "Unknown error!", c:"error"}]}
   }
