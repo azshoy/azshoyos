@@ -32,6 +32,7 @@
 
   --bar-height: 50px;
   --console-font: "console", "monospace";
+  --default-font: "basic";
   --tittle-bar-height: calc(var(--scale) * var(--bar-height))
 }
 
