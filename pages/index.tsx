@@ -38,6 +38,8 @@ export const Home = ()=> {
   return (
     <>
       <Head>
+        <title>az.sh</title>
+        <meta name="description" content="Welcome to az.sh" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
       </Head>
       <div ref={screenArea} className={styles.screenArea}>
