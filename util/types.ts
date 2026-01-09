@@ -1,4 +1,10 @@
+import {CSSProperties} from "react";
 
+
+export type v2 = {x: number, y: number}
+
+type CSSvariable = `--${string}`
+export type CSSPropertiesPlus = CSSProperties | {[key: CSSvariable]: string | number}
 
 export class Vector2{
     x:number

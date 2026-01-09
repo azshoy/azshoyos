@@ -1,21 +1,23 @@
 import styles from "../program.module.css";
-import { BasicProgramProps} from "..";
-import {Component} from "react";
+import {readableFiles} from "@/components/Program/DocumentReader/ReadableFiles";
 
 
-export class DocumentReader extends  Component<BasicProgramProps> {
-  parameters: string[]
-  constructor(props:BasicProgramProps) {
-    super(props);
-    this.parameters = props.parameters
-  }
-  render() {
-    return (
+export type DocumentReaderTypes = {
+  windowComponent: typeof DocumentReader
+  parameters: DocumentReaderProps
+}
+
+export type DocumentReaderProps = {
+  file?: string[] | string
+}
+export const DocumentReader = ({
+  file = []
+}:DocumentReaderProps) => {
+  return (
     <div className={styles.document}>
-      {getContents(this.parameters)}
+      {getContents(Array.isArray(file) ? file : [file])}
     </div>
   )
-  }
 }
 
 const getContents = (parameters:string[])=> {
@@ -26,42 +28,8 @@ const getContents = (parameters:string[])=> {
   return content
 }
 const getContent = (parameter:string)=> {
-  switch (parameter){
-    case 'readme':
-      return (
-        <div>
-          # az.sh oy <br/>
-          <br/>
-          ## TL;DR:<br/>
-          DAO:n johto ja web2/3 ohjelmointiprojektit lohkottuina kokonaisuuksina.
-          <br/>
-          <br/>
-          Yrityksen yhteystiedot löydät Contact Information pikakuvakkeen takaa.<br/>
-        </div>
-      )
-    case 'contact':
-      return (
-        <div>
-          # az.sh oy <br/>
-          <br/>
-          ## Yhteystiedot <br/>
-          <br/>
-          Y-tunnus:<br/>
-          3474773-5<br/>
-          <br/>
-          Sähköposti:<br/>
-          info@azsh.fi<br/>
-          Puhelin:<br/>
-          050 432 4719<br/>
-          <br/>
-          Postiosoite:<br/>
-          az.sh oy<br/>
-          Isokatu 56<br/>
-          90100 Oulu<br/>
-        </div>
-      )
-    default:
-      return (<div>{parameter}</div>)
-  }
+  const content = readableFiles[parameter]
+  return (typeof content != 'undefined') ? content : parameter
+
 }
 
