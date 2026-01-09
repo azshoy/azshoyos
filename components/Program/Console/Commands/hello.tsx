@@ -1,6 +1,6 @@
 import {Result} from "@/components/Program/Console/commandHandler";
 import {Command} from "@/components/Program/Console/availableCommands";
-import {TaskManager} from "@/util/taskManager";
+import {ConsoleContext} from "@/components/Program/Console";
 
 
 
@@ -9,9 +9,9 @@ export const helloCommand:Command = {
   help: "Hello world!",
   description: "Startup script",
   unlisted: true,
-  run: (_args: string[], _tm:TaskManager):Result => {
+  run: (_args: string[], _context:ConsoleContext):Result => {
     return {
-      exitStatus: 0, output: [
+      exitCode: 0, output: [
         {s: "       Welcome.             "}, {s: "_\n", c: "highlight"},
         {s: "    Running version 1.1   "}, {s: "/  /\n", c: "highlight"},
         {s: "   _____  _____     ____ /  /___\n", c: "highlight"},

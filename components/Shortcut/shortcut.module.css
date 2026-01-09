@@ -1,0 +1,54 @@
+
+.shortCutHolder{
+}
+.slot, .dragSlot{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.dragSlot{
+    pointer-events: none;
+    z-index: 10000;
+    .shortCut {
+        z-index: 10000;
+        opacity: 0.5;
+    }
+}
+.shortCut{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    user-select: none;
+    width: calc(var(--scale) * 150px);
+    height: calc(var(--scale) * 150px);
+    > .icon {
+        width: 70%;
+        max-height: 65%;
+        pointer-events: none;
+    }
+    > .title {
+        font-size: calc(var(--scale) * 20px);
+        line-height: calc(var(--scale) * 20px);
+        color: var(--white);
+        text-shadow: var(--black) 0 0 3px, var(--black) 0 0 3px, var(--black) 0 0 3px, var(--black) 0 0 3px;
+        pointer-events: none;
+        text-align: center;
+    }
+    cursor: pointer;
+}
+.slot .shortCut:hover{
+    background-color: var(--gray-2);
+    border-radius: 15px;
+}
+.slot .shortCut:active {
+    background-color: transparent;
+}
+.shortCut:active > *{
+    animation: dragging 0s 0.1s linear forwards;
+}
+@keyframes dragging {
+    to {filter: saturate(0.2) brightness(50%)}
+}

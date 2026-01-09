@@ -1,29 +1,31 @@
 import styles from "./taskBar.module.css";
-import {ProgramProperties, TaskManager} from "@/util/taskManager";
-import {useEffect, useState} from "react";
-import {Program} from "@/components/Program";
+import {ReactNode, useContext, useEffect, useMemo, useRef, useState} from "react";
+import {TaskManagerContext} from "@/components/OS/TaskManager";
+import {ProgramClass} from "@/components/Program/Program";
+import {WindowManagerContext} from "@/components/OS/WindowManager";
+import {Shortcut} from "@/components/Shortcut/Shortcut";
 
-export type TaskBarProps = {
-  taskManager: TaskManager
-}
 
 export const TaskBar = ({
-  taskManager
-}:TaskBarProps) => {
-  const [, onWindowUpdate] = useState(0)
-  taskManager.subscribe("TaskBar", "window", onWindowUpdate)
-  const prog = []
-  for (let p = 0; p < taskManager.programs.length; p++){
-    const program = taskManager.programs[p]
-    prog.push(program.taskBarButton)
-  }
+
+}) => {
+  const [taskButtons, setTaskButtons] = useState<ReactNode[]>([])
+  const {tasks, taskUpdate, programs} = useContext(TaskManagerContext)
+
+  useEffect(() => {
+    const btn = tasks.filter((t) => t.type == 'window').map((t) => {
+      return <TaskBarButton key={t.taskID} taskID={t.taskID} program={programs[t.programID]}/>
+    })
+    setTaskButtons(btn)
+  }, [tasks, taskUpdate]);
+
+
   return (
     <div className={styles.taskBar}>
-      <StartMenu taskManager={taskManager}/>
-      <StartMenuButton taskManager={taskManager}/>
+      <StartMenuHandler/>
       <div className={styles.verticalSeparator}></div>
       <div className={styles.tasks}>
-        {prog}
+        {taskButtons}
       </div>
       <div className={styles.verticalSeparator}></div>
       <Clock/>
@@ -52,80 +54,130 @@ export const Clock = () => {
   );
 }
 
-
-export type startMenuProps = {
-  taskManager: TaskManager
+export type TaskBarButtonProps = {
+  program: ProgramClass
+  taskID: number
 }
-export const StartMenuButton = ({
-  taskManager,
-}:startMenuProps) => {
+
+export const TaskBarButton = ({
+  taskID,
+  program
+}:TaskBarButtonProps) => {
+  const windowManager = useContext(WindowManagerContext)
   return (
-      <div className={`${styles.taskBarButton} ${styles.startButton}`} onClick={() => taskManager.toggleStartMenu()}>
+    <div className={styles.taskBarButton} onClick={() => windowManager?.focus(taskID)}>
+      <img src={program.icon} alt={program.description || ""} className={styles.icon}></img>
+      <div className={styles.title}>
+        {program.title}
+      </div>
+    </div>
+  );
+}
+
+
+
+export const StartMenuHandler = () => {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [outsideClick, setOutsideClick] = useState(0)
+  const [insideClick, setInsideClick] = useState(0)
+  const timer = useRef<ReturnType<typeof setTimeout>>(null);
+
+  useEffect(() => {
+    const closeMenu = () => {
+      setOutsideClick(Date.now)
+    }
+    if (window) window.removeEventListener('click', closeMenu)
+    if (window) window.addEventListener('click', closeMenu)
+    return () => {
+      if (window) window.removeEventListener('click', closeMenu)
+    }
+  }, []);
+
+  useEffect(() => {
+    if (outsideClick - insideClick > 100){
+      timer.current = setTimeout(() => {
+        setMenuOpen(false)
+      })
+    } else if (timer.current) clearTimeout(timer.current)
+    return () => {if (timer.current) clearTimeout(timer.current)}
+  }, [outsideClick, insideClick]);
+
+  const toggleMenu = () => {
+    if (!menuOpen){
+      setInsideClick(Date.now())
+    }
+    setMenuOpen(!menuOpen)
+  }
+
+  return (
+    <>
+      <div className={styles.startMenuHolder} onClick={() => setInsideClick(Date.now())}>
+        {menuOpen ? <StartMenu toggleMenu={toggleMenu}/> : null}
+      </div>
+      <div className={`${styles.taskBarButton} ${styles.startButton}`} onClick={() => toggleMenu()}>
         <img src={'/icons/start.svg'} alt={''} className={styles.icon}></img>
         <div className={styles.tittle}>
           MENU
         </div>
       </div>
-  );
+    </>
+  )
 }
 
-export type TaskBarButtonProps = {
-  programProperties: ProgramProperties,
-  program: Program
-}
 
-export const TaskBarButton = ({
-  programProperties,
-  program
-}:TaskBarButtonProps) => {
-  return (
-    <div className={styles.taskBarButton} onClick={() => program.pop()}>
-      <img src={programProperties.icon} alt={programProperties.description || ""} className={styles.icon}></img>
-      <div className={styles.tittle}>
-        {programProperties.tittle}
-      </div>
-    </div>
-  );
-}
+export const StartMenu = ({toggleMenu}:{toggleMenu:CallableFunction}) => {
 
-export const StartMenu = ({
-  taskManager,
-}:startMenuProps) => {
-  const [showMenu, setShowMenu] = useState(false)
-  taskManager.startMenuState = setShowMenu
-  if (!showMenu){
-    return (<div className={styles.startMenuHolder}></div>)
-  }
-  const scr = []
-  for (let s = 0; s < taskManager.shortCuts.length; s++){
-    const shortCut = taskManager.shortCuts[s]
-    scr.push(shortCut.startMenuShortcut)
-  }
-  const profileImage:string = profileimages[Math.floor(Math.random()*999999) % profileimages.length]
+  const {shortcuts, setShutDown} = useContext(TaskManagerContext)
+  const [profileImage, setProfileImage] = useState(profileimages[0])
+  useEffect(() => {
+    setProfileImage(profileimages[Math.floor(Math.random()*999999) % profileimages.length])
+  }, []);
 
   return (
-  <div className={styles.startMenuHolder}>
     <div className={styles.startMenu}>
       <div className={styles.startMenuHead}>
         <img src={profileImage} alt={''} className={styles.icon}></img>
-        <div className={styles.tittle}>
+        <div className={styles.title}>
         az.sh
         </div>
       </div>
-      {scr}
-
-
+      {shortcuts.map((s) => <StartMenuShortcut shortcut={s} key={s.id} toggleMenu={toggleMenu}/>)}
       <div className={styles.horizontalSeparator}></div>
-      <div className={styles.startMenuButton} onClick={() => taskManager.closeComputer()}>
+      <div className={styles.startMenuButton} onClick={() => setShutDown(1)}>
         <img src={'/icons/shutdown.svg'} alt={''} className={styles.icon}></img>
-        <div className={styles.tittle}>
+        <div className={styles.title}>
           Shutdown
         </div>
       </div>
     </div>
-  </div>
   );
 }
+
+type StartMenuShortcutProps = {
+  shortcut: Shortcut
+  toggleMenu:CallableFunction
+}
+
+export const StartMenuShortcut = ({
+  shortcut,
+  toggleMenu
+}:StartMenuShortcutProps) => {
+  const {startNewTask, programs} = useContext(TaskManagerContext)
+  const program = programs[shortcut.programID]
+  const onClick = () => {
+    startNewTask(shortcut.programID)
+    toggleMenu()
+  }
+  return (
+    <div className={styles.startMenuButton} onClick={() => onClick()}>
+      <img src={program.icon} alt={program.description || ""} className={styles.icon}></img>
+      <div className={styles.title}>
+        {program.title}
+      </div>
+    </div>
+  );
+}
+
 
 const profileimages = [
   '/logo/bluegreen.svg', '/logo/goldngreen.svg', '/logo/green.svg', '/logo/greenngold.svg',

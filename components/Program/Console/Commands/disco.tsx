@@ -1,40 +1,28 @@
 import {Result} from "@/components/Program/Console/commandHandler";
 import {Command} from "@/components/Program/Console/availableCommands";
-import {TaskManager} from "@/util/taskManager";
+import {ConsoleContext} from "@/components/Program/Console";
 
-
+type commandState = {
+  on: boolean,
+}
 export const discoCommand:Command = {
   argCount: [0, 0],
   help: "Starts a disco!",
   description: "Wanna party?",
   unlisted: false,
-  run: (_args: string[], _tm:TaskManager):Result => {
-    const r: HTMLElement|null = document.querySelector(':root')
-    if (r) {
-      const background = r.style.getPropertyValue('--background')
-      if (background === 'url("/misc/disco.gif")') {
-        r.style.setProperty('--background', 'var(--blue-dark)');
-        return {exitStatus: 0, output: [{s: "Party time is over!"}]}
-      } else {
-        r.style.setProperty('--background', 'url("/misc/disco.gif")');
-        const interval = setInterval(() => {
-          const currentBackground = r.style.getPropertyValue('--background');
-          if (currentBackground !== 'url("/misc/disco.gif")') {
-            clearInterval(interval);
-            return;
-          }
-          _tm.shortCuts.forEach(shortcut => {
-            const randomX = Math.floor(Math.random() * _tm.screenSize.x);
-            const randomY = Math.floor(Math.random() * _tm.screenSize.y);
-            shortcut.position.x = randomX;
-            shortcut.position.y = randomY;
-          });
-          _tm.updateShortcuts(_tm.screenSize);
-          _tm.callUpdate('shortcuts');
-        }, 200);
-        return {exitStatus: 0, output: [{s: "Party time!"}]}
-      }
+  default_state: {on: false},
+  run: (_args: string[], context:ConsoleContext):Result => {
+    context.state["disco"].on = !context.state["disco"].on
+    const currentState = context.state["disco"] as commandState
+    if (currentState.on) {
+      context.taskManager.setAsBackground('url("/misc/disco.gif")')
+      context.taskManager.specialEffects.add("shortcuts_dance")
+      return {exitCode: 0, output: [{s: "Party time!"}]}
+    } else {
+      context.taskManager.specialEffects.remove("shortcuts_dance")
+      context.taskManager.setAsBackground('default')
+      return {exitCode: 0, output: [{s: "Party Over! :("}]}
     }
-    return {exitStatus: 1, output: [{s: "Unknown error!", c:"error"}]}
+    return {exitCode: 1, output: [{s: "Unknown error!", c:"error"}]}
   }
 }

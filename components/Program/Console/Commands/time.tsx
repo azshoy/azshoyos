@@ -1,6 +1,6 @@
 import {Result} from "@/components/Program/Console/commandHandler";
 import {Command} from "@/components/Program/Console/availableCommands";
-import {TaskManager} from "@/util/taskManager";
+import {ConsoleContext} from "@/components/Program/Console";
 
 
 
@@ -9,7 +9,7 @@ export const timeCommand:Command = {
   help: "Tells you the current time",
   description: "What time is it?",
   unlisted: false,
-  run: (_args: string[], _tm:TaskManager):Result => {
-    return {exitStatus: 0, output: [{s: "Please check the bottom right corner."}]}
+  run: (_args: string[], _context:ConsoleContext):Result => {
+    return {exitCode: 0, output: [{s: "Please check the bottom right corner."}]}
   }
 }
