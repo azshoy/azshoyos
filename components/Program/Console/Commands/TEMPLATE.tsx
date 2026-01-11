@@ -1,6 +1,6 @@
 import {Result} from "@/components/Program/Console/commandHandler";
 import {Command} from "@/components/Program/Console/availableCommands";
-import {TaskManager} from "@/util/taskManager";
+import {ConsoleContext} from "@/components/Program/Console";
 
 
 // const should be named as <YourCommand>Command
@@ -14,7 +14,7 @@ export const TemplateCommand:Command = {
   unlisted: false,
   // If set true, the command will not be listed by 'help' but can still be executed normally.
 
-  run: (_args: string[], _tm:TaskManager):Result => {
+  run: (_args: string[], _context:ConsoleContext):Result => {
     // this function runs when your command is executed.
     // remove the _prefix if you want to use these parameters.
     // args is list consisting all arguments user has given. The length of the list will be >= argCount[0] and <= argCount[1]
@@ -23,7 +23,7 @@ export const TemplateCommand:Command = {
 
 
 
-    return {exitStatus: 0, output: []}
+    return {exitCode: 0, output: []}
     // allways return Result object.
     // exitStatus: number, 0 success and anything else is considered failure.
     // output: Txt[],

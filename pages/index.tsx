@@ -1,40 +1,15 @@
 import "@/globalStyles/globals.css";
 import styles from '@/globalStyles/global.module.css'
 import { TaskBar } from "@/components/TaskBar";
-import {ProgramProperties, TaskManager} from "@/util/taskManager";
-import { WindowManager } from "@/components/WindowManager";
 import {Desktop} from "@/components/desktop";
-import {useEffect, useRef, useState} from "react";
-import {ShortCut, ShortCutProps} from "@/components/Program/ShortCut";
-import {Vector2} from "@/util/types";
+import {CSSProperties, useContext, useState} from "react";;
 import Head from 'next/head'
+import {TaskManagerContext, TaskManagerProvider} from "@/components/OS/TaskManager";
+import {useMonitor} from "@/components/OS/MonitorHandler";
 
 
 export const Home = ()=> {
-  const [taskManager, setWindowManager] = useState<TaskManager|null>(null)
-  const screenArea = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setViewportHeight();
-    window.addEventListener('resize', setViewportHeight);
-
-    if (screenArea && screenArea.current) {
-      setWindowManager(new TaskManager(screenArea.current))
-    }
-
-    return () => {
-      window.removeEventListener('resize', setViewportHeight);
-    };
-  }, [screenArea]);
-
-  // Function to set the viewport height as a CSS variable
-  const setViewportHeight = () => {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  };
-
-  const content = taskManager ? <Content taskManager={taskManager} shortCuts={getShortCuts(taskManager)}/> : <div key={0} className={styles.loading}></div>
-
+  const {uiScale} = useMonitor()
   return (
     <>
       <Head>
@@ -42,140 +17,27 @@ export const Home = ()=> {
         <meta name="description" content="Welcome to az.sh" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
       </Head>
-      <div ref={screenArea} className={styles.screenArea}>
-        {content}
-      </div>
+      <TaskManagerProvider>
+        <div className={styles.main} style={{'--uiScale': String(uiScale)} as CSSProperties}>
+          <Desktop/>
+        </div>
+        <TaskBar/>
+        <CloseComputer/>
+      </TaskManagerProvider>
     </>
   );
 }
 
-type ContentProps = {
-  taskManager:TaskManager,
-  shortCuts: ShortCut[]
-}
-
-const Content = ({
-  taskManager,
-  shortCuts,
-}:ContentProps) => {
-
-  return ([
-    <div key={0} className={styles.main} onClick={() => taskManager.anyclick()}>
-      <Desktop shortCuts={shortCuts} taskManager={taskManager}></Desktop>
-      <WindowManager taskManager={taskManager}></WindowManager>
-    </div>,
-    <TaskBar key={1} taskManager={taskManager}/>,
-    <CloseComputer key={2} taskManager={taskManager}/>
-  ])
-}
-
-const getShortCuts = (taskManager:TaskManager):ShortCut[]=>{
-  const shortCuts:ShortCut[] = []
-  for (let s = 0; s < shortCutInputs.length; s++){
-    const sci = shortCutInputs[s]
-    const props:ShortCutProps = {
-      taskManager: taskManager,
-      properties: sci.properties,
-      parameters: sci.parameters,
-      position: sci.position,
-      startMenuIcon: sci.startMenuIcon,
-      desktopIcon: sci.startMenuIcon
-    }
-    shortCuts.push(new ShortCut(props))
-  }
-  return shortCuts
-}
-
-
-
-type ShortCutInput = {
-  properties: ProgramProperties
-  parameters: string[]
-  position: Vector2
-  startMenuIcon?: boolean
-  desktopIcon?: boolean
-}
-
-const shortCutInputs: ShortCutInput[] = [
-  {
-    properties: {
-      tittle: "Trash",
-      icon: "/icons/trash_empty.svg",
-      description: "Last stop before dev/null",
-      program: "files",
-      extra: "trash",
-    },
-    parameters: ["cd", "-s", "trash"],
-    position: new Vector2(1,1)
-  },
-  {
-    properties: {
-      tittle: "Our Computer",
-      icon: "/icons/computer.svg",
-      description: "This does the thing",
-      program: "files",
-      extra: "closeiftrashed"
-    },
-    parameters: ["cd", "-s", "root"],
-    position: new Vector2(0,0)
-  },
-  {
-    properties: {
-      tittle: "az.sh",
-      icon: "/icons/console.svg",
-      description: "The Best Shell",
-      program: "console",
-    },
-    parameters: [],
-    position: new Vector2(0,0.1)
-  },
-  {
-    properties: {
-      tittle: "Contact information",
-      icon: "/icons/contact.svg",
-      description: "",
-      program: "document",
-    },
-    parameters: ["contact"],
-    position: new Vector2(0.3,0.8)
-  },
-  {
-    properties: {
-      tittle: "Readme.md",
-      icon: "/icons/document.svg",
-      description: "",
-      program: "document",
-    },
-    parameters: ["readme"],
-    position: new Vector2(0.6,0.4)
-  },
-  {
-    properties: {
-      tittle: "Interweb zplorer",
-      icon: "/icons/zplorer.svg",
-      description: "Very Fast yes",
-      program: "",
-      extra: "openTab"
-    },
-    parameters: [],
-    position: new Vector2(0.4,0.2)
-  }
-]
 
 export default Home
 
 
-type CloseComputerProps = {
-  taskManager:TaskManager,
-}
 
 
-const CloseComputer = ({
-  taskManager,
-}:CloseComputerProps) => {
-  const [shutState, shutDown] = useState(0)
-  taskManager.shutDown = shutDown
-  const classN = shutState == 0 ? styles.hidden : shutState == 1 ? styles.shutDownNow : styles.shutDown
+const CloseComputer = () => {
+  const {shutDown} = useContext(TaskManagerContext)
+  console.log(shutDown)
+  const classN = shutDown == 0 ? styles.hidden : shutDown == 2 ? styles.shutDownNow : styles.shutDown
   return (
     <div className={classN}>
       <div className={styles.shutDownBye}>

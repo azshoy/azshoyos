@@ -3,7 +3,24 @@ import { BasicProgramProps} from "..";
 import {Component} from "react";
 import globalStyles from "@/globalStyles/global.module.css";
 
-export class FileExplorer extends Component<BasicProgramProps> {
+
+export type FileExplorerTypes = {
+  windowComponent: typeof FileExplorer
+  parameters: FileExplorerProps
+}
+
+export type FileExplorerProps = {
+  path: string[]
+}
+
+
+export const FileExplorer = ({
+  path,
+}:FileExplorerProps) => {
+  return <>{path.join()}</>
+}
+
+export class oFileExplorer extends Component<BasicProgramProps> {
   parameters: string[]
   constructor(props:BasicProgramProps) {
     super(props);

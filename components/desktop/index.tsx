@@ -1,31 +1,13 @@
-import styles from "./desktop.module.css";
-import {ShortCut} from "@/components/Program/ShortCut";
-import {TaskManager} from "@/util/taskManager";
-import {useState} from "react";
+import {Directory} from "@/components/Directory/Directory";
+import {quickPaths} from "@/components/ProgramData/programs";
 
 
 
-export type DesktopProps = {
-  shortCuts: ShortCut[]
-  taskManager: TaskManager
-}
 
-export const Desktop = ({
-  shortCuts,
-  taskManager
-}:DesktopProps) => {
-  const [, updateDesktop] = useState(0)
-  taskManager.subscribe("Desktop", "size", updateDesktop)
-  taskManager.subscribe("Desktop", "shortcuts", updateDesktop)
-
-  const scr = []
-  for (let s = 0; s < shortCuts.length; s++){
-    if (shortCuts[s].desktopIcon) scr.push(shortCuts[s].render())
-  }
-
+export const Desktop = () => {
   return (
-    <div id={"azshDesktop"} className={styles.desktop}>
-      {scr}
+    <div style={{position: "absolute", width: "100%", height: "100%", paddingBottom: "var(--bar-height)"}}>
+      <Directory path={quickPaths.desktop} allowFreePosition/>
     </div>
   );
 }
