@@ -6,6 +6,7 @@ import {discoCommand} from "@/components/Program/Console/Commands/disco";
 import {timeCommand} from "@/components/Program/Console/Commands/time";
 import {shutdownCommand} from "@/components/Program/Console/Commands/shutdown";
 import {csCommand} from "@/components/Program/Console/Commands/cs";
+import {pestiCommand} from "@/components/Program/Console/Commands/pesti/pesti";
 
 //import {TemplateCommand} from "@/components/Program/Console/Commands/TEMPLATE";
 
@@ -17,6 +18,7 @@ export const commands:{[key: string]: Command} = {
   time: timeCommand,
   cs: csCommand,
   shutdown: shutdownCommand,
+  pesti:pestiCommand
 
   //template: TemplateCommand,
 }

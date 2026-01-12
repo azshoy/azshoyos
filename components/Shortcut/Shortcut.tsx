@@ -22,6 +22,7 @@ export type ShortcutInitProps = {
   onMove?: (_p:v2) => void,
   onMoveDir?: (_p:string[]) => ProgramAction
   icon: string | (() => string)
+  showInStartMenu?: boolean
 }
 
 export class Shortcut {
@@ -34,6 +35,7 @@ export class Shortcut {
   order: number | undefined
   iconFile?: string
   id: string
+  showInStartMenu: boolean
   iconFunc: (() => string) = () => ""
   onMove = (p:v2) => {}
   onMoveDir = (p:string[]) => ProgramAction.DEFAULT
@@ -45,6 +47,7 @@ export class Shortcut {
     }
     if (props.onMove) this.onMove = props.onMove
     if (props.onMoveDir) this.onMoveDir = props.onMoveDir
+    this.showInStartMenu = props.showInStartMenu ?? false
     this.id = "s" + props.index
     this.title = props.title
     this.description = props.description
