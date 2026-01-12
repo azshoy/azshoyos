@@ -6,6 +6,7 @@ import {ProgramAction, ProgramConstructor, ProgramType} from "@/components/Progr
 
 export const quickPaths = {
   root: [],
+  images: ['images'],
   desktop: ['desktop'],
   trash: ['trash'],
   data: ['ourComputer'],
@@ -42,7 +43,8 @@ export const programData:{[key: string]: ProgramConstructor} = {
     shortcut: {
       icon: useTrashIcon,
       position: {x: 1, y: 1},
-      onMoveDir: (_p: string[]) => ProgramAction.NONE
+      onMoveDir: (_p: string[]) => ProgramAction.NONE,
+      showInStartMenu: true,
     }
   },
   computer: {
@@ -53,7 +55,18 @@ export const programData:{[key: string]: ProgramConstructor} = {
     shortcut: {
       icon: "/icons/computer.svg",
       position: {x: 0, y: 0},
-      onMoveDir: onOurComputerMoved
+      onMoveDir: onOurComputerMoved,
+      showInStartMenu: true,
+    }
+  },
+  images: {
+    title: "Images",
+    description: "A folder",
+    type: ProgramType.FILE_EXPLORER,
+    path: quickPaths.images,
+    shortcut: {
+      icon: "/icons/dir.svg",
+      position: {x: 0.2, y: 0.9},
     }
   },
   shell: {
@@ -63,6 +76,7 @@ export const programData:{[key: string]: ProgramConstructor} = {
     shortcut: {
       icon: "/icons/console.svg",
       position: {x: 0, y: 0.1},
+      showInStartMenu: true,
     }
   },
   contactInformation: {
@@ -73,6 +87,7 @@ export const programData:{[key: string]: ProgramConstructor} = {
     shortcut: {
       icon: "/icons/contact.svg",
       position: {x: 0.3, y: 0.8},
+      showInStartMenu: true,
     }
   },
   readMe: {
@@ -83,6 +98,7 @@ export const programData:{[key: string]: ProgramConstructor} = {
     shortcut: {
       icon: "/icons/document.svg",
       position: {x: 0.6, y: 0.4},
+      showInStartMenu: true,
     }
   },
   browser: {
@@ -93,6 +109,7 @@ export const programData:{[key: string]: ProgramConstructor} = {
     shortcut: {
       icon: "/icons/zplorer.svg",
       position: {x: 0.4, y: 0.2},
+      showInStartMenu: true,
     }
   }
 }

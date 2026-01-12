@@ -19,6 +19,7 @@ export type ShortcutData = {
   icon: string | (() => string),
   position: v2,
   path?: string[]
+  showInStartMenu?: boolean,
   onMove?: (_p:v2) => void,
   onMoveDir?: (_p:string[]) => ProgramAction,
 }

@@ -141,7 +141,7 @@ export const StartMenu = ({toggleMenu}:{toggleMenu:CallableFunction}) => {
         az.sh
         </div>
       </div>
-      {shortcuts.map((s) => <StartMenuShortcut shortcut={s} key={s.id} toggleMenu={toggleMenu}/>)}
+      {shortcuts.filter((s) => s.showInStartMenu).map((s) => <StartMenuShortcut shortcut={s} key={s.id} toggleMenu={toggleMenu}/>)}
       <div className={styles.horizontalSeparator}></div>
       <div className={styles.startMenuButton} onClick={() => setShutDown(1)}>
         <img src={'/icons/shutdown.svg'} alt={''} className={styles.icon}></img>

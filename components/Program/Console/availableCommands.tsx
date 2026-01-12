@@ -9,6 +9,7 @@ import {csCommand} from "@/components/Program/Console/Commands/cs";
 import {emailCommand, yCommand, nCommand} from "@/components/Program/Console/Commands/email";
 import {checkCommand} from "@/components/Program/Console/Commands/check";
 import {onchainCommand} from "@/components/Program/Console/Commands/onchain";
+import {pestiCommand} from "@/components/Program/Console/Commands/pesti/pesti";
 
 //import {TemplateCommand} from "@/components/Program/Console/Commands/TEMPLATE";
 
@@ -27,6 +28,7 @@ export const commands:{[key: string]: Command} = {
   yes: yCommand,
   n: nCommand,
   no: nCommand,
+  pesti:pestiCommand
 
   //template: TemplateCommand,
 }
