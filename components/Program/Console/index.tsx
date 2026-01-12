@@ -1,11 +1,12 @@
 import styles from "../program.module.css";
-import {ReactNode, useContext, useEffect, useState} from "react";
+import {ReactNode, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {handleCommand, Result, Txt} from "@/components/Program/Console/commandHandler";
 import {FileExplorer} from "@/components/Program/FileExplorer";
 import {TaskManagerContext, TaskManagerInterface} from "@/components/OS/TaskManager";
 import {useMonitor} from "@/components/OS/MonitorHandler";
 import {v2} from "@/util/types";
 import {commands} from "@/components/Program/Console/availableCommands";
+import {hasPendingPrompt} from "@/util/session";
 
 export type ConsoleTypes = {
   windowComponent: typeof FileExplorer
@@ -16,6 +17,7 @@ export type ConsoleContext = {
   taskManager: TaskManagerInterface
   monitor: {size: v2 | undefined, uiScale: number | undefined}
   state: {[K in (keyof typeof commands)]: any}
+  print: (txt: Txt | Txt[]) => void
 }
 
 export type ShellConsoleProps = {
@@ -29,11 +31,34 @@ export const ShellConsole = ({
 
   const [commandHistory, setCommandHistory] = useState<string[]>([])
   const [historyCursor, setHistoryCursor] = useState(-1)
+  const outputKeyRef = useRef(0)
+
+  // Async-safe print function for commands
+  const asyncPrint = useCallback((txtInput: Txt | Txt[]) => {
+    const txt: Txt[] = Array.isArray(txtInput) ? txtInput : [txtInput];
+    setOutputLines(prev => {
+      const newOutputs: ReactNode[] = [];
+      txt.forEach((t) => {
+        const sl = t.s.split("\n");
+        for (let s = 0; s < sl.length; s++) {
+          newOutputs.push(
+            <span key={outputKeyRef.current++} className={[styles.line, t.c == "error" ? styles.error : t.c == "highlight" ? styles.highlight : ""].join(" ")}>
+              {sl[s]}
+            </span>
+          );
+          if (s != sl.length - 1) newOutputs.push(<br key={outputKeyRef.current++} />);
+        }
+      });
+      newOutputs.push(<br key={outputKeyRef.current++} />);
+      return [...prev, ...newOutputs];
+    });
+  }, []);
 
   const context:ConsoleContext = {
     taskManager: useContext(TaskManagerContext),
     monitor: useMonitor(),
-    state: {}
+    state: {},
+    print: asyncPrint
   }
 
   useEffect(() => {
@@ -108,8 +133,11 @@ export const ShellConsole = ({
         printLine({s: input})
         if (command) {
           doAction(command, param);
+        } else if (hasPendingPrompt()) {
+          // Empty enter with pending prompt defaults to Y
+          doAction('y', []);
         } else {
-          setExitCode(1)
+          setExitCode(0)
         }
         setTimeout(() => inputElement.scrollIntoView({ behavior: "instant", block: "nearest", inline: "end" }), 100)
       }

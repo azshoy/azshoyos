@@ -6,6 +6,8 @@ import {discoCommand} from "@/components/Program/Console/Commands/disco";
 import {timeCommand} from "@/components/Program/Console/Commands/time";
 import {shutdownCommand} from "@/components/Program/Console/Commands/shutdown";
 import {csCommand} from "@/components/Program/Console/Commands/cs";
+import {emailCommand, yCommand, nCommand} from "@/components/Program/Console/Commands/email";
+import {checkCommand} from "@/components/Program/Console/Commands/check";
 
 //import {TemplateCommand} from "@/components/Program/Console/Commands/TEMPLATE";
 
@@ -17,6 +19,12 @@ export const commands:{[key: string]: Command} = {
   time: timeCommand,
   cs: csCommand,
   shutdown: shutdownCommand,
+  email: emailCommand,
+  check: checkCommand,
+  y: yCommand,
+  yes: yCommand,
+  n: nCommand,
+  no: nCommand,
 
   //template: TemplateCommand,
 }
