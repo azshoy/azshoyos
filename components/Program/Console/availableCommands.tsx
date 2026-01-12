@@ -8,6 +8,7 @@ import {shutdownCommand} from "@/components/Program/Console/Commands/shutdown";
 import {csCommand} from "@/components/Program/Console/Commands/cs";
 import {emailCommand, yCommand, nCommand} from "@/components/Program/Console/Commands/email";
 import {checkCommand} from "@/components/Program/Console/Commands/check";
+import {onchainCommand} from "@/components/Program/Console/Commands/onchain";
 
 //import {TemplateCommand} from "@/components/Program/Console/Commands/TEMPLATE";
 
@@ -21,6 +22,7 @@ export const commands:{[key: string]: Command} = {
   shutdown: shutdownCommand,
   email: emailCommand,
   check: checkCommand,
+  onchain: onchainCommand,
   y: yCommand,
   yes: yCommand,
   n: nCommand,
