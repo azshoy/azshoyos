@@ -19,6 +19,7 @@ export type ShortcutData = {
   icon: string | (() => string),
   position: v2,
   path?: string[]
+  showInStartMenu?: boolean,
   onMove?: (_p:v2) => void,
   onMoveDir?: (_p:string[]) => ProgramAction,
 }
@@ -119,7 +120,9 @@ export class DocumentReaderProgramClass extends ProgramBase {
   constructor(construct:ProgramBaseProps & DocumentReaderProps) {
     super(construct)
     this.parameters = {
-      file: construct.file
+      file: construct.file,
+      downloadable: construct.downloadable,
+      filename: construct.filename
     }
   }
   run = () => {

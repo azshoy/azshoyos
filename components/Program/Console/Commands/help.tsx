@@ -9,7 +9,7 @@ export const helpCommand:Command = {
   help: "help gives you help!",
   description: "a great help.",
   unlisted: false,
-  run: (args: string[], _context:ConsoleContext):Result => {
+  run: (_command: string, args: string[], _context:ConsoleContext):Result => {
     if (args.length == 0) {
       const clist: Txt[] = [{s: "Usage: help <command>\nYou can try these commands:"}]
       for (const [key, value] of Object.entries(commands)) {
@@ -26,5 +26,8 @@ export const helpCommand:Command = {
       }
       return {exitCode: 1, output: {s: "Sorry, can't help with nonexistent command. '" + args[0] + "' :(", c: "error"}}
     }
+  },
+  continue: (_command: string, _input:string[], _context:ConsoleContext):Result => {
+    return {exitCode: 0, output: []}
   }
 }

@@ -30,6 +30,7 @@ export type TaskManagerInterface = {
   setShutDown: (s: number) => void
   shortcutUpdate: number,
   setShortcutUpdate: (s:number) => void,
+  swapTask: (taskID: number, programID: string) => void,
   setShortcuts: (shortcuts:Shortcut[]) => void,
   setAsBackground: (s:CSSProperties['background']) => void,
   specialEffects: {effects: string[], add: (s:string) => void, remove: (s:string) => void, updated: number}
@@ -72,6 +73,7 @@ export type Task = {
   taskID: number,
   programID: string,
   type: 'window' | 'killed'
+  update: number
 }
 
 export const TaskManagerContext = createContext<TaskManagerInterface>({
@@ -87,6 +89,7 @@ export const TaskManagerContext = createContext<TaskManagerInterface>({
   setShortcutUpdate: (s:number) => {},
   runXonY: (x:Shortcut, y:string) => false,
   startNewTask: (programID: string) =>{},
+  swapTask: (taskID: number, programID: string) => {},
   killTask: (taskID: number) =>{},
   setAsBackground: (s: CSSProperties['background']) =>{},
   specialEffects: {effects: [], add: (s:string) => {}, remove: (s:string)=> {}, updated: 0},
@@ -132,6 +135,7 @@ export const TaskManagerProvider = ({
       case ProgramAction.MOVE:
         if (program.programType == ProgramType.FILE_EXPLORER) {
           const onMoveRes = x.onMoveDir((program as FileExplorerProgramClass).parameters.path)
+          setShortcutUpdate(Date.now())
           switch (onMoveRes) {
             case ProgramAction.SHUTDOWN:
               setShutDown(1)
@@ -159,7 +163,7 @@ export const TaskManagerProvider = ({
         if (program.programType == ProgramType.RUNNABLE_SCRIPT) {
           (program as ScriptProgramClass).run()
         } else {
-          setTasks([...tasks, {taskID: taskID, programID: newTask, type: 'window'}])
+          setTasks((prevState) => [...prevState, {taskID: taskID, programID: newTask, type: 'window', update: 0}])
         }
         setTaskID(taskID + 1)
       }
@@ -167,6 +171,18 @@ export const TaskManagerProvider = ({
     setNewTask(null)
     setTaskUpdate(Date.now())
   }, [newTask, tasks, taskID]);
+
+  const swapTask = (taskID:number, newProgram:string) => {
+    const upd = Date.now()
+    setTasks((prevState) => prevState.map((t) => {
+      if (t.taskID == taskID) {
+        t.programID = newProgram
+        t.update = upd
+      }
+      return t
+    }))
+    setTaskUpdate(upd)
+  }
 
   useEffect(() => {
     if (newKillTask){
@@ -194,12 +210,12 @@ export const TaskManagerProvider = ({
 
 
   return (
-    <TaskManagerContext.Provider value={{programs, shortcuts, shortcutID, tasks, taskUpdate, shutDown, setShutDown, setShortcuts, shortcutUpdate, setShortcutUpdate, runXonY, startNewTask:setNewTask, killTask:setKillTask, setAsBackground, specialEffects}}>
-      <WindowManagerProvider>
-        <DragManagerProvider>
+    <TaskManagerContext.Provider value={{programs, shortcuts, shortcutID, tasks, taskUpdate, shutDown, setShutDown, setShortcuts, shortcutUpdate, setShortcutUpdate, runXonY, startNewTask:setNewTask, killTask:setKillTask, swapTask, setAsBackground, specialEffects}}>
+      <DragManagerProvider>
+        <WindowManagerProvider>
           {children}
-        </DragManagerProvider>
-      </WindowManagerProvider>
+        </WindowManagerProvider>
+      </DragManagerProvider>
     </TaskManagerContext.Provider>
     )
 }
@@ -253,6 +269,7 @@ const useSpecialEffects = () => {
 type DragManagerInterface = {
   setCollector: CallableFunction
   startDragging: (_e:Draggable, _o:v2) => void
+  resetDragging: CallableFunction
 }
 
 export const DragManagerContext = createContext<DragManagerInterface | undefined>(undefined);
@@ -270,7 +287,7 @@ export const DragManagerProvider = ({
   const [dragging, setDragging] = useState<Draggable>(null)
   const [offset, setOffset] = useState<v2>({x:0,y:0})
   const [dragState, setDragState] = useState<DragState>(DragState.IDLE)
-  const [collector, setCollector] = useState<{f: CallableFunction} | undefined>(undefined)
+  const [collector, setCollector] = useState<{f: CallableFunction, p: string[]} | undefined>(undefined)
   const [lMA, setLastMouseAction] = useState<{p:v2, t:string, s:number}>({p:{x:-1,y:-1}, t:"", s:0})
 
   const timer = useRef<ReturnType<typeof setTimeout>>(null);
@@ -282,11 +299,16 @@ export const DragManagerProvider = ({
     setOffset(o)
     setDragging(e)
     setDragState(DragState.INIT)
+    console.log("Start drag")
+  }
+  const resetDragging = () => {
+    setDragState(DragState.IDLE)
+    setDragging(null)
   }
 
   useEffect(() => {
     if (typeof collector != 'undefined'){
-      console.log("Collecting?", dragState)
+      console.log("Collecting?", dragState, collector)
       if (dragState == DragState.DROPPED){
         collector.f(dragging)
         setDragState(DragState.IDLE)
@@ -338,7 +360,7 @@ export const DragManagerProvider = ({
   },[cursor.timestamp])
 
   return (
-    <DragManagerContext.Provider value={{startDragging, setCollector}}>
+    <DragManagerContext.Provider value={{startDragging, setCollector, resetDragging}}>
       <div style={{position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents:'none'}}>
         {dragging && dragState == DragState.DRAGGING ? <ShortcutDraggable shortcut={dragging} x={cursor.clientX-offset.x} y={cursor.clientY-offset.y}/>: <div></div> }
       </div>

@@ -9,6 +9,7 @@ import {csCommand} from "@/components/Program/Console/Commands/cs";
 import {emailCommand, yCommand, nCommand} from "@/components/Program/Console/Commands/email";
 import {checkCommand} from "@/components/Program/Console/Commands/check";
 import {onchainCommand} from "@/components/Program/Console/Commands/onchain";
+import {pestiCommand} from "@/components/Program/Console/Commands/pesti/pesti";
 
 //import {TemplateCommand} from "@/components/Program/Console/Commands/TEMPLATE";
 
@@ -20,13 +21,7 @@ export const commands:{[key: string]: Command} = {
   time: timeCommand,
   cs: csCommand,
   shutdown: shutdownCommand,
-  email: emailCommand,
-  check: checkCommand,
-  onchain: onchainCommand,
-  y: yCommand,
-  yes: yCommand,
-  n: nCommand,
-  no: nCommand,
+  pesti:pestiCommand
 
   //template: TemplateCommand,
 }
@@ -38,5 +33,6 @@ export type Command = {
   description?: string
   unlisted?: boolean
   run: CallableFunction
-  default_state?: any
+  continue: CallableFunction
+  defaultState?: any
 }

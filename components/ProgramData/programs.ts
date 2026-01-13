@@ -6,6 +6,7 @@ import {ProgramAction, ProgramConstructor, ProgramType} from "@/components/Progr
 
 export const quickPaths = {
   root: [],
+  images: ['images'],
   desktop: ['desktop'],
   trash: ['trash'],
   data: ['ourComputer'],
@@ -42,7 +43,8 @@ export const programData:{[key: string]: ProgramConstructor} = {
     shortcut: {
       icon: useTrashIcon,
       position: {x: 1, y: 1},
-      onMoveDir: (_p: string[]) => ProgramAction.NONE
+      onMoveDir: (_p: string[]) => ProgramAction.NONE,
+      showInStartMenu: true,
     }
   },
   computer: {
@@ -53,7 +55,118 @@ export const programData:{[key: string]: ProgramConstructor} = {
     shortcut: {
       icon: "/icons/computer.svg",
       position: {x: 0, y: 0},
-      onMoveDir: onOurComputerMoved
+      onMoveDir: onOurComputerMoved,
+      showInStartMenu: true,
+    }
+  },
+  imagesDir: {
+    title: "Images",
+    description: "A folder",
+    type: ProgramType.FILE_EXPLORER,
+    path: quickPaths.images,
+    shortcut: {
+      icon: "/icons/dir_blue.svg",
+      position: {x: 0, y: 0},
+      path: quickPaths.root
+    }
+  },
+  pestiStatue: {
+    title: "statue.png",
+    filename: "statue.png",
+    description: "Strange statue",
+    type: ProgramType.DOCUMENT_READER,
+    file: "statue",
+    shortcut: {
+      icon: "/icons/image.svg",
+      path: ["images"],
+      position: {x: 0, y: 0},
+    }
+  },
+  codeDir: {
+    title: "Code Projects",
+    description: "A folder",
+    type: ProgramType.FILE_EXPLORER,
+    path: ["code_projects"],
+    shortcut: {
+      icon: "/icons/dir_green.svg",
+      position: {x: 0.1, y: 0},
+      path: quickPaths.root
+    }
+  },
+  pestiPython: {
+    title: "important.py",
+    filename: "important.py",
+    description: "a bit broken code snippet",
+    type: ProgramType.DOCUMENT_READER,
+    file: "pestiPython",
+    downloadable: true,
+    shortcut: {
+      icon: "/icons/python.svg",
+      position: {x: 0, y: 0},
+      path: ["code_projects"],
+    }
+  },
+  dataDir: {
+    title: "Auction Data",
+    description: "A folder",
+    type: ProgramType.FILE_EXPLORER,
+    path: ["auction_data"],
+    shortcut: {
+      icon: "/icons/dir_yellow.svg",
+      position: {x: 0.2, y: 0},
+      path: quickPaths.root
+    }
+  },
+  pestiAuctionsJSON: {
+    title: "auctions.json",
+    filename: "auctions.json",
+    description: "json data",
+    type: ProgramType.DOCUMENT_READER,
+    file: "pestiAuctionsJSON",
+    downloadable: true,
+    shortcut: {
+      icon: "/icons/json.svg",
+      position: {x: 0, y: 0},
+      path: ["auction_data"]
+    }
+  },
+  pestiBidsJSON: {
+    title: "bids.json",
+    filename: "bids.json",
+    description: "json data",
+    type: ProgramType.DOCUMENT_READER,
+    file: "pestiBidsJSON",
+    downloadable: true,
+    shortcut: {
+      icon: "/icons/json.svg",
+      position: {x: 0, y: 0},
+      path: ["auction_data"]
+    }
+  },
+  pestiUsersJSON: {
+    title: "users.json",
+    filename: "users.json",
+    description: "json data",
+    type: ProgramType.DOCUMENT_READER,
+    file: "pestiUsersJSON",
+    downloadable: true,
+    shortcut: {
+      icon: "/icons/json.svg",
+      position: {x: 0, y: 0},
+      path: ["auction_data"]
+    }
+  },
+  pestiVehiclesJSON: {
+    title: "vehicles.json",
+    filename: "vehicles.json",
+    description: "json data",
+    type: ProgramType.DOCUMENT_READER,
+    file: "pestiVehiclesJSON",
+    downloadable: true,
+    shortcut: {
+      icon: "/icons/json.svg",
+      position: {x: 0, y: 0},
+      path: ["auction_data"]
     }
   },
   shell: {
@@ -63,26 +176,31 @@ export const programData:{[key: string]: ProgramConstructor} = {
     shortcut: {
       icon: "/icons/console.svg",
       position: {x: 0, y: 0.1},
+      showInStartMenu: true,
     }
   },
   contactInformation: {
     title: "Contact information",
+    filename: "contact.md",
     description: "",
     type: ProgramType.DOCUMENT_READER,
     file: "contact",
     shortcut: {
       icon: "/icons/contact.svg",
       position: {x: 0.3, y: 0.8},
+      showInStartMenu: true,
     }
   },
   readMe: {
     title: "Readme.md",
+    filename: "readme.md",
     description: "",
     type: ProgramType.DOCUMENT_READER,
     file: "readme",
     shortcut: {
       icon: "/icons/document.svg",
       position: {x: 0.6, y: 0.4},
+      showInStartMenu: true,
     }
   },
   browser: {
@@ -93,6 +211,7 @@ export const programData:{[key: string]: ProgramConstructor} = {
     shortcut: {
       icon: "/icons/zplorer.svg",
       position: {x: 0.4, y: 0.2},
+      showInStartMenu: true,
     }
   }
 }

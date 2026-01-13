@@ -1,7 +1,7 @@
-import {CSSProperties, useContext, useEffect, useState} from "react";
+import {CSSProperties, ReactNode, useContext, useEffect, useState} from "react";
 import {v2} from "@/util/types";
 import styles from "@/components/Program/program.module.css";
-import {WindowedProgramClass} from "@/components/Program/Program";
+import {FileExplorerProgramClass, WindowedProgramClass} from "@/components/Program/Program";
 import {TaskManagerContext} from "@/components/OS/TaskManager";
 import {WindowManagerContext} from "@/components/OS/WindowManager";
 import {useCursor} from "@/components/OS/Cursor";
@@ -19,7 +19,7 @@ const getWindowStyle = (p: v2, s: v2, z: number, max: boolean, min: boolean, mov
       return {
         transition: moving ? "none" : "width 0.3s, height 0.3s, left 0.3s, top 0.3s",
         width: 100 + "%",
-        height: 100 + "%",
+        height: "calc(100% - var(--bar-height))",
         left: 0 + "px",
         top: 0 + "px",
         zIndex: 1000 - z
@@ -49,10 +49,12 @@ const getWindowStyle = (p: v2, s: v2, z: number, max: boolean, min: boolean, mov
 export const ProgramWindow = ({
   position: initialPosition,
   size: initialSize,
-  program,
+  program: initialProgram,
   taskID,
 }:WindowProps) => {
-  const {killTask} = useContext(TaskManagerContext)
+  const {killTask, taskUpdate, tasks, programs, setShortcutUpdate} = useContext(TaskManagerContext)
+  const [program, setProgram] = useState<WindowedProgramClass | null>(initialProgram)
+  const [newProgram, setNewProgram] = useState<WindowedProgramClass | null>(null)
   const [position, setPosition] = useState(initialPosition)
   const [zIndex, setZIndex] = useState(0)
   const [size] = useState(initialSize)
@@ -78,6 +80,23 @@ export const ProgramWindow = ({
   useEffect(() => {
     windowManager?.focus(taskID)
   }, [])
+
+
+  useEffect(() => {
+    const thisTask = tasks.find((t) => t.taskID == taskID)
+    if (thisTask && thisTask.update == taskUpdate) {
+      setNewProgram(programs[thisTask.programID] as WindowedProgramClass)
+      setProgram(null)
+    }
+  }, [tasks, taskUpdate])
+
+  useEffect(() => {
+    if (newProgram) {
+      setProgram(newProgram)
+      setNewProgram(null)
+    }
+  }, [newProgram])
+
   const windowStyle = getWindowStyle(position, size, zIndex, windowMaximized, windowMinimized, isMoving)
 
   const startMove = (e:React.MouseEvent) => {
@@ -90,21 +109,33 @@ export const ProgramWindow = ({
     setWindowMinimized(!windowMinimized)
   }
   const toggleMaximize = (e:React.MouseEvent) => {
+    e.stopPropagation()
     setWindowMaximized(!windowMaximized)
   }
   const close = (e:React.MouseEvent) => {
+    e.stopPropagation()
     killTask(taskID)
   }
   useEffect(() => {
     if (isMoving) {
       if (cursor.clickActive) {
         const newPos = {x: cursor.pageX - moveOffset.x, y: cursor.pageY - moveOffset.y}
-        if (newPos.x != position.x || newPos.y != position.y) setPosition({x: cursor.pageX - moveOffset.x, y: cursor.pageY - moveOffset.y})
+        if (newPos.x != position.x || newPos.y != position.y) {
+
+          if (windowMaximized) {
+            setWindowMaximized(false)
+          }
+          setPosition({x: cursor.pageX - moveOffset.x, y: cursor.pageY - moveOffset.y})
+        }
       } else {
+        if (position.y < 5){
+          setPosition({x: position.x, y: 0})
+          setWindowMaximized(true)
+        }
         setIsMoving(false)
       }
     }
-  }, [cursor, isMoving, moveOffset, position]);
+  }, [cursor, isMoving, moveOffset, position, windowMaximized]);
 
   useEffect(() => {
     if (windowMinimized && windowManager){
@@ -115,10 +146,14 @@ export const ProgramWindow = ({
   return (
     <div className={styles.window} onClick={() => windowManager?.focus(taskID)} style={windowStyle}>
       <div className={styles.titleBar} onMouseDown={startMove}>
-        <img src={program.icon} alt={''} className={styles.icon}></img>
-        <div className={styles.title}>
-          {program.title}
-        </div>
+        {program !== null ?
+          <>
+            <img src={program.icon} alt={''} className={styles.icon}></img>
+            <div className={styles.title}>
+              {program.title}
+            </div>
+          </>
+        : null}
         <button className={styles.minimize} onClick={minimize}>
           <img src={'/icons/minimize.svg'} alt={''} className={styles.icon}></img>
         </button>
@@ -130,7 +165,7 @@ export const ProgramWindow = ({
         </button>
       </div>
       <div className={styles.program}>
-        {program.programWindow}
+        {program ? program.programWindow : null}
       </div>
     </div>
   )

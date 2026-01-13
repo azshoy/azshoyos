@@ -9,7 +9,10 @@ export const timeCommand:Command = {
   help: "Tells you the current time",
   description: "What time is it?",
   unlisted: false,
-  run: (_args: string[], _context:ConsoleContext):Result => {
+  run: (_command: string, _args: string[], _context:ConsoleContext):Result => {
     return {exitCode: 0, output: [{s: "Please check the bottom right corner."}]}
+  },
+  continue: (_command: string, _input:string[], _context:ConsoleContext):Result => {
+    return {exitCode: 0, output: []}
   }
 }
