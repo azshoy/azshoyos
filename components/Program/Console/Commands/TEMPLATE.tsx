@@ -14,7 +14,7 @@ export const TemplateCommand:Command = {
   unlisted: false,
   // If set true, the command will not be listed by 'help' but can still be executed normally.
 
-  run: (_args: string[], _context:ConsoleContext):Result => {
+  run: (_command: string, _args: string[], _context:ConsoleContext):Result => {
     // this function runs when your command is executed.
     // remove the _prefix if you want to use these parameters.
     // args is list consisting all arguments user has given. The length of the list will be >= argCount[0] and <= argCount[1]
@@ -31,6 +31,9 @@ export const TemplateCommand:Command = {
     //         where optional param c is textColor = "default" | "error" | "highlight"
     // Add multiple Txt's to change output color on the fly.
     // Split lines with \n as newline.
+  },
+  continue: (_command: string, _input:string[], _context:ConsoleContext):Result => {
+    return {exitCode: 0, output: []}
   }
 }
 // Look at other files in this dir for examples.

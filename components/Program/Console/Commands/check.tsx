@@ -106,6 +106,9 @@ export const checkCommand: Command = {
       useSession = hasCookieConsent();
     }
 
-    return doCheck(answer, useSession, context.print);
+    return doCheck(answer, useSession, () => {});
+  },
+  continue: (_command: string, _input:string[], _context:ConsoleContext):Result => {
+    return {exitCode: 0, output: []}
   }
 };

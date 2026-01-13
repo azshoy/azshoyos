@@ -21,13 +21,6 @@ export const commands:{[key: string]: Command} = {
   time: timeCommand,
   cs: csCommand,
   shutdown: shutdownCommand,
-  email: emailCommand,
-  check: checkCommand,
-  onchain: onchainCommand,
-  y: yCommand,
-  yes: yCommand,
-  n: nCommand,
-  no: nCommand,
   pesti:pestiCommand
 
   //template: TemplateCommand,
@@ -40,5 +33,6 @@ export type Command = {
   description?: string
   unlisted?: boolean
   run: CallableFunction
-  default_state?: any
+  continue: CallableFunction
+  defaultState?: any
 }

@@ -1,8 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
+import {API_URL, enableCookies, getUserId} from "@/util/session";
+import {Result, Txt} from "@/components/Program/Console/commandHandler";
+import {getUsername} from "@/components/Program/Console/Commands/pesti/pesti";
 
 
-const serverUrl = 'https://mywebsite.example/endpoint/'
-const enabled = false
 
 const getUserUniqueId = () => {
   let id = localStorage.getItem("userID")
@@ -12,18 +13,47 @@ const getUserUniqueId = () => {
   return id
 }
 
-export const sendCommandProgressToServer = (command: string, args: string[]) => {
-  if (!enabled) return
-  fetch(serverUrl, {
+
+export const doCheck = async (quest: string, answer: string) => {
+  const status = {
+    pending: true,
+    error: false,
+    ok: false,
+  }
+  await fetch(`${API_URL}/check`, {
     method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      user: getUserUniqueId(),
-      command: command,
-      args: args.join(" "),
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({quest, answer, userId: getUserUniqueId(), username: getUsername() || "?"}),
+  }).then(response => {
+      if (!response.ok) {
+        return response.json().then(data => {
+          throw new Error(data.error || 'Request failed');
+        });
+      }
+      return response.json();
     })
+    .then(data => {
+      if (data.correct) {
+        status.pending = false
+        status.ok = true
+      } else {
+        status.pending = false
+        status.ok = false
+      }
+    })
+    .catch(err => {
+      status.pending = false
+      status.error = true
+    });
+  return status
+}
+
+
+export const doSubscribe = (email: string) => {
+  fetch(`${API_URL}/contact`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({email, userId: getUserUniqueId()}),
   })
 }
+

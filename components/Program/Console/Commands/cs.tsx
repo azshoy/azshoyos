@@ -10,7 +10,7 @@ export const csCommand:Command = {
   help: "Command storage toggler",
   description: "By enabling local command storage, you agree to using cookies.",
   unlisted: false,
-  run: (args: string[], context:ConsoleContext):Result => {
+  run: (_command: string, args: string[], context:ConsoleContext):Result => {
     const enabled = localStorage.getItem("localCommandHistoryEnabled") == "TRUE"
     if (args.length == 0) {
       if (enabled){
@@ -40,5 +40,8 @@ export const csCommand:Command = {
       }
     }
     return {exitCode: 1, output: [{s: "Unknown error!", c:"error"}]}
+  },
+  continue: (_command: string, _input:string[], _context:ConsoleContext):Result => {
+    return {exitCode: 0, output: []}
   }
 }

@@ -10,9 +10,10 @@ export const discoCommand:Command = {
   help: "Starts a disco!",
   description: "Wanna party?",
   unlisted: false,
-  default_state: {on: false},
-  run: (_args: string[], context:ConsoleContext):Result => {
+  defaultState: {on: false},
+  run: (_command: string, _args: string[], context:ConsoleContext):Result => {
     context.state["disco"].on = !context.state["disco"].on
+    context.setState({...context.state})
     const currentState = context.state["disco"] as commandState
     if (currentState.on) {
       context.taskManager.setAsBackground('url("/misc/disco.gif")')
@@ -24,5 +25,8 @@ export const discoCommand:Command = {
       return {exitCode: 0, output: [{s: "Party Over! :("}]}
     }
     return {exitCode: 1, output: [{s: "Unknown error!", c:"error"}]}
+  },
+  continue: (_command: string, _input:string[], _context:ConsoleContext):Result => {
+    return {exitCode: 0, output: []}
   }
 }

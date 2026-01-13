@@ -16,24 +16,30 @@ export type DirGrid = {
 }
 
 export const Directory = ({
-  path,
+  path:inputPath,
   allowFreePosition = false,
   className,
 }:DirectoryProps) => {
-  const {shortcuts, runXonY} = useContext(TaskManagerContext)
+  const {shortcuts:allShortcuts, shortcutUpdate, setShortcutUpdate, runXonY} = useContext(TaskManagerContext)
   const {uiScale} = useMonitor()
   const [viewSize, setViewSize] = useState<v2|undefined>(undefined);
   const [grid, setGrid] = useState<DirGrid | undefined>(undefined);
   const [scrollable, setScrollable] = useState(false);
   const viewAreaElement = useRef<HTMLDivElement>(null)
+  const [path, setPath] = useState(inputPath)
   const pathString = "/"+path.join("/")
   const [shortcutElements, setShortCutElements] = useState<ReactNode[]>([])
-
+  const [shortcuts, setShortcuts] = useState<Shortcut[]>([])
   const DMC = useContext(DragManagerContext)
 
 
   const [collectPos, setCollectPos] = useState<v2>({x:0, y:0});
   const [collected, setCollected] = useState<Draggable>(null);
+
+
+  useEffect(() => {
+    setShortcuts(allShortcuts.filter((s) => {return "/"+s.path.join('/') == pathString}))
+  }, [allShortcuts, shortcutUpdate, pathString]);
 
   useEffect(() => {
     if (viewAreaElement.current) {
@@ -141,7 +147,7 @@ export const Directory = ({
         })
       )
     }
-  }, [shortcuts, pathString, grid, allowFreePosition]);
+  }, [shortcuts, pathString, grid, allowFreePosition, shortcutUpdate]);
 
   const collectShortcut = (clientClickPos:v2) =>{
     if (viewAreaElement.current && DMC) {
@@ -150,7 +156,7 @@ export const Directory = ({
         x: clientClickPos.x - elemRect.x,
         y: clientClickPos.y - elemRect.y
       }
-      DMC.setCollector({f: setCollected})
+      DMC.setCollector({f: setCollected, p: path})
       setCollectPos(clickPos)
     }
   }
@@ -169,36 +175,36 @@ export const Directory = ({
   useEffect(() => {
     setCollected(null)
     if (collected && viewSize && grid) {
-      const s = shortcuts.find((s) => s.id == collected.id)
+      const s = allShortcuts.find((s) => s.id == collected.id)
       if (s) {
         const dropPos = {x: collectPos.x / viewSize.x, y: collectPos.y / viewSize.y}
         const gPos = {x: Math.floor(dropPos.x * (grid.gridSize.x-0.001)), y: Math.floor(dropPos.y * (grid.gridSize.y-0.001))}
         const current = grid.grid[gPos.y][gPos.x]
-        const currentS = current ? shortcuts.find((s) => s.id == current) : undefined
+        const currentS = current ? allShortcuts.find((s) => s.id == current) : undefined
         if (current == s.id) return
         if ("/"+s.path.join('/') != pathString){
           s.path = [...path]
+          setShortcutUpdate(Date.now())
+        }
+        if (current == null || !currentS){
+          s.position = {
+            x: collectPos.x / viewSize.x,
+            y: collectPos.y / viewSize.y
+          }
+          const nGrid = grid.grid.map((row, y) => row.map((c, x) => {
+            if (c == s.id) return null
+            return c
+          }))
+          setGrid({...grid, grid: nGrid})
         } else {
-          if (current == null || !currentS){
-            s.position = {
-              x: collectPos.x / viewSize.x,
-              y: collectPos.y / viewSize.y
-            }
+          const gone = runXonY(s, currentS.programID)
+          if (gone) {
             const nGrid = grid.grid.map((row, y) => row.map((c, x) => {
               if (c == s.id) return null
               return c
             }))
             setGrid({...grid, grid: nGrid})
-          } else {
-            const gone = runXonY(s, currentS.programID)
-            console.log(gone)
-            if (gone) {
-              const nGrid = grid.grid.map((row, y) => row.map((c, x) => {
-                if (c == s.id) return null
-                return c
-              }))
-              setGrid({...grid, grid: nGrid})
-            }
+            setShortcutUpdate(Date.now())
           }
         }
       }

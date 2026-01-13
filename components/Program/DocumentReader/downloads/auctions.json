@@ -1,0 +1,167 @@
+[
+  {
+    "id": 1,
+    "createdAt": "2025-11-19T03:58:14.094154Z",
+    "reservePriceCents": 3578200,
+    "startPriceCents": 2669100,
+    "startTime": "2025-12-26T21:10:44.094151Z",
+    "endTime": "2026-01-09T21:10:44.094151Z",
+    "sellerId": 12,
+    "vehicleId": 8,
+    "status": "ended"
+  },
+  {
+    "id": 2,
+    "createdAt": "2025-11-22T19:51:56.094165Z",
+    "reservePriceCents": 2282300,
+    "startPriceCents": 1995100,
+    "startTime": "2026-01-01T21:10:44.094162Z",
+    "endTime": "2026-01-11T21:10:44.094162Z",
+    "sellerId": 6,
+    "vehicleId": 14,
+    "status": "active"
+  },
+  {
+    "id": 3,
+    "createdAt": "2025-12-09T11:41:39.094174Z",
+    "reservePriceCents": 4877100,
+    "startPriceCents": 4130500,
+    "startTime": "2026-01-05T21:10:44.094172Z",
+    "endTime": "2026-01-12T21:10:44.094172Z",
+    "sellerId": 17,
+    "vehicleId": 4,
+    "status": "pending"
+  },
+  {
+    "id": 4,
+    "createdAt": "2025-12-22T12:17:05.094183Z",
+    "reservePriceCents": 1209600,
+    "startPriceCents": 757600,
+    "startTime": "2026-01-05T21:10:44.094181Z",
+    "endTime": "2026-01-14T21:10:44.094181Z",
+    "sellerId": 12,
+    "vehicleId": 6,
+    "status": "cancelled"
+  },
+  {
+    "id": 5,
+    "createdAt": "2025-11-14T09:24:29.094192Z",
+    "reservePriceCents": 1082300,
+    "startPriceCents": 878700,
+    "startTime": "2026-01-02T21:10:44.094190Z",
+    "endTime": "2026-01-13T21:10:44.094190Z",
+    "sellerId": 7,
+    "vehicleId": 11,
+    "status": "ended"
+  },
+  {
+    "id": 6,
+    "createdAt": "2025-12-05T10:22:37.094206Z",
+    "reservePriceCents": 1792600,
+    "startPriceCents": 848400,
+    "startTime": "2025-12-30T21:10:44.094204Z",
+    "endTime": "2026-01-11T21:10:44.094204Z",
+    "sellerId": 17,
+    "vehicleId": 15,
+    "status": "cancelled"
+  },
+  {
+    "id": 7,
+    "createdAt": "2025-11-27T00:44:50.094215Z",
+    "reservePriceCents": 4253000,
+    "startPriceCents": 4106500,
+    "startTime": "2025-12-29T21:10:44.094213Z",
+    "endTime": "2026-01-03T21:10:44.094213Z",
+    "sellerId": 16,
+    "vehicleId": 23,
+    "status": "active"
+  },
+  {
+    "id": 8,
+    "createdAt": "2025-12-08T18:13:04.094223Z",
+    "reservePriceCents": 1533700,
+    "startPriceCents": 714900,
+    "startTime": "2026-01-07T21:10:44.094221Z",
+    "endTime": "2026-01-16T21:10:44.094221Z",
+    "sellerId": 7,
+    "vehicleId": 22,
+    "status": "active"
+  },
+  {
+    "id": 9,
+    "createdAt": "2025-12-21T17:52:12.094231Z",
+    "reservePriceCents": 3894400,
+    "startPriceCents": 3530600,
+    "startTime": "2026-01-04T21:10:44.094230Z",
+    "endTime": "2026-01-14T21:10:44.094230Z",
+    "sellerId": 8,
+    "vehicleId": 28,
+    "status": "cancelled"
+  },
+  {
+    "id": 10,
+    "createdAt": "2025-11-30T02:44:32.094240Z",
+    "reservePriceCents": 5172300,
+    "startPriceCents": 4931900,
+    "startTime": "2025-12-27T21:10:44.094238Z",
+    "endTime": "2025-12-30T21:10:44.094238Z",
+    "sellerId": 14,
+    "vehicleId": 20,
+    "status": "ended"
+  },
+  {
+    "id": 11,
+    "createdAt": "2025-12-08T16:21:15.094248Z",
+    "reservePriceCents": 2137700,
+    "startPriceCents": 1295200,
+    "startTime": "2025-12-31T21:10:44.094246Z",
+    "endTime": "2026-01-11T21:10:44.094246Z",
+    "sellerId": 12,
+    "vehicleId": 1,
+    "status": "active"
+  },
+  {
+    "id": 12,
+    "createdAt": "2026-01-03T12:50:40.094257Z",
+    "reservePriceCents": 3346600,
+    "startPriceCents": 2629800,
+    "startTime": "2026-01-01T21:10:44.094255Z",
+    "endTime": "2026-01-08T21:10:44.094255Z",
+    "sellerId": 13,
+    "vehicleId": 24,
+    "status": "ended"
+  },
+  {
+    "id": 13,
+    "createdAt": "2025-12-31T12:56:56.094265Z",
+    "reservePriceCents": 2413700,
+    "startPriceCents": 1989600,
+    "startTime": "2026-01-08T21:10:44.094263Z",
+    "endTime": "2026-01-11T21:10:44.094263Z",
+    "sellerId": 17,
+    "vehicleId": 3,
+    "status": "cancelled"
+  },
+  {
+    "id": 14,
+    "createdAt": "2025-11-09T10:57:45.094274Z",
+    "reservePriceCents": 2409100,
+    "startPriceCents": 1618500,
+    "startTime": "2026-01-01T21:10:44.094272Z",
+    "endTime": "2026-01-15T21:10:44.094272Z",
+    "sellerId": 20,
+    "vehicleId": 2,
+    "status": "ended"
+  },
+  {
+    "id": 15,
+    "createdAt": "2025-11-14T06:49:35.094284Z",
+    "reservePriceCents": 4558200,
+    "startPriceCents": 4263600,
+    "startTime": "2026-01-08T21:10:44.094282Z",
+    "endTime": "2026-01-11T21:10:44.094282Z",
+    "sellerId": 18,
+    "vehicleId": 19,
+    "status": "active"
+  }
+]

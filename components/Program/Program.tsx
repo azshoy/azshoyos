@@ -120,7 +120,9 @@ export class DocumentReaderProgramClass extends ProgramBase {
   constructor(construct:ProgramBaseProps & DocumentReaderProps) {
     super(construct)
     this.parameters = {
-      file: construct.file
+      file: construct.file,
+      downloadable: construct.downloadable,
+      filename: construct.filename
     }
   }
   run = () => {

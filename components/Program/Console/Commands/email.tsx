@@ -60,7 +60,7 @@ export const emailCommand: Command = {
   help: "Subscribe to updates with your email.\n\nUsage:\n  email <your@email.com>     Subscribe (asks about cookies)\n  email Y <your@email.com>   Subscribe with session tracking\n  email N <your@email.com>   Subscribe anonymously",
   description: "Subscribe to updates",
 
-  run: (args: string[], context: ConsoleContext): Result => {
+  run: (_command: string, args: string[], context: ConsoleContext): Result => {
     if (args.length === 0) {
       return {
         exitCode: 1,
@@ -116,11 +116,14 @@ export const emailCommand: Command = {
       useSession = true;
     }
 
-    return doSubscribe(email, useSession ?? false, context.print);
+    return doSubscribe(email, useSession ?? false, () => {});
+  },
+  continue: (_command: string, _input:string[], _context:ConsoleContext):Result => {
+    return {exitCode: 0, output: []}
   }
 };
 
-export const yCommand: Command = {
+export const yCommand  = {
   argCount: [0, 0],
   help: "Confirm with yes",
   description: "Confirm yes",
@@ -129,17 +132,17 @@ export const yCommand: Command = {
   run: (_args: string[], context: ConsoleContext): Result => {
     if (hasPendingEmail()) {
       const email = getPendingEmail();
-      if (email) return doSubscribe(email, true, context.print);
+      if (email) return doSubscribe(email, true, () => {});
     }
     if (hasPendingCheck()) {
       const answer = getPendingCheck();
-      if (answer) return doCheck(answer, true, context.print);
+      if (answer) return doCheck(answer, true, () => {});
     }
     return {exitCode: 1, output: {s: "Nothing to confirm.", c: "error"}};
   }
 };
 
-export const nCommand: Command = {
+export const nCommand = {
   argCount: [0, 0],
   help: "Confirm with no",
   description: "Confirm no",
@@ -148,11 +151,11 @@ export const nCommand: Command = {
   run: (_args: string[], context: ConsoleContext): Result => {
     if (hasPendingEmail()) {
       const email = getPendingEmail();
-      if (email) return doSubscribe(email, false, context.print);
+      if (email) return doSubscribe(email, false, () => {});
     }
     if (hasPendingCheck()) {
       const answer = getPendingCheck();
-      if (answer) return doCheck(answer, false, context.print);
+      if (answer) return doCheck(answer, false, () => {});
     }
     return {exitCode: 1, output: {s: "Nothing to confirm.", c: "error"}};
   }

@@ -1,13 +1,13 @@
-
 import {CSSPropertiesPlus, v2} from "@/util/types";
 import {DirGrid} from "@/components/Directory/Directory";
-import {CSSProperties, useContext, useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import styles from "@/components/Shortcut/shortcut.module.css";
 import {DragManagerContext, TaskManagerContext} from "@/components/OS/TaskManager";
 import {clampf} from "@/util/misc";
 import {useMonitor} from "@/components/OS/MonitorHandler";
-import {ProgramAction} from "@/components/Program/Program";
-
+import {FileExplorerProgramClass, ProgramAction, ProgramType} from "@/components/Program/Program";
+import {quickPaths} from "@/components/ProgramData/programs";
+import {WindowManagerContext} from "@/components/OS/WindowManager";
 
 
 export type ShortcutInitProps = {
@@ -72,7 +72,7 @@ type ShortcutComponentProps = {
   grid: DirGrid,
   freePos: boolean
   dropTo: CallableFunction
-  gridPos?: v2
+  gridPos?: v2,
 }
 
 const useDanceTimer = () => {
@@ -99,9 +99,10 @@ export const ShortcutComponent = ({
   grid,
   freePos,
   dropTo,
-  gridPos
+  gridPos,
 }:ShortcutComponentProps) => {
-  const {startNewTask, shortcutUpdate} = useContext(TaskManagerContext)
+  const {startNewTask, shortcutUpdate, programs, swapTask} = useContext(TaskManagerContext)
+  const windowManager = useContext(WindowManagerContext)
   const [gridArea, setGridArea] = useState<string|undefined>(undefined)
   const [order, setOrder] = useState<number|undefined>(undefined)
   const [click, setClick] = useState<boolean>(false)
@@ -146,7 +147,8 @@ export const ShortcutComponent = ({
   useEffect(() => {
     if (click) {
       if (doubleClick) {
-        startNewTask(shortcut.programID)
+        if (DMC) DMC.resetDragging()
+        launchProgram()
         setDoubleClick(false)
       } else {
         setDoubleClick(true)
@@ -154,7 +156,7 @@ export const ShortcutComponent = ({
       }
       setClick(false)
     }
-  }, [click, doubleClick]);
+  }, [click, doubleClick, DMC]);
 
   useEffect(() => {
     if (grid){
@@ -175,9 +177,19 @@ export const ShortcutComponent = ({
     }
   }, [grid, freePos, gridPos, dropTo, shortcut, shortcutUpdate]);
 
+  const launchProgram = () => {
+    const program = programs[shortcut.programID]
+    if (program.programType == ProgramType.FILE_EXPLORER && shortcut.path != quickPaths.desktop && windowManager && windowManager.focused >= 0){
+      swapTask(windowManager.focused, shortcut.programID)
+    } else {
+      startNewTask(shortcut.programID)
+    }
+
+  }
 
   const startDragging = (clientClickPos:v2) => {
     setClick(true)
+    console.log(DMC)
     if (element.current && DMC) {
       const elemRect = element.current.getBoundingClientRect()
       DMC.startDragging(shortcut, {x: clientClickPos.x - elemRect.x, y: clientClickPos.y - elemRect.y})

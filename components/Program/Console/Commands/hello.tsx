@@ -9,7 +9,7 @@ export const helloCommand:Command = {
   help: "Hello world!",
   description: "Startup script",
   unlisted: true,
-  run: (_args: string[], _context:ConsoleContext):Result => {
+  run: (_command: string, _args: string[], _context:ConsoleContext):Result => {
     return {
       exitCode: 0, output: [
         {s: "       Welcome.             "}, {s: "_\n", c: "highlight"},
@@ -20,5 +20,8 @@ export const helloCommand:Command = {
         {s: "\\___._/______/__/_____/__/ /__/", c: "highlight"}
       ]
     }
+  },
+  continue: (_command: string, _input:string[], _context:ConsoleContext):Result => {
+    return {exitCode: 0, output: []}
   }
 }

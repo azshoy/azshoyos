@@ -6,10 +6,13 @@ export const onchainCommand: Command = {
   argCount: [0, 0],
   help: "Display onchain challenge details",
   description: "Onchain challenge",
-  run: (_args: string[], _context: ConsoleContext): Result => {
+  run: (_command: string, _args: string[], _context: ConsoleContext): Result => {
     return {
       exitCode: 0,
       output: [{s: "42161 0x259207d12b8991Cfb9F222BD31e87c8b53a81FDF", c: "highlight"}]
     };
+  },
+  continue: (_command: string, _input:string[], _context:ConsoleContext):Result => {
+    return {exitCode: 0, output: []}
   }
 };
