@@ -31,11 +31,15 @@ export const readableFiles:{[key:string]: Readable} = {
       <div>
         <h2>## az.sh oy</h2>
         <br/>
-        <h3># TL;DR:</h3>
-        DAO:n johto ja web2/3 ohjelmointiprojektit lohkottuina kokonaisuuksina.
+        As a company, az.sh has high ownership in product based projects in both SaaS and web3 platforms.
         <br/>
         <br/>
-        Yrityksen yhteystiedot löydät Contact Information pikakuvakkeen takaa.<br/>
+        We do everything from smart contract development to full stack web, code audits and testing,
+        technical writing, UI/UX design, and media production with a focus on end-to-end product and platform delivery.
+        <br/>
+        <br/>
+        The main projects currently are related to the automotive market and robust commercial platforms and decentralized finance in the form of yield products,
+         automation, platforms, and protocols both in tech and leadership.
       </div>
     )
   },
