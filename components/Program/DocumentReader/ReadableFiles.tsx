@@ -76,9 +76,9 @@ export const readableFiles:{[key:string]: Readable} = {
         <br/>
         <h3># az.sh Pesti Challenge 2026</h3>
         <br/>
-        az.sh Pesti Challenge consists of few short challenges and an optional bonus task.
+        az.sh Pesti Challenge consists of a few short challenges and an optional bonus task.
         <br/>
-        If you complete all of the short challenges during the Pesti event, you will be rewarded with a small prize!
+        If you complete all of the short challenges during the Pesti event you will be rewarded with a small prize!
         <br/>
         <br/>
         Begin the challenge by opening the <span className={styles.blue}>az.sh</span> <img src={"/icons/console.svg"} alt={""} className={styles.inlineIcon}/> console from the desktop and run command <div className={styles.codeBlock}>pesti</div>.

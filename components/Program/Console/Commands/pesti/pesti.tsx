@@ -22,7 +22,7 @@ export const pestiCommand:Command = {
           status: Status.WAITINPUT, output: [
             {s: "Welcome to az.sh Pesti-Challenge journey!\n\n"},
             {s: `The journey includes ${taskCount-1} short challenges and a bit longer bonus task. `},
-            {s: "If you complete all of the short challenges during the Pesti event, you will be rewarded with a small prize!\n"},
+            {s: "If you complete all of the short challenges during the Pesti event you will be rewarded with a small prize!\n"},
             {s: "\nPlease give nickname:"}
           ]
         }
@@ -41,7 +41,7 @@ export const pestiCommand:Command = {
         case "-h":
           return { exitCode: 0, output: [
               {s: `az.sh Pesti Challenge journey includes ${taskCount-1} short challenges and an optional bonus task.\n`},
-              {s: "If you complete all of the short challenges during the Pesti event, you will be rewarded with a small prize!\n\n"},
+              {s: "If you complete all of the short challenges during the Pesti event you will be rewarded with a small prize!\n\n"},
               {s: "Meet az.sh at University of Oulu’s Linnanmaa campus from 9 to 15. Stand 111 is located at Agora near the main entrance at door 2T.\n"},
               {s: "\nChallenge status:  "},
               {s: "pesti --status", onClick: {a: "command", t: "pesti --status"}},
