@@ -237,11 +237,11 @@ const pestiChallenges = {
   json: {
     question: [
       {s: "Kurre bought a car.\n\n", c: "error"},
-      {s: "Kurre bought a car and now he wants to paint his house. But there is a major problem! Kurre can't remember "},
+      {s: "Kumikurre bought a car and now he wants to paint his house. But there is a major problem! Kumikurre can't remember "},
       {s: "the color of his new car", c: "highlight"},
       {s: " and it must match with the house!\n\n"},
-      {s: "Luckily Kurre ain't no stupid squirrel so he hacked the car auction site and downloaded the data to this computer!\n\n"},
-      {s: "Help Kurre and parse the data to find out the color of his new car!\n\n"},
+      {s: "Luckily Kumikurre ain't no stupid squirrel so he hacked the car auction site and downloaded the data to this computer!\n\n"},
+      {s: "Help Kumikurre and parse the data to find out the color of his new car!\n\n"},
       {s: "files: "},
       {s: "[our_computer/auction_data/auctions.json]", onClick: {a: "file", t: "auction_data/auctions.json"}},
       {s: "\n       "},
@@ -261,7 +261,7 @@ const pestiChallenges = {
   python: {
     question: [
       {s: "Oh no! Code stuck!\n\n", c: "error"},
-      {s: "Sakke has saved some important information to a python file, but slotti must have messed with his files as the code doesn't work.\n\n"},
+      {s: "Sakke has saved some important information into a Python file, but slotti must have messed with his files as the code doesn't work.\n\n"},
       {s: "file: "},
       {s: "[our_computer/code_projects/important.py]", onClick: {a: "file", t: "code_projects/important.py"}},
       {s: "\n\n"},
@@ -280,10 +280,10 @@ const pestiChallenges = {
     question: [
       {s: "BONUS TASK!\n\n", c:"error"},
       {s: "OS upgrade!\n\n", c:"error"},
-      {s: "You have completed all the small tasks but there can always be more!\n"},
+      {s: "You have completed all the small tasks but there can always be more!\n\n"},
       {s: "Clone the azshoyos repo from "},
       {s: "https://github.com/azshoy/azshoyos", onClick: {a: "link", t: "https://github.com/azshoy/azshoyos"}},
-      {s: " and implement your own feature to the system! Anything is possible.\n"},
+      {s: " and implement your own feature to the system!\nAnything is possible.\n\n"},
       {s: "Finish the quest by making a pull request to the repo and you won't be forgotten!\n"},
     ],
     after: [],
