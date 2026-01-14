@@ -21,7 +21,7 @@ export const pestiCommand:Command = {
         return {
           status: Status.WAITINPUT, output: [
             {s: "Welcome to az.sh Pesti-Challenge journey!\n\n"},
-            {s: "The journey includes 6 short challenges and a bit longer bonus task. "},
+            {s: `The journey includes ${taskCount-1} short challenges and a bit longer bonus task. `},
             {s: "If you complete all of the short challenges during the Pesti event, you will be rewarded with a small prize!\n"},
             {s: "\nPlease give nickname:"}
           ]
