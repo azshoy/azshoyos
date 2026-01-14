@@ -3,6 +3,7 @@ import {Draggable, DragManagerContext, TaskManagerContext} from "@/components/OS
 import {useMonitor} from "@/components/OS/MonitorHandler";
 import {v2} from "@/util/types";
 import {Shortcut, ShortcutComponent} from "@/components/Shortcut/Shortcut";
+import {FileExplorerProgramClass, ProgramAction} from "@/components/Program/Program";
 
 type DirectoryProps = {
   path: string[]
@@ -20,7 +21,7 @@ export const Directory = ({
   allowFreePosition = false,
   className,
 }:DirectoryProps) => {
-  const {shortcuts:allShortcuts, shortcutUpdate, setShortcutUpdate, runXonY} = useContext(TaskManagerContext)
+  const {shortcuts:allShortcuts, shortcutUpdate, setShortcutUpdate, runXonY, setShutDown} = useContext(TaskManagerContext)
   const {uiScale} = useMonitor()
   const [viewSize, setViewSize] = useState<v2|undefined>(undefined);
   const [grid, setGrid] = useState<DirGrid | undefined>(undefined);
@@ -183,6 +184,17 @@ export const Directory = ({
         if ("/"+s.path.join('/') != pathString){
           s.path = [...path]
           setShortcutUpdate(Date.now())
+          const onMoveRes = s.onMoveDir([...path])
+          switch (onMoveRes) {
+            case ProgramAction.SHUTDOWN:
+              setShutDown(1)
+              break
+            case ProgramAction.SHUTDOWNNOW:
+              setShutDown(2)
+              break
+            case ProgramAction.NONE:
+              break
+          }
         }
         if (current == null || !currentS){
           s.position = {
