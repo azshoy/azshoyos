@@ -178,7 +178,12 @@ export const Directory = ({
       if (s) {
         const dropPos = {x: collectPos.x / viewSize.x, y: collectPos.y / viewSize.y}
         const gPos = {x: Math.floor(dropPos.x * (grid.gridSize.x-0.001)), y: Math.floor(dropPos.y * (grid.gridSize.y-0.001))}
-        const current = grid.grid[gPos.y][gPos.x]
+        // Get current shortcut from grid for desktop, or by order for folders (no free positioning)
+        const current = allowFreePosition ?
+            grid.grid[gPos.y][gPos.x] :
+            (shortcuts.find((short) =>
+                "/"+s.path.join('/') == pathString && short.order === (gPos.x + gPos.y * grid.gridSize.x + 1)*2)?.id ?? null)
+
         const currentS = current ? allShortcuts.find((s) => s.id == current) : undefined
         if (current == s.id) return
         if ("/"+s.path.join('/') != pathString){
