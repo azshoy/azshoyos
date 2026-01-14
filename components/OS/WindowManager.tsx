@@ -73,7 +73,7 @@ export const WindowManagerProvider = ({
     if (monitor.size && monitor.uiScale){
       setWindowDefaultSize({
         x: Math.min(monitor.size.x, Math.max(800, monitor.size.x * 0.6)),
-        y: Math.min(monitor.size.y, Math.max(600, monitor.size.y * 0.6))
+        y: Math.min((monitor.size.y-50) , Math.max(600, (monitor.size.y-50) * 0.6))
       })
     }
   }, [monitor.size, monitor.uiScale]);
@@ -82,12 +82,12 @@ export const WindowManagerProvider = ({
       if (nextWindowSpawnPos.x == -1 && windowDefaultSize.x != 0){
         setNextWindowSpawnPos({
           x: (monitor.size.x - windowDefaultSize.x) / 2,
-          y: (monitor.size.y - windowDefaultSize.y) / 2,
+          y: ((monitor.size.y-50) - windowDefaultSize.y) / 2,
         })
-      } else if (nextWindowSpawnPos.x > (monitor.size.x - windowDefaultSize.x) || nextWindowSpawnPos.y > (monitor.size.y - windowDefaultSize.y)){
+      } else if (nextWindowSpawnPos.x > (monitor.size.x - windowDefaultSize.x) || nextWindowSpawnPos.y > ((monitor.size.y-50)  - windowDefaultSize.y)){
         setNextWindowSpawnPos({
           x: nextWindowSpawnPos.x > (monitor.size.x - windowDefaultSize.x) ? 0 : nextWindowSpawnPos.x,
-          y: nextWindowSpawnPos.y > (monitor.size.y - windowDefaultSize.y) ? 0 : nextWindowSpawnPos.y,
+          y: nextWindowSpawnPos.y > ((monitor.size.y-50)  - windowDefaultSize.y) ? 0 : nextWindowSpawnPos.y,
         })
       }
     }
