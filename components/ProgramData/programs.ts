@@ -179,6 +179,18 @@ export const programData:{[key: string]: ProgramConstructor} = {
       showInStartMenu: true,
     }
   },
+  pestiInfomation: {
+    title: "Pesti Career Day",
+    filename: "pesti.md",
+    description: "",
+    type: ProgramType.DOCUMENT_READER,
+    file: "pestiInfo",
+    shortcut: {
+      icon: "/icons/document_b.svg",
+      position: {x: 0.05, y: 0.65},
+      showInStartMenu: true,
+    }
+  },
   contactInformation: {
     title: "Contact information",
     filename: "contact.md",
@@ -210,7 +222,7 @@ export const programData:{[key: string]: ProgramConstructor} = {
     func: openRandomPage,
     shortcut: {
       icon: "/icons/zplorer.svg",
-      position: {x: 0.4, y: 0.2},
+      position: {x: 0.4, y: 0.3},
       showInStartMenu: true,
     }
   }

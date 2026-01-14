@@ -5,7 +5,12 @@ type textColor = "default" | "error" | "highlight"
 
 export type Txt = {
   s: string,
-  c?: textColor
+  c?: textColor,
+  onClick?: TxtAction
+}
+export type TxtAction = {
+  a: "link" | "file" | "command"
+  t: string
 }
 
 export type Result = {
@@ -20,7 +25,6 @@ export type Result = {
 export const handleCommand = async (commandStatus: CommandStatus, c: string | undefined, args: string[], context:ConsoleContext) => {
   if (commandStatus.status == Status.EXITED) {
     await runCommand(c, args, context).then(output => {
-      console.log(output, context)
       if ("exitCode" in output){
         context.printLine(output.output)
         context.setCommandStatus({t: Date.now(), status: Status.EXITED, exitCode: output.exitCode, command: c ?? ""})

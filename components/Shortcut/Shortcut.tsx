@@ -189,7 +189,6 @@ export const ShortcutComponent = ({
 
   const startDragging = (clientClickPos:v2) => {
     setClick(true)
-    console.log(DMC)
     if (element.current && DMC) {
       const elemRect = element.current.getBoundingClientRect()
       DMC.startDragging(shortcut, {x: clientClickPos.x - elemRect.x, y: clientClickPos.y - elemRect.y})

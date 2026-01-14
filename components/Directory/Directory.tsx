@@ -164,11 +164,9 @@ export const Directory = ({
   const onTouchEnd = (e: React.TouchEvent)=> {
     const touch =  e.touches[0] ?? e.targetTouches[0] ?? e.changedTouches[0] ?? undefined
     if (!touch) return
-    console.log("Touchended")
     collectShortcut({x: touch.clientX, y: touch.clientY})
   }
   const onMouseUp = (e: React.MouseEvent) => {
-    console.log("Mouseupped")
     collectShortcut({x: e.clientX, y: e.clientY})
   }
 

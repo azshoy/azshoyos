@@ -32,7 +32,7 @@ export const pestiCommand:Command = {
           {s: progress < pestiChallengeOrder.length ? "Your current challenge:\n\n" : ""},
           ...(progress < taskCount ? pestiChallengeOrder[progress].question as Txt[] : [{s: "You have completed all of the Pesti challenges!\n"}]),
           {s: "\nMore info about the Pesti challenge with command "},
-          {s: "pesti --help", c: "highlight"},
+          {s: "pesti --help", onClick: {a: "command", t: "pesti --help"}},
         ]
       }
     } else {
@@ -40,16 +40,18 @@ export const pestiCommand:Command = {
         case "--help":
         case "-h":
           return { exitCode: 0, output: [
-              {s: "az.sh Pesti-Challenge journey includes 6 short challenges and a bit longer bonus task.\n"},
-              {s: "If you complete all of the short challenges during the Pesti event, you will be rewarded with a small prize!\n"},
-              {s: "Challenge status:  "},
-              {s: "pesti --status\n", c: "highlight"},
-              {s: "Validate answer:   "},
-              {s: "pesti --check <ANSWER>\n", c: "highlight"},
-              {s: "Rename user:       "},
-              {s: "pesti --rename\n", c: "highlight"},
-              {s: "Reset progress:       "},
-              {s: "pesti --reset\n", c: "highlight"},
+              {s: `az.sh Pesti Challenge journey includes ${taskCount-1} short challenges and an optional bonus task.\n`},
+              {s: "If you complete all of the short challenges during the Pesti event, you will be rewarded with a small prize!\n\n"},
+              {s: "Meet az.sh at University of Oulu’s Linnanmaa campus from 9 to 15. Stand 111 is located at Agora near the main entrance at door 2T.\n"},
+              {s: "\nChallenge status:  "},
+              {s: "pesti --status", onClick: {a: "command", t: "pesti --status"}},
+              {s: "\nValidate answer:   "},
+              {s: "pesti --check <ANSWER>", onClick: {a: "command", t: "pesti --check <ANSWER>"}},
+              {s: "\nRename user:       "},
+              {s: "pesti --rename", onClick: {a: "command", t: "pesti --rename"}},
+              {s: "\nReset progress:    "},
+              {s: "pesti --reset", onClick: {a: "command", t: "pesti --reset"}},
+              {s: "\n"}
             ]
           }
         case "--status":
@@ -88,6 +90,7 @@ export const pestiCommand:Command = {
                 context.setCommandStatus({t: Date.now(), status: Status.EXITED, exitCode: 1, command: command})
               } else if (check.ok) {
                 context.printLine([{s: "Correct!", c: "highlight"}])
+                if (pestiChallengeOrder[progress].after.length > 0) context.printLine(pestiChallengeOrder[progress].after as Txt[])
                 setTimeout(() => {
                   if (progress == taskCount - 2) {
                     context.printLine([{s: "\nYou have completed all short quests! Go to az.sh pesti stand for your reward!"}])
@@ -125,7 +128,7 @@ export const pestiCommand:Command = {
             return { exitCode: 1, output: [
               {s: "Error: Unknown arguments!", c: "error"},
                 {s: "\nUse "},
-                {s: "pesti --help ", c: "highlight"},
+                {s: "pesti --help ", onClick: {a: "command", t: "pesti --help"}},
                 {s: "for usage help."},
               ]}
           }
@@ -205,12 +208,15 @@ const pestiChallenges = {
       {s: "Strange statue\n\n", c: "error"},
       {s: "On your Pesti journey you see an interesting statue.\n\n"},
       {s: "file: "},
-      {s: "[our_computer/images/statue.png]\n\n", c: "highlight"},
-      {s: "It seems that someone has written strange message to the base of the statue, it reads:\n\n"},
+      {s: "[our_computer/images/statue.png]", onClick: {a: "file", t: "images/statue.png"}},
+      {s: "\n\nIt seems that someone has written strange message to the base of the statue, it reads:\n\n"},
       {s: "> Tox Vtxltk\n", c: "highlight"},
       {s: "> Max gxqm vhfftgw bl uknmnl\n", c: "highlight"},
       {s: "> Mabl pbee teehp rhn mh ikhvxxw mh max gxqm mtld\n\n", c: "highlight"},
-      {s: "Encrypt the message to continue your journey.\nThe statue guy might have something to do with this nonsense..\n"},
+      {s: "Decrypt the message to continue your journey.\nThe statue guy might have something to do with this nonsense..\n"},
+    ],
+    after: [
+      {s: "Yes. Of course."}
     ],
     name: "Statue strings",
     id: "scroll",
@@ -218,9 +224,12 @@ const pestiChallenges = {
   chain: {
     question: [
       {s: "chain: ", c: "highlight"},
-      {s: "42161\n", c: "error"},
+      {s: "42161\n", c: "error" },
       {s: "token: ", c: "highlight"},
       {s: "0x259207d12b8991Cfb9F222BD31e87c8b53a81FDF\n", c: "error"}
+    ],
+    after: [
+      {s: "Chains go brrr..."}
     ],
     name: "Chain action",
     id: "onchain",
@@ -234,10 +243,17 @@ const pestiChallenges = {
       {s: "Luckily Kurre ain't no stupid squirrel so he hacked the car auction site and downloaded the data to this computer!\n\n"},
       {s: "Help Kurre and parse the data to find out the color of his new car!\n\n"},
       {s: "files: "},
-      {s: "[our_computer/auction_data/auctions.json]\n", c: "highlight"},
-      {s: "       [our_computer/auction_data/bids.json]\n", c: "highlight"},
-      {s: "       [our_computer/auction_data/users.json]\n", c: "highlight"},
-      {s: "       [our_computer/auction_data/vehicles.json]\n", c: "highlight"},
+      {s: "[our_computer/auction_data/auctions.json]", onClick: {a: "file", t: "auction_data/auctions.json"}},
+      {s: "\n       "},
+      {s: "[our_computer/auction_data/bids.json]", onClick: {a: "file", t: "auction_data/bids.json"}},
+      {s: "\n       "},
+      {s: "[our_computer/auction_data/users.json]", onClick: {a: "file", t: "auction_data/users.json"}},
+      {s: "\n       "},
+      {s: "[our_computer/auction_data/vehicles.json]", onClick: {a: "file", t: "auction_data/vehicles.json"}},
+      {s: "\n"},
+    ],
+    after: [
+      {s: "Yes!!! that must be it! Now Kurre can finally paint his house!"}
     ],
     name: "Gotta paint the house",
     id: "car",
@@ -247,20 +263,18 @@ const pestiChallenges = {
       {s: "Oh no! Code stuck!\n\n", c: "error"},
       {s: "Sakke has saved some important information to a python file, but slotti must have messed with his files as the code doesn't work.\n\n"},
       {s: "file: "},
-      {s: "[our_computer/code_projects/important.py]\n\n", c: "highlight"},
+      {s: "[our_computer/code_projects/important.py]", onClick: {a: "file", t: "code_projects/important.py"}},
+      {s: "\n\n"},
       {s: "Please help Sakke by fixing the code and return the forgotten important information.\n"},
       {s: "When you have found the info, check it with command "},
-      {s: "pesti --check <ANSWER>\n", c: "highlight"},
+      {s: "pesti --check <ANSWER>", onClick: {a: "command", t: "pesti --check <ANSWER>"}},
+      {s: "\n"}
+    ],
+    after: [
+      {s: "Oh! This must be the az.sh business ID.\nIt is very important indeed...\n\nAnd you totally can't find it from our Contact Information..."}
     ],
     name: "Code stuck",
     id: "python",
-  },
-  trade: {
-    question: [
-      {s: "Put the question here"},
-    ],
-    name: "Coin getter",
-    id: "trade",
   },
   bonus: {
     question: [
@@ -268,13 +282,14 @@ const pestiChallenges = {
       {s: "OS upgrade!\n\n", c:"error"},
       {s: "You have completed all the small tasks but there can always be more!\n"},
       {s: "Clone the azshoyos repo from "},
-      {s: "https://github.com/azshoy/azshoyos", c:"highlight"},
+      {s: "https://github.com/azshoy/azshoyos", onClick: {a: "link", t: "https://github.com/azshoy/azshoyos"}},
       {s: " and implement your own feature to the system! Anything is possible.\n"},
       {s: "Finish the quest by making a pull request to the repo and you won't be forgotten!\n"},
     ],
+    after: [],
     name: "OS upgrade",
     id: "bonus",
   }
 }
 
-const pestiChallengeOrder = [pestiChallenges.python, pestiChallenges.cesar, pestiChallenges.chain, pestiChallenges.json, pestiChallenges.trade, pestiChallenges.bonus]
+const pestiChallengeOrder = [pestiChallenges.python, pestiChallenges.cesar, pestiChallenges.chain, pestiChallenges.json, pestiChallenges.bonus]

@@ -107,13 +107,46 @@
       flex-direction: row;
     }
     .line{
-        white-space-collapse: preserve;
-        &.error{
-            color: var(--red)
+      white-space-collapse: preserve;
+      &.error{
+          color: var(--red)
+      }
+      &.highlight{
+          color: var(--green)
+      }
+
+      &.openFile, &.openCommand, &.openLink{
+        text-decoration: underline;
+        cursor: pointer;
+        & > .endArrow {
+          text-decoration: none;
+          margin-left: -0.3em;
+          margin-right: 0.3em;
         }
-        &.highlight{
-            color: var(--green)
+        &:hover{
+          & > .endArrow {
+            margin-left: 0;
+            margin-right: 0;
+          }
         }
+
+      }
+      &.openFile {
+        color: var(--orange);
+      }
+      &.openCommand {
+        color: var(--green);
+        & > .optional {
+          color: var(--yellowish);
+          & > span {
+            color: var(--gray-4);
+          }
+        }
+      }
+      &.openLink {
+        color: var(--blue);
+
+      }
     }
     .inputArea{
         background-color: var(--black);
@@ -239,5 +272,20 @@
     font-family: var(--console-font);
     font-size: calc(var(--scale) * 22px);
     white-space: pre;
+  }
+  .imageHolder {
+    inset: 0;
+    position: absolute;
+    background: var(--gray-2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    & > img {
+      margin: auto;
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+    }
   }
 }

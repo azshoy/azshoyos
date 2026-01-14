@@ -1,0 +1,35 @@
+
+.codeBlock {
+  font-family: var(--console-font);
+  display: inline-block;
+  background: var(--gray-4);
+  border: var(--yellowish) 1px solid;
+  color: var(--red-dark);
+  border-radius: 3px;
+  padding: 0 6px;
+  font-size: 0.9em;
+  line-height: 1.1;
+}
+.noSpaceIcon, .inlineIcon {
+  display: inline-block;
+  height: 1.2em;
+  margin-top: 0.05em;
+  margin-bottom: -0.25em;
+}
+.noSpaceIcon {
+  margin-right: -1.2em;
+  z-index: 10;
+}
+.link {
+  text-decoration: underline;
+  color: var(--blue);
+}
+.red {
+  color: var(--red-dark)
+}
+.violet {
+  color: var(--violet-dark)
+}
+.blue {
+  color: var(--blue-dark)
+}

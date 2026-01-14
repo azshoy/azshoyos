@@ -2,8 +2,8 @@ import "@/globalStyles/globals.css";
 import styles from '@/globalStyles/global.module.css'
 import { TaskBar } from "@/components/TaskBar";
 import {Desktop} from "@/components/desktop";
-import {CSSProperties, useContext, useState} from "react";;
-import Head from 'next/head'
+import {CSSProperties, useContext, useState} from "react";
+import Head from 'next/head';
 import {TaskManagerContext, TaskManagerProvider} from "@/components/OS/TaskManager";
 import {useMonitor} from "@/components/OS/MonitorHandler";
 
@@ -36,7 +36,6 @@ export default Home
 
 const CloseComputer = () => {
   const {shutDown} = useContext(TaskManagerContext)
-  console.log(shutDown)
   const classN = shutDown == 0 ? styles.hidden : shutDown == 2 ? styles.shutDownNow : styles.shutDown
   return (
     <div className={classN}>

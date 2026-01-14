@@ -36,7 +36,6 @@ const useWindowCalls = () => {
   }, [tasks, taskUpdate, order]);
 
   const focus = (taskID:number) => {
-    console.log("Focusing!", taskID)
     setFocused(taskID)
     setOrder((prevState) => [taskID, ...removeFromArray(prevState, taskID)])
     setOrderUpdated(Date.now())
@@ -103,7 +102,6 @@ export const WindowManagerProvider = ({
         setWindows((prevState) => {return {...prevState, ...{[t.taskID]: makeNewWindow(t)}}})
         setNextWindowSpawnPos({x: nextWindowSpawnPos.x + 46, y: nextWindowSpawnPos.y +46})
       } else if (t.type == 'killed' && t.taskID in windows){
-        console.log("Killing", t.taskID)
         setWindows((prevState) => {
           delete prevState[t.taskID]
           return prevState

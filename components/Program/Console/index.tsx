@@ -1,6 +1,6 @@
 import styles from "../program.module.css";
 import {ReactNode, useCallback, useContext, useEffect, useRef, useState} from "react";
-import {handleCommand, Result, Txt} from "@/components/Program/Console/commandHandler";
+import {handleCommand, Result, Txt, TxtAction} from "@/components/Program/Console/commandHandler";
 import {FileExplorer} from "@/components/Program/FileExplorer";
 import {TaskManagerContext, TaskManagerInterface} from "@/components/OS/TaskManager";
 import {useMonitor} from "@/components/OS/MonitorHandler";
@@ -42,7 +42,8 @@ export const ShellConsole = ({
   const [historyCursor, setHistoryCursor] = useState(-1)
   const inputElement = useRef<HTMLInputElement>(null)
   const scrollTimer = useRef<ReturnType<typeof setTimeout>>(null)
-
+  const taskManagerContext = useContext(TaskManagerContext)
+  const [inputOverride, setInputOverride] = useState("")
 
   const printLine = (txtInput?: Txt | Txt[], newLine=true) =>{
     if ((Array.isArray(txtInput) && txtInput.length == 0)) return
@@ -52,7 +53,7 @@ export const ShellConsole = ({
       txt.forEach((t) => {
         const sl = t.s.split("\n")
         for (let s = 0; s < sl.length; s++){
-          newOutputs.push(<span key={prevState.length + newOutputs.length}  className={[styles.line, t.c == "error" ? styles.error : t.c == "highlight" ? styles.highlight : ""].join(" ")}>{sl[s]}</span>)
+          newOutputs.push(<OutputLine key={prevState.length + newOutputs.length} style={t.c} action={t.onClick} inputOverride={setInputOverride} openFile={taskManagerContext.startTaskByPath}>{sl[s]}</OutputLine>)
           if (s != sl.length -1) newOutputs.push(<br key={prevState.length + newOutputs.length}/>)
         }
       })
@@ -62,7 +63,7 @@ export const ShellConsole = ({
   }
 
   const context:ConsoleContext = {
-    taskManager: useContext(TaskManagerContext),
+    taskManager: taskManagerContext,
     monitor: useMonitor(),
     state: commandStates,
     setState: setCommandStates,
@@ -71,7 +72,6 @@ export const ShellConsole = ({
   }
 
   useEffect(() => {
-    console.log("RESET?")
     doAction(commandStatus, 'hello', [])
     getCommandHistory()
   }, []);
@@ -156,14 +156,25 @@ export const ShellConsole = ({
 
   const addLineStart = (exitCode:number) => {
     setOutputLines((prevState) => {
-      console.log(prevState)
       return [...prevState, <LineStart exitCode={exitCode} path={path} key={prevState.length}/>]
     })
   }
+  useEffect(() => {
+    if (inputOverride != "" && inputElement && inputElement.current){
+      inputElement.current.value = inputOverride
+      const s = inputOverride.indexOf("<")
+      const e = inputOverride.indexOf(">")
+      if (s >= 0 && e >= 0){
+        inputElement.current.setSelectionRange(s, e+1)
+      } else {
+        inputElement.current.setSelectionRange(inputOverride.length, inputOverride.length)
+      }
+      setInputOverride("")
+    }
+  }, [inputOverride]);
 
   useEffect(() => {
     if (inputElement && inputElement.current){
-      console.log("HELLO?")
       scrollTimer.current = setTimeout(() => {
         if (inputElement && inputElement.current) inputElement.current.scrollIntoView({ behavior: "instant", block: "nearest", inline: "end" })
       }, 100)
@@ -185,6 +196,65 @@ export const ShellConsole = ({
       </div>
     </div>
     )
+}
+type OutputLineProps = {
+  style: Txt["c"]
+  children: ReactNode
+  action?: TxtAction
+  inputOverride: CallableFunction
+  openFile: CallableFunction
+}
+
+const OutputLine = ({
+  style,
+  children: txt,
+  action,
+  inputOverride,
+  openFile,
+}:OutputLineProps) => {
+  const {end, classNames} = getLineProperties(style, action)
+  const onClick = () => {
+    if (action) {
+      if (action.a == "command") inputOverride(action.t)
+      if (action.a == "file") openFile(action.t)
+      if (action.a == "link" && window) window.open(action.t, '_blank')?.focus()
+    }
+  }
+  if (action && action.a == "command" && typeof txt == "string"){
+    const s = txt.indexOf("<")
+    const e = txt.indexOf(">")
+    if (s >= 0 && e >= 0) {
+      return <span className={classNames} onClick={() => onClick()}>{txt.slice(0, s)}<span className={styles.optional}>&lt;<span>{txt.slice(s+1, e)}</span>&gt;</span>{txt.slice(e+1)}{end}</span>
+    }
+  }
+  return <span className={classNames} onClick={() => onClick()}>{txt}{end}</span>
+}
+
+const getLineProperties = (s: OutputLineProps["style"], a: OutputLineProps['action']) => {
+  const classNames = [styles.line]
+  switch (s){
+    case "error":
+      classNames.push(styles.error)
+      break
+    case "highlight":
+      classNames.push(styles.highlight)
+      break
+  }
+  if (typeof a != "undefined") {
+    switch (a.a) {
+      case "command":
+        classNames.push(styles.openCommand)
+        return {end: <span className={styles.endArrow}> ⤏</span>, classNames: classNames.join(" ")}
+      case "link":
+        classNames.push(styles.openLink)
+        return {end: <span className={styles.endArrow}> ↪</span>, classNames: classNames.join(" ")}
+      case "file":
+        classNames.push(styles.openFile)
+        return {end: <span className={styles.endArrow}> ➤</span>, classNames: classNames.join(" ")}
+    }
+  }
+  return {end: "", classNames: classNames.join(" ")}
+
 }
 
 const LineStart = ({exitCode=0, path}:{exitCode:number, path:string[]}) => {

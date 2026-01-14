@@ -1,4 +1,4 @@
-import {Readable, readableFiles} from "@/components/Program/DocumentReader/ReadableFiles";
+import {ContentImage, Readable, readableFiles} from "@/components/Program/DocumentReader/ReadableFiles";
 import styles from "../program.module.css";
 import {useRef} from "react";
 
@@ -62,9 +62,16 @@ const getContent = (parameter:string, p:number)=> {
   if (!content) return <div key={p} className={styles.content}>{parameter}</div>
   return (
     <div key={p} className={getClassName(content.type)}>
-      {content.content}
+      {content.type == "image" ? getImage(content.content) : content.content}
     </div>
   )
+}
+const getImage = (ci:ContentImage) => {
+ return (
+  <div className={styles.imageHolder}>
+    <img src={ci.src} alt={ci.alt ?? ""}/>
+  </div>
+ )
 }
 const getClassName = (t: Readable['type']) => {
   switch (t) {

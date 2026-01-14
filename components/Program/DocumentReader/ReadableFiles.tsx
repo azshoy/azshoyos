@@ -1,8 +1,9 @@
-import {ReactNode} from "react";
+import {CSSProperties, ReactNode} from "react";
 import auctionsJSON from './downloads/auctions.json';
 import bidsJSON from './downloads/bids.json';
 import usersJSON from './downloads/users.json';
 import vehiclesJSON from './downloads/vehicles.json';
+import styles from './document.module.css'
 
 export type Readable = {
   type: "ReactNode"
@@ -13,6 +14,13 @@ export type Readable = {
 } | {
   type: "python"
   content: string
+} | {
+  type: "image"
+  content: ContentImage
+}
+export type ContentImage = {
+  src: string,
+  alt?: string
 }
 
 export const readableFiles:{[key:string]: Readable} = {
@@ -21,9 +29,9 @@ export const readableFiles:{[key:string]: Readable} = {
     type: "ReactNode",
     content: (
       <div>
-        # az.sh oy <br/>
+        <h2>## az.sh oy</h2>
         <br/>
-        ## TL;DR:<br/>
+        <h3># TL;DR:</h3>
         DAO:n johto ja web2/3 ohjelmointiprojektit lohkottuina kokonaisuuksina.
         <br/>
         <br/>
@@ -35,9 +43,9 @@ export const readableFiles:{[key:string]: Readable} = {
     type: "ReactNode",
     content: (
       <div>
-        # az.sh oy <br/>
+        <h2>## az.sh oy</h2>
         <br/>
-        ## Yhteystiedot <br/>
+        <h3># Yhteystiedot</h3>
         <br/>
         Y-tunnus:<br/>
         3474773-5<br/>
@@ -54,13 +62,32 @@ export const readableFiles:{[key:string]: Readable} = {
       </div>
     )
   },
-  statue: {
+  pestiInfo: {
     type: "ReactNode",
     content: (
-      <div style={{inset: "0px", position: "absolute", background: "#13261c", display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
-        <img src={"/misc/statue.png"} alt={""} style={{margin: "auto", maxHeight: "100%", maxWidth: "100%", objectFit: "contain"}}/>
+      <div>
+        <h2>## Pesti Career Day 2026-1-15</h2>
+        <br/>
+        Meet az.sh at University of Oulu’s Linnanmaa campus from 9 to 15. <br/>The stand number 111 is located at Agora near the main entrance at door 2T.
+        <br/>
+        <br/>
+        <a href={"https://pestipaivat.fi/"} target={"_blank"} className={styles.link}>pestipaivat.fi <img src={"/icons/zplorer.svg"} alt={""} className={styles.noSpaceIcon}/>&nbsp;&nbsp;&nbsp;&nbsp; ↪</a>
+        <br/>
+        <br/>
+        <h3># az.sh Pesti Challenge 2026</h3>
+        <br/>
+        az.sh Pesti Challenge consists of few short challenges and an optional bonus task.
+        <br/>
+        If you complete all of the short challenges during the Pesti event, you will be rewarded with a small prize!
+        <br/>
+        <br/>
+        Begin the challenge by opening the <span className={styles.blue}>az.sh</span> <img src={"/icons/console.svg"} alt={""} className={styles.inlineIcon}/> console from the desktop and run command <div className={styles.codeBlock}>pesti</div>.
       </div>
     )
+  },
+  statue: {
+    type: "image",
+    content: {src: "/misc/statue.png", alt: "picture of a statue"}
   },
   pestiAuctionsJSON: {
     type: "json",

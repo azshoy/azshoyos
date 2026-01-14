@@ -33,7 +33,8 @@ export type TaskManagerInterface = {
   swapTask: (taskID: number, programID: string) => void,
   setShortcuts: (shortcuts:Shortcut[]) => void,
   setAsBackground: (s:CSSProperties['background']) => void,
-  specialEffects: {effects: string[], add: (s:string) => void, remove: (s:string) => void, updated: number}
+  specialEffects: {effects: string[], add: (s:string) => void, remove: (s:string) => void, updated: number} 
+  startTaskByPath: (f: string) => boolean
 }
 
 
@@ -93,6 +94,7 @@ export const TaskManagerContext = createContext<TaskManagerInterface>({
   killTask: (taskID: number) =>{},
   setAsBackground: (s: CSSProperties['background']) =>{},
   specialEffects: {effects: [], add: (s:string) => {}, remove: (s:string)=> {}, updated: 0},
+  startTaskByPath: (f:string) => false
 });
 
 export const TaskManagerProvider = ({
@@ -115,6 +117,23 @@ export const TaskManagerProvider = ({
 
   const [background, setAsBackground] = useState<CSSProperties['background']>('var(--blue-dark)')
 
+  
+  const startTaskByPath = (path: string) => {
+    const s = shortcuts.find((s) => {
+      const prog = programs[s.programID]
+      if ("parameters" in prog && "filename" in prog.parameters){
+        const progPath = [...s.path, prog.parameters.filename]
+        return progPath.join("/") == path
+      }
+      return false
+    })
+    if (typeof s != "undefined"){
+      setNewTask(s.programID)
+      return true
+    }
+    return false
+  }
+  
   useEffect(() => {
     if (background == "default") {
       setAsBackground('var(--blue-dark)')
@@ -157,7 +176,6 @@ export const TaskManagerProvider = ({
   }
   useEffect(() => {
     if (newTask) {
-      console.log("OPENING", newTask)
       const program = programs[newTask]
       if (program) {
         if (program.programType == ProgramType.RUNNABLE_SCRIPT) {
@@ -210,7 +228,7 @@ export const TaskManagerProvider = ({
 
 
   return (
-    <TaskManagerContext.Provider value={{programs, shortcuts, shortcutID, tasks, taskUpdate, shutDown, setShutDown, setShortcuts, shortcutUpdate, setShortcutUpdate, runXonY, startNewTask:setNewTask, killTask:setKillTask, swapTask, setAsBackground, specialEffects}}>
+    <TaskManagerContext.Provider value={{programs, shortcuts, shortcutID, tasks, taskUpdate, shutDown, setShutDown, setShortcuts, shortcutUpdate, setShortcutUpdate, runXonY, startNewTask:setNewTask, killTask:setKillTask, swapTask, setAsBackground, specialEffects, startTaskByPath}}>
       <DragManagerProvider>
         <WindowManagerProvider>
           {children}
@@ -294,12 +312,10 @@ export const DragManagerProvider = ({
   const cursor = useCursor()
 
 
-
   const startDragging = (e:Draggable, o:v2) => {
     setOffset(o)
     setDragging(e)
     setDragState(DragState.INIT)
-    console.log("Start drag")
   }
   const resetDragging = () => {
     setDragState(DragState.IDLE)
@@ -308,7 +324,6 @@ export const DragManagerProvider = ({
 
   useEffect(() => {
     if (typeof collector != 'undefined'){
-      console.log("Collecting?", dragState, collector)
       if (dragState == DragState.DROPPED){
         collector.f(dragging)
         setDragState(DragState.IDLE)
@@ -320,7 +335,6 @@ export const DragManagerProvider = ({
   }, [dragging, dragState, collector]);
 
   useEffect(() => {
-    console.log(dragState)
     if (dragState == DragState.INIT){
       timer.current = setTimeout(() => {
         setDragState(DragState.DRAGGING)
@@ -341,15 +355,12 @@ export const DragManagerProvider = ({
   useEffect(() => {
     if (Date.now()-lMA.s < 100){
       if (dragState == DragState.INIT && (lMA.t == 'touchmove' || lMA.t == 'mousemove')){
-        console.log("set dragging")
         setDragState(DragState.DRAGGING)
       }
       if (dragState == DragState.INIT && (lMA.t == 'touchend' || lMA.t == 'mouseup')){
-        console.log("set idle")
         setDragState(DragState.IDLE)
       }
       if (dragState == DragState.DRAGGING && (lMA.t == 'touchend' || lMA.t == 'mouseup')){
-        console.log("set dropped")
         setDragState(DragState.DROPPED)
       }
     }
