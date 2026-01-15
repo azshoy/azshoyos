@@ -44,7 +44,7 @@ export const readableFiles:{[key:string]: Readable} = {
         <br/>
         You can send your free form application to apply@azsh.fi
         <br/>
-        Just tell us a bit of your skills and interests. No need to over do it!
+        Just tell us a bit of your skills and interests. No need to overdo it!
       </div>
     )
   },
@@ -84,7 +84,9 @@ export const readableFiles:{[key:string]: Readable} = {
         <a href={"https://pestipaivat.fi/"} target={"_blank"} className={styles.link}>pestipaivat.fi <img src={"/icons/zplorer.svg"} alt={""} className={styles.noSpaceIcon}/>&nbsp;&nbsp;&nbsp;&nbsp; ↪</a>
         <br/>
         <br/>
-        Send your free form application to apply@azsh.fi (No need to overdo it!)
+        Send your free form application to apply@azsh.fi
+        <br/>
+        Just tell us a bit of your skills and interests. No need to overdo it!
         <br/>
         <br/>
         <h3># az.sh Pesti Challenge 2026</h3>
