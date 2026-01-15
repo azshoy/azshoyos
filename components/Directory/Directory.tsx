@@ -96,7 +96,7 @@ export const Directory = ({
             return false
           }
         }
-        const current = grid.grid[gPos.y][gPos.x]
+        const current = typeof grid.grid[gPos.y] != "undefined" ? grid.grid[gPos.y][gPos.x] : null
         if (current == null) {
           updateGridAt(short.id, gPos)
         } else if (current == short.id) {
@@ -178,7 +178,7 @@ export const Directory = ({
       if (s) {
         const dropPos = {x: collectPos.x / viewSize.x, y: collectPos.y / viewSize.y}
         const gPos = {x: Math.floor(dropPos.x * (grid.gridSize.x-0.001)), y: Math.floor(dropPos.y * (grid.gridSize.y-0.001))}
-        const current = grid.grid[gPos.y][gPos.x]
+        const current = typeof grid.grid[gPos.y] != "undefined" ? grid.grid[gPos.y][gPos.x] : null
         const currentS = current ? allShortcuts.find((s) => s.id == current) : undefined
         if (current == s.id) return
         if ("/"+s.path.join('/') != pathString){
