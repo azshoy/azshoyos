@@ -4,10 +4,14 @@ import {useMonitor} from "@/components/OS/MonitorHandler";
 import {v2} from "@/util/types";
 import {Shortcut, ShortcutComponent} from "@/components/Shortcut/Shortcut";
 import {FileExplorerProgramClass, ProgramAction} from "@/components/Program/Program";
+import styles from "./directory.module.css";
+import {WindowManagerContext} from "@/components/OS/WindowManager";
+
 
 type DirectoryProps = {
   path: string[]
   allowFreePosition?: boolean
+  showPathBar?: boolean
   className?: string
 }
 export type DirGrid = {
@@ -19,9 +23,11 @@ export type DirGrid = {
 export const Directory = ({
   path:inputPath,
   allowFreePosition = false,
+  showPathBar = false,
   className,
 }:DirectoryProps) => {
-  const {shortcuts:allShortcuts, shortcutUpdate, setShortcutUpdate, runXonY, setShutDown} = useContext(TaskManagerContext)
+  const {shortcuts:allShortcuts, shortcutUpdate, setShortcutUpdate, runXonY, setShutDown, swapTask, programs} = useContext(TaskManagerContext)
+  const windowManager = useContext(WindowManagerContext)
   const {uiScale} = useMonitor()
   const [viewSize, setViewSize] = useState<v2|undefined>(undefined);
   const [grid, setGrid] = useState<DirGrid | undefined>(undefined);
@@ -171,6 +177,25 @@ export const Directory = ({
     collectShortcut({x: e.clientX, y: e.clientY})
   }
 
+  const onPathBarClick = (newPath: string[]) => {
+      const shortcut = allShortcuts.find(short => {
+          const prog = programs[short.programID]
+          if ("parameters" in prog && "path" in prog.parameters) {
+              return '/' + prog.parameters.path.join('/') === '/' + newPath.join('/')
+          }
+          return false
+      })
+      if(shortcut && windowManager) {
+          swapTask(windowManager.focused, shortcut.programID)
+      }
+}
+
+  const goBack = () => {
+      if (path.length > 0) {
+          onPathBarClick(path.slice(0, -1));
+      }
+  };
+
   useEffect(() => {
     setCollected(null)
     if (collected && viewSize && grid) {
@@ -227,8 +252,25 @@ export const Directory = ({
   }, [collected, collectPos, viewSize, path, pathString, shortcuts, grid]);
 
   return (
-    <div ref={viewAreaElement} className={className} style={{width: "100%", height: "100%", display:'grid', gridTemplateColumns: `repeat(${grid?.gridSize.x}, ${grid?.cellSize.x}px)`, gridTemplateRows: `repeat(${grid?.gridSize.y}, ${grid?.cellSize.y}px)`}} onMouseUp={onMouseUp} onTouchEnd={onTouchEnd}>
-      {shortcutElements}
+      <div className={`${className} ${styles.container}`}>
+          { showPathBar && (<div className={styles.pathBar}>
+              <span className={styles.pathButton} onClick={goBack}>{'<'}</span>
+              <div className={styles.path}>
+                  <span className={styles.pathLink} onClick={() => onPathBarClick([])}>/ root</span>
+                  {path.map((folder, index) => (
+                      <div key={index} style={{display:'flex', gap:'4px'}}>
+                          <span>{'>'}</span>
+                          <span className={styles.pathLink} onClick={() => onPathBarClick(path.slice(0, index + 1))}>
+                              {folder}
+                          </span>
+                      </div>
+                  ))}
+              </div>
+          </div>)}
+
+          <div ref={viewAreaElement} style={{width: "100%", height: "100%", display:'grid', gridTemplateColumns: `repeat(${grid?.gridSize.x}, ${grid?.cellSize.x}px)`, gridTemplateRows: `repeat(${grid?.gridSize.y}, ${grid?.cellSize.y}px)`}} onMouseUp={onMouseUp} onTouchEnd={onTouchEnd}>
+              {shortcutElements}
+          </div>
     </div>
   )
 }
