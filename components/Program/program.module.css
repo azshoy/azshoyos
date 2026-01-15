@@ -5,6 +5,28 @@
     pointer-events: visible;
     max-width: 100vw;
     max-height: 100vh;
+    display: flex;
+    flex-direction: row;
+  .windowEdgeHorizontal {
+    height: 6px;
+    margin-top: -3px;
+    margin-bottom: -3px;
+    cursor: row-resize;
+    user-select: none;
+  }
+  .windowEdgeVertical {
+    width: 6px;
+    margin-left: -3px;
+    margin-right: -3px;
+    cursor: col-resize;
+  }
+  .windowMid{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
 }
 
 .titleBar{
