@@ -40,6 +40,11 @@ export const readableFiles:{[key:string]: Readable} = {
         <br/>
         The main projects currently are related to the automotive market and robust commercial platforms and decentralized finance in the form of yield products,
          automation, platforms, and protocols both in tech and leadership.
+        <br/>
+        <br/>
+        You can send your free form application to apply@azsh.fi
+        <br/>
+        Just tell us a bit of your skills and interests. No need to over do it!
       </div>
     )
   },
@@ -49,17 +54,18 @@ export const readableFiles:{[key:string]: Readable} = {
       <div>
         <h2>## az.sh oy</h2>
         <br/>
-        <h3># Yhteystiedot</h3>
+        <h3># Contact information</h3>
         <br/>
-        Y-tunnus:<br/>
+        Business ID:<br/>
         3474773-5<br/>
         <br/>
-        Sähköposti:<br/>
+        email:<br/>
         info@azsh.fi<br/>
-        Puhelin:<br/>
+        apply@azsh.fi<br/>
+        Phone:<br/>
         050 432 4719<br/>
         <br/>
-        Postiosoite:<br/>
+        Post address:<br/>
         az.sh oy<br/>
         Isokatu 56<br/>
         90100 Oulu<br/>
@@ -76,6 +82,9 @@ export const readableFiles:{[key:string]: Readable} = {
         <br/>
         <br/>
         <a href={"https://pestipaivat.fi/"} target={"_blank"} className={styles.link}>pestipaivat.fi <img src={"/icons/zplorer.svg"} alt={""} className={styles.noSpaceIcon}/>&nbsp;&nbsp;&nbsp;&nbsp; ↪</a>
+        <br/>
+        <br/>
+        Send your free form application to apply@azsh.fi (No need to overdo it!)
         <br/>
         <br/>
         <h3># az.sh Pesti Challenge 2026</h3>
