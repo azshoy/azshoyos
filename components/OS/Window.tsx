@@ -63,6 +63,7 @@ export const ProgramWindow = ({
   const [windowMinimized, setWindowMinimized] = useState(false)
   const windowManager = useContext(WindowManagerContext)
   const [isMoving, setIsMoving] = useState(false)
+  const [dragStart, setDragStart] = useState<{x: number, y: number} | null>(null)
   const [moveOffset, setMoveOffset] = useState({x: 0, y: 0})
   const [resize, setResize] = useState<{o: number, side: WindowSide} | null>(null)
   const cursor = useCursor()
@@ -102,8 +103,8 @@ export const ProgramWindow = ({
   const windowStyle = getWindowStyle(position, size, zIndex, windowMaximized, windowMinimized, isMoving || !!resize)
 
   const startMove = (e:React.MouseEvent) => {
+    setDragStart({x: cursor.pageX, y: cursor.pageY})
     setMoveOffset({x: cursor.pageX - position.x, y: cursor.pageY - position.y})
-    setIsMoving(true)
     windowManager?.focus(taskID)
   }
   const minimize = (e:React.MouseEvent) => {
@@ -156,6 +157,21 @@ export const ProgramWindow = ({
       }
     }
   }, [cursor, isMoving, moveOffset, position, windowMaximized]);
+
+  useEffect(() => {
+    if (dragStart && cursor.clickActive) {
+      const dx = Math.abs(cursor.pageX - dragStart.x)
+      const dy = Math.abs(cursor.pageY - dragStart.y)
+      const treshold = 5;
+      if (!isMoving && (dx > treshold || dy > treshold)) {
+        setIsMoving(true)
+        setDragStart(null)
+      }
+    }
+    if (!cursor.clickActive && dragStart) {
+      setDragStart(null)
+    }
+  }, [cursor, dragStart, isMoving]);
 
   useEffect(() => {
     if (resize) {
