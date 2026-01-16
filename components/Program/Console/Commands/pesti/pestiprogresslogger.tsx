@@ -23,7 +23,7 @@ export const doCheck = async (quest: string, answer: string) => {
   await fetch(`${API_URL}/check`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({quest, answer, userId: getUserUniqueId(), username: getUsername() || "?"}),
+    body: JSON.stringify({quest, answer: answer.toLowerCase(), userId: getUserUniqueId(), username: getUsername() || "?"}),
   }).then(response => {
       if (!response.ok) {
         return response.json().then(data => {
