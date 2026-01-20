@@ -7,7 +7,7 @@ type commandState = {
 }
 export const discoCommand:Command = {
   argCount: [0, 0],
-  help: "Starts a disco!",
+  help: "Starts a disco! run disco to toggle it on or off again",
   description: "Wanna party?",
   unlisted: false,
   defaultState: {on: false},
