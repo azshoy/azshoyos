@@ -61,7 +61,7 @@ export const WindowManagerContext = createContext<WindowManagerInterface | undef
 export const WindowManagerProvider = ({
     children
 }:WindowManagerProviderProps) => {
-  const {tasks, programs, taskUpdate} = useContext(TaskManagerContext)
+  const {tasks, programs, taskUpdate, killTask} = useContext(TaskManagerContext)
   const monitor = useMonitor()
   const [windows, setWindows] = useState<{[key: number]: ReactNode}>({})
   const [windowDefaultSize, setWindowDefaultSize] = useState({x: 0, y: 0})
@@ -110,6 +110,16 @@ export const WindowManagerProvider = ({
     })
   }, [tasks, taskUpdate, windows, programs, windowDefaultSize, nextWindowSpawnPos]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return
+      if (call.focused < 0) return
+      e.preventDefault()
+      killTask(call.focused)
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [call.focused, killTask]);
 
   return (
     <WindowManagerContext.Provider value={{...call}}>
