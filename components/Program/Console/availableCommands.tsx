@@ -10,6 +10,7 @@ import {emailCommand, yCommand, nCommand} from "@/components/Program/Console/Com
 import {checkCommand} from "@/components/Program/Console/Commands/check";
 import {onchainCommand} from "@/components/Program/Console/Commands/onchain";
 import {pestiCommand} from "@/components/Program/Console/Commands/pesti/pesti";
+import { retroCommand } from "@/components/Program/Console/Commands/retro";
 
 //import {TemplateCommand} from "@/components/Program/Console/Commands/TEMPLATE";
 
@@ -21,7 +22,8 @@ export const commands:{[key: string]: Command} = {
   time: timeCommand,
   cs: csCommand,
   shutdown: shutdownCommand,
-  pesti:pestiCommand
+  pesti:pestiCommand,
+  retro: retroCommand
 
   //template: TemplateCommand,
 }
