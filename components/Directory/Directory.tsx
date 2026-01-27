@@ -180,7 +180,8 @@ export const Directory = ({
   const onPathBarClick = (newPath: string[]) => {
       const shortcut = allShortcuts.find(short => {
           const prog = programs[short.programID]
-          if ("parameters" in prog && "path" in prog.parameters) {
+
+          if (prog instanceof FileExplorerProgramClass) {
               return '/' + prog.parameters.path.join('/') === '/' + newPath.join('/')
           }
           return false
