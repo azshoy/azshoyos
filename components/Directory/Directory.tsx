@@ -102,7 +102,7 @@ export const Directory = ({
             return false
           }
         }
-        const current = grid.grid[gPos.y][gPos.x]
+        const current = typeof grid.grid[gPos.y] != "undefined" ? grid.grid[gPos.y][gPos.x] : null
         if (current == null) {
           updateGridAt(short.id, gPos)
         } else if (current == short.id) {
@@ -203,13 +203,23 @@ export const Directory = ({
       if (s) {
         const dropPos = {x: collectPos.x / viewSize.x, y: collectPos.y / viewSize.y}
         const gPos = {x: Math.floor(dropPos.x * (grid.gridSize.x-0.001)), y: Math.floor(dropPos.y * (grid.gridSize.y-0.001))}
-        // Get current shortcut from grid for desktop, or by order for folders (no free positioning)
-        const current = allowFreePosition ?
-            grid.grid[gPos.y][gPos.x] :
-            (shortcuts.find((short) =>
-                "/"+s.path.join('/') == pathString && short.order === (gPos.x + gPos.y * grid.gridSize.x + 1)*2)?.id ?? null)
 
-        const currentS = current ? allShortcuts.find((s) => s.id == current) : undefined
+        // Get current shortcut from grid for desktop, or by order for folders (no free positioning)
+        let current : string | null = null
+        let currentS : Shortcut | undefined = undefined
+        if(allowFreePosition) {
+            current = typeof grid.grid[gPos.y] != "undefined" ? grid.grid[gPos.y][gPos.x] : null
+            currentS = current ? allShortcuts.find((s) => s.id == current) : undefined
+        }
+        else {
+            currentS = shortcuts.find((shortcut) => {
+                const shortcutPath = "/" + shortcut.path.join('/');
+                const gridOrder = (gPos.x + gPos.y * grid.gridSize.x + 1) * 2;
+                if (shortcutPath === pathString && shortcut.order === gridOrder)
+                    return true;
+            })
+            current = currentS ? currentS.id : null
+        }
         if (current == s.id) return
         if ("/"+s.path.join('/') != pathString){
           s.path = [...path]

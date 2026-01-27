@@ -45,6 +45,7 @@ const getWindowStyle = (p: v2, s: v2, z: number, max: boolean, min: boolean, mov
     }
   }
 }
+type WindowSide = "top" | "left" | "right" | "bottom"
 
 export const ProgramWindow = ({
   position: initialPosition,
@@ -57,12 +58,13 @@ export const ProgramWindow = ({
   const [newProgram, setNewProgram] = useState<WindowedProgramClass | null>(null)
   const [position, setPosition] = useState(initialPosition)
   const [zIndex, setZIndex] = useState(0)
-  const [size] = useState(initialSize)
+  const [size, setSize] = useState(initialSize)
   const [windowMaximized, setWindowMaximized] = useState(false)
   const [windowMinimized, setWindowMinimized] = useState(false)
   const windowManager = useContext(WindowManagerContext)
   const [isMoving, setIsMoving] = useState(false)
   const [moveOffset, setMoveOffset] = useState({x: 0, y: 0})
+  const [resize, setResize] = useState<{o: number, side: WindowSide} | null>(null)
   const cursor = useCursor()
 
   useEffect(() => {
@@ -97,7 +99,7 @@ export const ProgramWindow = ({
     }
   }, [newProgram])
 
-  const windowStyle = getWindowStyle(position, size, zIndex, windowMaximized, windowMinimized, isMoving)
+  const windowStyle = getWindowStyle(position, size, zIndex, windowMaximized, windowMinimized, isMoving || !!resize)
 
   const startMove = (e:React.MouseEvent) => {
     setMoveOffset({x: cursor.pageX - position.x, y: cursor.pageY - position.y})
@@ -115,6 +117,24 @@ export const ProgramWindow = ({
   const close = (e:React.MouseEvent) => {
     e.stopPropagation()
     killTask(taskID)
+  }
+  const doResize = (e:React.MouseEvent, side:WindowSide) => {
+    e.preventDefault()
+    e.stopPropagation()
+    switch (side) {
+      case "top":
+        setResize({o: cursor.pageY, side: side})
+        break
+      case "left":
+        setResize({o: cursor.pageX, side: side})
+        break
+      case "bottom":
+        setResize({o: cursor.pageY, side: side})
+        break
+      case "right":
+        setResize({o: cursor.pageX, side: side})
+        break
+    }
   }
   useEffect(() => {
     if (isMoving) {
@@ -138,6 +158,43 @@ export const ProgramWindow = ({
   }, [cursor, isMoving, moveOffset, position, windowMaximized]);
 
   useEffect(() => {
+    if (resize) {
+      if (cursor.clickActive) {
+        const diff = {x: cursor.pageX - resize.o, y: cursor.pageY - resize.o}
+        switch (resize.side) {
+          case "top":
+            if (diff.y !== 0){
+              setResize({side: resize.side, o: cursor.pageY})
+              setPosition({x: position.x, y: position.y + diff.y})
+              setSize({x: size.x, y:size.y - diff.y})
+            }
+            break
+          case "left":
+            if (diff.x !== 0) {
+              setResize({side: resize.side, o: cursor.pageX})
+              setPosition({x: position.x + diff.x, y: position.y})
+              setSize({x: size.x - diff.x, y: size.y})
+            }
+            break
+          case "bottom":
+            if (diff.y !== 0) {
+              setResize({side: resize.side, o: cursor.pageY})
+              setSize({x: size.x, y: size.y + diff.y})
+            }
+            break
+          case "right":
+            if (diff.x !== 0) {
+              setResize({side: resize.side, o: cursor.pageX})
+              setSize({x: size.x + diff.x, y: size.y})
+            }
+            break
+        }
+      } else {
+        setResize(null)
+      }
+    }
+  }, [cursor, resize, size, position]);
+  useEffect(() => {
     if (windowMinimized && windowManager){
       windowManager.unfocus(taskID)
     }
@@ -145,28 +202,37 @@ export const ProgramWindow = ({
 
   return (
     <div className={styles.window} onClick={() => windowManager?.focus(taskID)} style={windowStyle}>
-      <div className={styles.titleBar} onMouseDown={startMove}>
-        {program !== null ?
-          <>
-            <img src={program.icon} alt={''} className={styles.icon}></img>
-            <div className={styles.title}>
-              {program.title}
-            </div>
-          </>
-        : null}
-        <button className={styles.minimize} onClick={minimize}>
-          <img src={'/icons/minimize.svg'} alt={''} className={styles.icon}></img>
-        </button>
-        <button className={styles.minimize} onClick={toggleMaximize}>
-          <img src={windowMaximized ? '/icons/unmaximize.svg' : '/icons/maximize.svg'} alt={''} className={styles.icon}></img>
-        </button>
-        <button className={styles.close} onClick={close}>
-          <img src={'/icons/close.svg'} alt={''} className={styles.icon}></img>
-        </button>
+      <div className={styles.windowEdgeVertical} onMouseDown={(e) => doResize(e, "left")}></div>
+      <div className={styles.windowMid}>
+        <div className={styles.windowEdgeHorizontal} onMouseDown={(e) => doResize(e, "top")}></div>
+
+        <div className={styles.windowMid}>
+        <div className={styles.titleBar} onMouseDown={startMove}>
+          {program !== null ?
+            <>
+              <img src={program.icon} alt={''} className={styles.icon}></img>
+              <div className={styles.title}>
+                {program.title}
+              </div>
+            </>
+          : null}
+          <button className={styles.minimize} onClick={minimize}>
+            <img src={'/icons/minimize.svg'} alt={''} className={styles.icon}></img>
+          </button>
+          <button className={styles.minimize} onClick={toggleMaximize}>
+            <img src={windowMaximized ? '/icons/unmaximize.svg' : '/icons/maximize.svg'} alt={''} className={styles.icon}></img>
+          </button>
+          <button className={styles.close} onClick={close}>
+            <img src={'/icons/close.svg'} alt={''} className={styles.icon}></img>
+          </button>
+        </div>
+        <div className={styles.program}>
+          {program ? program.programWindow : null}
+        </div>
+        </div>
+        <div className={styles.windowEdgeHorizontal} onMouseDown={(e) => doResize(e, "bottom")}></div>
       </div>
-      <div className={styles.program}>
-        {program ? program.programWindow : null}
-      </div>
+      <div className={styles.windowEdgeVertical} onMouseDown={(e) => doResize(e, "right")}></div>
     </div>
   )
 
