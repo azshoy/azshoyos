@@ -1,0 +1,46 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.pathBar {
+    border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+    display: flex;
+    align-items: center;
+    padding-bottom: 4px;
+    padding-left: 4px;
+}
+
+.path {
+    background-color: rgba(0, 0, 0, 0.1);
+    width: 100%;
+    padding: 08px;
+    gap: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.pathLink {
+    cursor: pointer;
+}
+
+.pathButton {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 4px;
+
+    border: none;
+    border-radius: 4px;
+    background: none;
+
+    height: 100%;
+    aspect-ratio: 1 / 1;
+}
+
+.pathButton:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}

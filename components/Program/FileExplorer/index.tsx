@@ -17,5 +17,5 @@ export type FileExplorerProps = {
 export const FileExplorer = ({
   path,
 }:FileExplorerProps) => {
-  return <div className={styles.container}><Directory path={path}/></div>
+  return <div className={styles.container}><Directory path={path} showPathBar/></div>
 }
