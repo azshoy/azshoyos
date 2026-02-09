@@ -6,6 +6,7 @@ import {CSSProperties, useContext, useState} from "react";
 import Head from 'next/head';
 import {TaskManagerContext, TaskManagerProvider} from "@/components/OS/TaskManager";
 import {useMonitor} from "@/components/OS/MonitorHandler";
+import {OverlayFilter} from "@/components/extras/OverlayFilter";
 
 
 export const Home = ()=> {
@@ -22,6 +23,7 @@ export const Home = ()=> {
           <Desktop/>
         </div>
         <TaskBar/>
+        <OverlayFilter/>
         <CloseComputer/>
       </TaskManagerProvider>
     </>

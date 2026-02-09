@@ -33,6 +33,8 @@ export type TaskManagerInterface = {
   swapTask: (taskID: number, programID: string) => void,
   setShortcuts: (shortcuts:Shortcut[]) => void,
   setAsBackground: (s:CSSProperties['background']) => void,
+  setOverlayFilter: (s: CSSProperties['backdropFilter']) => void,
+  overlayFilter: CSSProperties['backdropFilter']
   specialEffects: {effects: string[], add: (s:string) => void, remove: (s:string) => void, updated: number} 
   startTaskByPath: (f: string) => boolean
 }
@@ -93,8 +95,10 @@ export const TaskManagerContext = createContext<TaskManagerInterface>({
   swapTask: (taskID: number, programID: string) => {},
   killTask: (taskID: number) =>{},
   setAsBackground: (s: CSSProperties['background']) =>{},
+  setOverlayFilter: (s: CSSProperties['backdropFilter']) =>{},
   specialEffects: {effects: [], add: (s:string) => {}, remove: (s:string)=> {}, updated: 0},
-  startTaskByPath: (f:string) => false
+  startTaskByPath: (f:string) => false,
+  overlayFilter: "none"
 });
 
 export const TaskManagerProvider = ({
@@ -116,6 +120,7 @@ export const TaskManagerProvider = ({
 
 
   const [background, setAsBackground] = useState<CSSProperties['background']>('var(--blue-dark)')
+  const [overlayFilter, setOverlayFilter] = useState<CSSProperties['backdropFilter']>('none')
 
   
   const startTaskByPath = (path: string) => {
@@ -228,7 +233,7 @@ export const TaskManagerProvider = ({
 
 
   return (
-    <TaskManagerContext.Provider value={{programs, shortcuts, shortcutID, tasks, taskUpdate, shutDown, setShutDown, setShortcuts, shortcutUpdate, setShortcutUpdate, runXonY, startNewTask:setNewTask, killTask:setKillTask, swapTask, setAsBackground, specialEffects, startTaskByPath}}>
+    <TaskManagerContext.Provider value={{programs, shortcuts, shortcutID, tasks, taskUpdate, shutDown, setShutDown, setShortcuts, shortcutUpdate, setShortcutUpdate, runXonY, startNewTask:setNewTask, killTask:setKillTask, swapTask, setAsBackground, setOverlayFilter, overlayFilter, specialEffects, startTaskByPath}}>
       <DragManagerProvider>
         <WindowManagerProvider>
           {children}

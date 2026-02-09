@@ -1,38 +1,59 @@
 import {Result, Txt} from "@/components/Program/Console/commandHandler";
 import {Command} from "@/components/Program/Console/availableCommands";
 import {ConsoleContext, Status} from "@/components/Program/Console";
-import {doCheck} from "@/components/Program/Console/Commands/pesti/pestiprogresslogger";
+import {doCheck} from "@/components/Program/Console/Commands/challenge/challengeprogresslogger";
+
+const activeOnPesti = {
+  isActive: false,
+  hasReward: true,
+  meet: [{s: "Meet az.sh at University of Oulu’s Linnanmaa campus from 9 to 15. Stand 111 is located at Agora near the main entrance at door 2T.\n"}] as Txt[]
+}
+
+const displayIfActive = (t:Txt[] | Txt, fallback:Txt|Txt[] = []):Txt[] => {
+  if (activeOnPesti.isActive) return Array.isArray(t) ? t : [t]
+  return Array.isArray(fallback) ? fallback : [fallback]
+}
+const displayIfReward = (t:Txt[] | Txt, fallback:Txt|Txt[] = []):Txt[] => {
+  if (activeOnPesti.isActive && activeOnPesti.hasReward) return Array.isArray(t) ? t : [t]
+  return Array.isArray(fallback) ? fallback : [fallback]
+}
 
 
-export const pestiCommand:Command = {
+export const challengeCommand:Command = {
   argCount: [0, 2],
-  help: "Pesti-Challenge 2026",
-  description: "Pesti-Challenge journey",
-  unlisted: true,
+  help: "az.sh challenge 2026",
+  description: "az.sh challenge journey",
+  unlisted: false,
   defaultState: {state: ""},
   run: async (command: string, args: string[], context:ConsoleContext):Promise<Result> => {
     const progress = getProgress()
-    const taskCount = pestiChallengeOrder.length
+    const taskCount = challengeOrder.length
     if (args.length == 0) {
       const user = getUsername()
       if (!user) {
-        context.state["pesti"].state = "register"
+        context.state["challenge"].state = "register"
         context.setState({...context.state})
         return {
           status: Status.WAITINPUT, output: [
-            {s: "Welcome to az.sh Pesti-Challenge journey!\n\n"},
+            {s: "Welcome to az.sh challenge journey!\n\n"},
             {s: `The journey includes ${taskCount-1} short challenges and a bit longer bonus task. `},
-            {s: "If you complete all of the short challenges during the Pesti event you will be rewarded with a small prize!\n"},
+            ...displayIfActive({s: "If you complete all of the short challenges during the Pesti event you will be rewarded with a small prize!\n"}),
             {s: "\nPlease give nickname:"}
           ]
         }
       }
+      const answerGuide: Txt[] = [
+        {s: "When you have found the answer, check it with command "},
+        {s: `${command} --check <ANSWER>`, onClick: {a: "command", t: `${command} --check <ANSWER>`}},
+        {s: "\n"}
+      ]
       return { exitCode: 0, output: [
-          {s: "Welcome to az.sh Pesti-Challenge journey!\n\n"},
-          {s: progress < pestiChallengeOrder.length ? "Your current challenge:\n\n" : ""},
-          ...(progress < taskCount ? pestiChallengeOrder[progress].question as Txt[] : [{s: "You have completed all of the Pesti challenges!\n"}]),
-          {s: "\nMore info about the Pesti challenge with command "},
-          {s: "pesti --help", onClick: {a: "command", t: "pesti --help"}},
+          {s: "Welcome to az.sh Challenge journey!\n\n"},
+          {s: progress < challengeOrder.length ? "Your current challenge:\n\n" : ""},
+          ...(progress < taskCount ? challengeOrder[progress].question as Txt[] : [{s: "You have completed all of the challenges!\n"}]),
+          ...(progress == 0 ? answerGuide : []),
+          {s: "\nMore info about the challenge with command "},
+          {s: `${command} --help`, onClick: {a: "command", t: `${command} --help`}},
         ]
       }
     } else {
@@ -40,24 +61,24 @@ export const pestiCommand:Command = {
         case "--help":
         case "-h":
           return { exitCode: 0, output: [
-              {s: `az.sh Pesti Challenge journey includes ${taskCount-1} short challenges and an optional bonus task.\n`},
-              {s: "If you complete all of the short challenges during the Pesti event you will be rewarded with a small prize!\n\n"},
-              {s: "Meet az.sh at University of Oulu’s Linnanmaa campus from 9 to 15. Stand 111 is located at Agora near the main entrance at door 2T.\n"},
+              {s: `az.sh Challenge journey includes ${taskCount-1} short challenges and an optional bonus task.\n`},
+              ...displayIfActive({s: "If you complete all of the short challenges during the Pesti event you will be rewarded with a small prize!\n\n"}),
+              ...displayIfReward(activeOnPesti.meet),
               {s: "\nChallenge status:  "},
-              {s: "pesti --status", onClick: {a: "command", t: "pesti --status"}},
+              {s: `${command} --status`, onClick: {a: "command", t: `${command} --status`}},
               {s: "\nValidate answer:   "},
-              {s: "pesti --check <ANSWER>", onClick: {a: "command", t: "pesti --check <ANSWER>"}},
+              {s: `${command} --check <ANSWER>`, onClick: {a: "command", t: `${command} --check <ANSWER>`}},
               {s: "\nRename user:       "},
-              {s: "pesti --rename", onClick: {a: "command", t: "pesti --rename"}},
+              {s: `${command} --rename`, onClick: {a: "command", t: `${command} --rename`}},
               {s: "\nReset progress:    "},
-              {s: "pesti --reset", onClick: {a: "command", t: "pesti --reset"}},
+              {s: `${command} --reset`, onClick: {a: "command", t: `${command} --reset`}},
               {s: "\n"}
             ]
           }
         case "--status":
         case "-s":
           const nameOfChallenge = (c:number, p:number, bonus:boolean=false) =>{
-            const line = [{s: `\n${bonus ? "Bonus!" : String(c) + "."} `, c:"highlight"}, {s: `${p >= c ? pestiChallengeOrder[c].name : "?????"}`}]
+            const line = [{s: `\n${bonus ? "Bonus!" : String(c) + "."} `, c:"highlight"}, {s: `${p >= c ? challengeOrder[c].name : "?????"}`}]
             if (p == c){
               line.push({s: " <- ", c: "error"})
               line.push({s: "You are here", c: "highlight"})
@@ -72,9 +93,7 @@ export const pestiCommand:Command = {
               ...nameOfChallenge(2, progress),
               ...nameOfChallenge(3, progress),
               ...nameOfChallenge(4, progress),
-              {s: "\n~ ", c: "highlight"},
-              {s: "REWARD", c: "error"},
-              {s: " ~", c: "highlight"},
+              ...displayIfReward([{s: "\n~ ", c: "highlight"}, {s: "REWARD", c: "error"}, {s: " ~", c: "highlight"}]),
               ...nameOfChallenge(5, progress, true),
             ]
           }
@@ -83,24 +102,24 @@ export const pestiCommand:Command = {
           if (args.length < 2) {
             return { exitCode: 1, output: [{s: "Please provide your answer to be checked!", c: "error"}]}
           }
-          doCheck(pestiChallengeOrder[progress].id, args[1]).then(check => {
+          doCheck(challengeOrder[progress].id, args[1]).then(check => {
             setTimeout(() => {
               if (check.error) {
                 context.printLine([{s: "Network error! Please try again", c: "error"}])
                 context.setCommandStatus({t: Date.now(), status: Status.EXITED, exitCode: 1, command: command})
               } else if (check.ok) {
                 context.printLine([{s: "Correct!", c: "highlight"}])
-                if (pestiChallengeOrder[progress].after.length > 0) context.printLine(pestiChallengeOrder[progress].after as Txt[])
+                if (challengeOrder[progress].after.length > 0) context.printLine(challengeOrder[progress].after as Txt[])
                 setTimeout(() => {
                   if (progress == taskCount - 2) {
-                    context.printLine([{s: "\nYou have completed all short quests! Go to az.sh pesti stand for your reward!"}])
+                    context.printLine(displayIfReward({s: "\nYou have completed all short quests! Go to az.sh challenge stand for your reward!"}, {s: "\nYou have completed all short quests!"}))
                   }
                   if (progress == taskCount - 1) {
                     context.printLine([{s: "\nYou have completed all quests! WOW! good job!"}])
                   } else {
                     context.printLine([{s: "\nNext task:\n"}])
                     setTimeout(() => {
-                      context.printLine((pestiChallengeOrder[progress + 1].question as Txt[]))
+                      context.printLine((challengeOrder[progress + 1].question as Txt[]))
                     }, 500)
                   }
                 }, 500)
@@ -116,11 +135,11 @@ export const pestiCommand:Command = {
           return {status: Status.PENDING, output: [{s: "Checking..."}]}
         case "--rename":
         case "-r":
-          context.state["pesti"].state = "rename"
+          context.state["challenge"].state = "rename"
           context.setState({...context.state})
           return {status: Status.WAITINPUT, output: [{s: "Please give nickname:"}]}
         case "--reset":
-          context.state["pesti"].state = "reset"
+          context.state["challenge"].state = "reset"
           context.setState({...context.state})
           return {status: Status.WAITINPUT, output: [{s: "Are you sure you want to reset progress? (y/N)"}]}
         default:
@@ -128,8 +147,8 @@ export const pestiCommand:Command = {
             return { exitCode: 1, output: [
               {s: "Error: Unknown arguments!", c: "error"},
                 {s: "\nUse "},
-                {s: "pesti --help ", onClick: {a: "command", t: "pesti --help"}},
-                {s: "for usage help."},
+                {s: `${command} --help`, onClick: {a: "command", t: `${command} --help`}},
+                {s: " for usage help."},
               ]}
           }
 
@@ -139,27 +158,27 @@ export const pestiCommand:Command = {
 
   },
   continue: async (_command: string, input:string[], context:ConsoleContext):Promise<Result> => {
-    const state = context.state["pesti"].state
+    const state = context.state["challenge"].state
     switch (state){
       case "rename":
       case "register":
         const username = input.join(" ")
         setUsername(username)
-        context.state["pesti"].state = ""
+        context.state["challenge"].state = ""
         context.setState({...context.state})
         if (state == "register") {
-          return {exitCode: 0, output: [{s: `Hello ${username}!\n\n`}, ...(pestiChallengeOrder[0].question as Txt[])]}
+          return {exitCode: 0, output: [{s: `Hello ${username}!\n\n`}, ...(challengeOrder[0].question as Txt[])]}
         } else {
           return {exitCode: 0, output: [{s: `Your name is now ${username}!`}]}
         }
       case "reset":
         const v = input.join(" ").toLowerCase()
-        context.state["pesti"].state = ""
+        context.state["challenge"].state = ""
         context.setState({...context.state})
         if (["yes", "y"].includes(v)){
           setProgress(0)
           localStorage.removeItem("username")
-          return {exitCode: 0, output: [{s: 'Your pesti challenge progress has been deleted', c:"error"}]}
+          return {exitCode: 0, output: [{s: 'Your challenge progress has been deleted', c:"error"}]}
         }
         return {exitCode: 0, output: [{s: 'Ok!'}]}
       default:
@@ -202,11 +221,11 @@ const setUsername = (s:string) => {
   localStorage.setItem("username", s)
 }
 
-const pestiChallenges = {
+const challengeList = {
   cesar: {
     question: [
       {s: "Strange statue\n\n", c: "error"},
-      {s: "On your Pesti journey you see an interesting statue.\n\n"},
+      {s: "On your journey you see an interesting statue.\n\n"},
       {s: "file: "},
       {s: "[our_computer/images/statue.png]", onClick: {a: "file", t: "images/statue.png"}},
       {s: "\n\nIt seems that someone has written strange message to the base of the statue, it reads:\n\n"},
@@ -266,9 +285,6 @@ const pestiChallenges = {
       {s: "[our_computer/code_projects/important.py]", onClick: {a: "file", t: "code_projects/important.py"}},
       {s: "\n\n"},
       {s: "Please help Sakke by fixing the code and return the forgotten important information.\n"},
-      {s: "When you have found the info, check it with command "},
-      {s: "pesti --check <ANSWER>", onClick: {a: "command", t: "pesti --check <ANSWER>"}},
-      {s: "\n"}
     ],
     after: [
       {s: "Oh! This must be the az.sh business ID.\nIt is very important indeed...\n\nAnd you totally can't find it from our Contact Information..."}
@@ -292,4 +308,4 @@ const pestiChallenges = {
   }
 }
 
-const pestiChallengeOrder = [pestiChallenges.python, pestiChallenges.cesar, pestiChallenges.chain, pestiChallenges.json, pestiChallenges.bonus]
+const challengeOrder = [challengeList.python, challengeList.cesar, challengeList.chain, challengeList.json, challengeList.bonus]

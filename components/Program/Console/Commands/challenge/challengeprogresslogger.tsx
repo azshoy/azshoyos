@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import {API_URL, enableCookies, getUserId} from "@/util/session";
 import {Result, Txt} from "@/components/Program/Console/commandHandler";
-import {getUsername} from "@/components/Program/Console/Commands/pesti/pesti";
+import {getUsername} from "@/components/Program/Console/Commands/challenge/challenge";
 
 
 

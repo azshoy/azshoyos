@@ -72,6 +72,19 @@ export const readableFiles:{[key:string]: Readable} = {
       </div>
     )
   },
+  challengeInfo: {
+    type: "ReactNode",
+    content: (
+      <div>
+        <h3># az.sh Challenge 2026</h3>
+        <br/>
+        az.sh Challenge consists of a few short challenges and an optional bonus task.
+        <br/>
+        <br/>
+        Begin the challenge by opening the <span className={styles.blue}>az.sh</span> <img src={"/icons/console.svg"} alt={""} className={styles.inlineIcon}/> console from the desktop and run command <div className={styles.codeBlock}>challenge</div>.
+      </div>
+    )
+  },
   pestiInfo: {
     type: "ReactNode",
     content: (

@@ -17,9 +17,11 @@ export const retroCommand:Command = {
     const currentState = context.state["retro"] as commandState
     if (currentState.on) {
       context.taskManager.setAsBackground('url("/misc/retro.png")')
+      context.taskManager.setOverlayFilter('url(#retro)')
       return {exitCode: 0, output: [{s: "Retro time!"}]}
     } else {
       context.taskManager.setAsBackground('default')
+      context.taskManager.setOverlayFilter('none')
       return {exitCode: 0, output: [{s: "Nostalgia is overrated :("}]}
     }
     return {exitCode: 1, output: [{s: "Unknown error!", c:"error"}]}

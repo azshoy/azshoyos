@@ -109,3 +109,13 @@
   from {width: 0}
   to {width: 100%}
 }
+
+.filterOverlay{
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 100000000;
+  pointer-events: none;
+}

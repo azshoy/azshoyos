@@ -179,16 +179,17 @@ export const programData:{[key: string]: ProgramConstructor} = {
       showInStartMenu: true,
     }
   },
-  pestiInfomation: {
-    title: "Pesti Career Day",
-    filename: "pesti.md",
+  challengeInfomation: {
+    title: "Challenge",
+    filename: "challenge.md",
     description: "",
     type: ProgramType.DOCUMENT_READER,
-    file: "pestiInfo",
+    file: "challengeInfo",
     shortcut: {
       icon: "/icons/document_b.svg",
       position: {x: 0.05, y: 0.65},
-      showInStartMenu: true,
+      showInStartMenu: false,
+      path: quickPaths.root
     }
   },
   contactInformation: {
