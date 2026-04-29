@@ -67,7 +67,7 @@ export const readableFiles:{[key:string]: Readable} = {
         <br/>
         Post address:<br/>
         az.sh oy<br/>
-        Isokatu 56<br/>
+        Asemakatu 18 as. 2<br/>
         90100 Oulu<br/>
       </div>
     )
