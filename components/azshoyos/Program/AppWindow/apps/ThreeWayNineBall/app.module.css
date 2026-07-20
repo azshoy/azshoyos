@@ -1,0 +1,128 @@
+
+.main {
+  background-color: var(--black);
+  color: var(--yellowish);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+.players {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  & > input {
+    border: none !important;
+    outline: none !important;
+    color: var(--white);
+    font-family: var(--default-font);
+    font-size: 0.9em;
+    padding: 0.2em;
+    &:nth-child(1){
+      background-color: var(--green-ultradark);
+    }
+    &:nth-child(2){
+      background-color: var(--blue-ultradark);
+    }
+    &:nth-child(3){
+      background-color: var(--reddish-ultradark);
+    }
+  }
+}
+.button {
+  cursor: pointer;
+  width: 200px;
+  background-color: var(--yellowish-semidark);
+  border-radius: 0.5em;
+  color: var(--orange-dark);
+  text-align: center;
+  padding: 0.3em;
+  margin: auto;
+  &:hover{
+    color: var(--orange);
+    background-color: var(--yellowish-light);
+
+  }
+}
+.game {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  .flipped {
+    scale: -1 1;
+  }
+  .arrow {
+    & > div {
+      transition: scale 1s ease-in-out;
+      scale: 1 1;
+    }
+    .flipped {
+      scale: -1 1;
+    }
+  }
+  .helper{
+    font-size: 0.8em;
+    padding: 0.4em;
+    color: var(--blue);
+    .key {
+      color: var(--orange);
+    }
+    .hold {
+      color: var(--purple)
+    }
+    .action {
+      color: var(--yellowish)
+    }
+  }
+  .tracker {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    & > div {
+      width: 20%;
+      overflow: hidden;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: width 1s ease-in-out, background-color 1s ease-in-out, color 1s ease-in-out;
+      &.active {
+        flex-grow: 1;
+        width: 60%;
+      }
+      .score{
+        font-size: 2em;
+        line-height: 1.3em;
+      }
+      &:nth-child(1){
+        background-color: var(--green-ultradark);
+        color: var(--green);
+        &.active {
+          background-color: var(--green-dark);
+          color: var(--green-light);
+        }
+      }
+      &:nth-child(2){
+        background-color: var(--blue-ultradark);
+        color: var(--blue);
+        &.active {
+          background-color: var(--blue-dark);
+          color: var(--blue-light);
+        }
+      }
+      &:nth-child(3){
+        background-color: var(--reddish-ultradark);
+        color: var(--reddish);
+        &.active {
+          background-color: var(--reddish-dark);
+          color: var(--reddish-light);
+        }
+      }
+    }
+
+  }
+}

@@ -1,0 +1,72 @@
+.main {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  min-height: 100%;
+  width: 100%;
+}
+.programMain {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  font-size: 1rem;
+  line-height: normal;
+}
+.mainTab {
+  display: flex;
+  flex-direction: column;
+  transition: flex 2s ease-in-out;
+  --inactiveTabWidth: 200px;
+  .static {
+    width: auto;
+  }
+  .dynamicContent{
+    flex-grow: 1;
+    .activeTab, .inactiveTab{
+      overflow-x: hidden;
+      overflow-y: visible;
+    }
+  }
+  &:nth-child(even){
+    .dynamicContent{
+      flex-direction: row-reverse;
+    }
+  }
+  &.active{
+    flex: 1 1 100%;
+    .dynamicContent {
+      .activeTab, .inactiveTab {
+        transition: width 0.5s ease-in-out, opacity 0.5s ease-in-out;
+      }
+      .activeTab {
+        width: 100%;
+        opacity: 1;
+      }
+
+      .inactiveTab {
+        width: 0;
+        opacity: 0;
+      }
+    }
+  }
+  &.inactive {
+    flex: 0 0 var(--inactiveTabWidth);
+    .dynamicContent {
+      .activeTab, .inactiveTab {
+        transition: width 0.5s 1.5s ease-in-out, opacity 0.5s 1.5s ease-in-out;
+      }
+      .activeTab {
+        width: 0;
+        opacity: 0;
+      }
+      .inactiveTab {
+        width: 100%;
+        opacity: 1;
+      }
+    }
+  }
+}

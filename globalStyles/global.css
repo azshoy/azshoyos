@@ -1,0 +1,90 @@
+:root {
+  --scale: 1;
+  --gray-0: #08150e;
+  --gray-1: #13261c;
+  --gray-2: #2d503f;
+  --gray-3: #599275;
+  --gray-4: #a3c8b5;
+  --gray-5: #f2faf6;
+  --black: var(--gray-0);
+  --white: var(--gray-5);
+  --orange-light: #da997b;
+  --orange: #b85d33;
+  --orange-semidark: #8c4626;
+  --orange-dark: #5c2e19;
+  --orange-megadark: #472413;
+  --orange-ultradark: #331a0e;
+  --green-light: #7bdb98;
+  --green: #34bc5d;
+  --green-semidark: #268C43;
+  --green-dark: #195c2c;
+  --green-megadark: #134722;
+  --green-ultradark: #0e3318;
+  --yellowish-light: #bddb7b;
+  --yellowish: #92bc34;
+  --yellowish-semidark: #6c8c26;
+  --yellowish-dark: #475c19;
+  --yellowish-megadark: #374713;
+  --yellowish-ultradark: #27330e;
+  --purple-light: #997bdb;
+  --purple: #5d33b9;
+  --purple-semidark: #46268c;
+  --purple-dark: #2e195c;
+  --purple-megadark: #241347;
+  --purple-ultradark: #1a0e33;
+  --reddish-light: #db7bbd;
+  --reddish: #b93390;
+  --reddish-semidark: #8c266c;
+  --reddish-dark: #5c1947;
+  --reddish-megadark: #471337;
+  --reddish-ultradark: #330e27;
+  --blue-light: #7bbddb;
+  --blue: #3493be;
+  --blue-semidark: #2a6b89;
+  --blue-dark: #1c485c;
+  --blue-megadark: #153847;
+  --blue-ultradark: #0f2833;
+}
+
+@font-face {
+  src: url("UbuntuTitling.ttf");
+  font-family: "basic";
+}
+
+@font-face {
+  src: url("UbuntuMono-Regular.ttf");
+  font-family: "console";
+}
+
+html,
+body {
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+
+body {
+  font-family: "basic", "sans-serif";
+  background: var(--background);
+  background-size: 100% 100%;
+  color: var(--black);
+}
+body > div {
+  height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+

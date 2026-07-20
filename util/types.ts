@@ -3,6 +3,16 @@ import {CSSProperties} from "react";
 
 export type v2 = {x: number, y: number}
 
+namespace AZSHColor {
+  export type base = "orange" | "green" | "yellowish" | "purple" | "reddish" | "blue"
+  export type mod = `${base}${"-light" | "" | "-semidark" | "-dark" | '-megadark' | '-ultradark'}`
+  export type gray = `gray-${"0" | "1" | "2" | "3" | "4" | "5" }`
+  export type bw = "black" | "white"
+  export type all = gray | bw | mod
+}
+export type azColorBase = AZSHColor.base
+export type azColor =  AZSHColor.all
+
 type CSSvariable = `--${string}`
 export type CSSPropertiesPlus = CSSProperties | {[key: CSSvariable]: string | number}
 

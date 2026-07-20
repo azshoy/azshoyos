@@ -1,28 +1,21 @@
-import "@/globalStyles/global.css";
-import "@/globalStyles/os.global.css";
 import styles from '@/globalStyles/os.module.css'
 import { TaskBar } from "@/components/azshoyos/TaskBar";
 import {Desktop} from "@/components/azshoyos/desktop";
-import {CSSProperties, useContext, useState} from "react";
-import Head from 'next/head';
+import {useContext} from "react";
 import {TaskManagerContext, TaskManagerProvider} from "@/components/azshoyos/OS/TaskManager";
-import {useMonitor} from "@/components/azshoyos/OS/MonitorHandler";
 import {OverlayFilter} from "@/components/azshoyos/extras/OverlayFilter";
+import {Scaler} from "@/components/layouts/components/scaler";
+import {Header, HeaderProps} from "@/components/layouts/components/header";
 
 
-export const Home = ()=> {
-  const {uiScale} = useMonitor()
+export const OSLayout = ({...headerProps}:Partial<HeaderProps> )=> {
   return (
     <>
-      <Head>
-        <title>az.sh</title>
-        <meta name="description" content="Welcome to az.sh" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-      </Head>
+      <Header headerProps={headerProps}/>
       <TaskManagerProvider>
-        <div className={styles.main} style={{'--uiScale': String(uiScale)} as CSSProperties}>
+        <Scaler className={styles.main}>
           <Desktop/>
-        </div>
+        </Scaler>
         <TaskBar/>
         <OverlayFilter/>
         <CloseComputer/>
@@ -32,7 +25,7 @@ export const Home = ()=> {
 }
 
 
-export default Home
+export default OSLayout
 
 
 

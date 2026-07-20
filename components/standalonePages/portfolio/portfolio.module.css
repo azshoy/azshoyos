@@ -1,0 +1,183 @@
+.green{
+  --color-ud: var(--green-ultradark);
+  --color-md: var(--green-megadark);
+  --color-d: var(--green-dark);
+  --color-sd: var(--green-semidark);
+  --color-b: var(--green);
+  --color-l: var(--green-light);
+
+  --bg: var(--color-ud);
+  --txt: var(--color-l);
+  .container{
+    --bg: var(--color-d);
+    --txt: var(--black);
+    --darken: var(--color-md);
+    .subcontainer{
+      --bg: var(--color-md);
+    }
+  }
+  --inactive-hover: var(--color-md);
+  --inactive-active: var(--color-d);
+  --closeImg: url('/portfolio/icons/greenClose.svg');
+  --openFullImg: url('/portfolio/icons/greenOpenFull.svg');
+  --bgLogo: url("/portfolio/greenlogo.svg");
+}
+.purple{
+  --color-ud: var(--purple-ultradark);
+  --color-md: var(--purple-megadark);
+  --color-d: var(--purple-dark);
+  --color-sd: var(--purple-semidark);
+  --color-b: var(--purple);
+  --color-l: var(--purple-light);
+
+  --bg: var(--color-ud);
+  --txt: var(--color-l);
+  --main-bg: var(--color-ud);
+  .container{
+    --bg: var(--color-d);
+    --txt: var(--black);
+    --darken: var(--color-md);
+    .subcontainer{
+      --bg: var(--color-md);
+    }
+  }
+  --inactive-hover: var(--color-md);
+  --inactive-active: var(--color-d);
+  --closeImg: url('/portfolio/icons/purpleClose.svg');
+  --openFullImg: url('/portfolio/icons/purpleOpenFull.svg');
+  --bgLogo: url("/portfolio/purplelogo.svg");
+}
+
+.tab {
+  width: 100%;
+  max-height: 100%;
+}
+
+
+/* width */
+.scrollbox::-webkit-scrollbar {
+  width: 9px;
+}
+
+/* Track */
+.scrollbox::-webkit-scrollbar-track {
+  border-radius: 3px;
+  border-left: solid transparent 3px;
+}
+
+/* Handle */
+.scrollbox::-webkit-scrollbar-thumb {
+  background: transparent;
+  box-shadow: inset 10px 0 var(--black);
+  border-left: solid transparent 3px;
+  border-radius: 5px 3px 3px 5px;
+}
+
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .tabContent {
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    flex-grow: 1;
+    .scrollbox{
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      overflow-x: hidden;
+      gap: 0.8em;
+      margin-right: var(--sidePadding);
+      width: min(var(--contentSize), calc(var(--window-x, 100vw) - var(--inactiveTabWidth) - var(--sidePadding) * 3));
+
+    }
+  }
+}
+
+.header {
+  font-size: 3em;
+  padding-top: 0.1em;
+  padding-bottom: 0.2em;
+}
+
+div.mainTab {
+  --sidePadding: 16px;
+  --contentSize: 1040px;
+  padding: 10px 0px 0px var(--sidePadding);
+  background-image: var(--bgLogo, url("/portfolio/transparentlogo.svg"));
+  background-repeat: no-repeat;
+  background-attachment: local;
+  color: var(--txt);
+  --inactiveTabWidth: 220px;
+  max-height: 100vh;
+  .dynamicContent {
+    position: relative;
+    & > .activeTab{
+      position: absolute;
+      height: 100%;
+      & > div{
+        height: 100%;
+      }
+    }
+  }
+  .static, .dynamicContent > .activeTab > div{
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    transition: max-width 1s ease-in-out;
+  }
+  background-color: var(--bg);
+  &.active{
+    background-position: bottom 0 right -1px;
+    transition: flex 2s ease-in-out, background-position 2s ease-in-out, padding-left 1s 1s ease-in-out, background-color 2s ease-in-out;
+    .static, .dynamicContent > .activeTab > div{
+      max-width: var(--contentSize)
+    }
+  }
+  &.inactive{
+    background-position: bottom 0 right -500px;
+    transition: flex 2s ease-in-out, background-position 2s ease-in-out, padding-left 1s 0s ease-in-out, background-color 0.4s ease-in-out;
+    .static, .dynamicContent > .activeTab > div{
+      width: 100%;
+      max-width: 100%;
+    }
+    &:not(.animating) {
+      &:hover {
+        background-color: var(--inactive-hover);
+        transition: flex 2s ease-in-out, background-position 2s ease-in-out, padding-left 1s 0s ease-in-out, background-color 0.4s ease-in-out;
+      }
+
+      &:active {
+        background-color: var(--inactive-active);
+        transition: flex 2s ease-in-out, background-position 2s ease-in-out, padding-left 1s 0s ease-in-out, background-color 0.1s ease-in-out;
+      }
+    }
+  }
+}
+.active {
+  --delay: 2s;
+  .itemSelector{
+    opacity: 0;
+    --animdelay: calc(var(--index) * 0.2s + var(--delay) * 0.75);
+    --animdur: 0.5s;
+    animation: fadeIn var(--animdur) var(--animdelay) 1 ease-in-out forwards, riseUp var(--animdur) var(--animdelay)  1 ease-in-out forwards;
+  }
+  .searchbar{
+    opacity: 0.5;
+    animation: fadeIn 1s calc(var(--delay) * 0.75) 1 ease-in-out forwards;
+  }
+  &.firstLoad{
+    --delay: 0s;
+  }
+}
+
+@keyframes fadeIn {
+  100% {opacity: 1}
+}
+@keyframes riseUp {
+  0% {transform: translate(0, 30px)}
+  100% {transform: translate(0, 0)}
+}
