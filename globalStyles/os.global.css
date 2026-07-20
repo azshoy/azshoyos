@@ -1,0 +1,14 @@
+:root{
+  --background: var(--blue-dark);
+  --window-bar: var(--blue);
+  --window-bar-light: var(--gray-4);
+  --window-bar-shadow: var(--blue-dark);
+  --task-bar: var(--gray-3);
+  --task-bar-light: var(--gray-4);
+  --task-bar-shadow: var(--gray-2);
+
+  --bar-height: 50px;
+  --console-font: "console", "monospace";
+  --default-font: "basic";
+  --tittle-bar-height: calc(var(--scale) * var(--bar-height))
+}
