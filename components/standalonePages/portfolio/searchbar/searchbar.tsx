@@ -17,13 +17,51 @@ export const Searchbar = ({
   const id = useId()
   const [hasInput, setHasInput] = useState<boolean>(false)
   const [preVal, setPreVal] = useState<string>("")
+  const [inputValue, setInputValue] = useState<string>("")
+  const [tagAdded, setTagAdded] = useState(0)
+  const addTag = useConnectedSignal<{value: string}>(target + 'AddTag')
+
+  useEffect(() => {
+    if (addTag.fired != tagAdded && addTag.output?.value) {
+      setTagAdded(addTag.fired)
+      if (inputValue != "") {
+        updateInputValue(inputValue + " / " + addTag.output.value)
+      } else {
+        updateInputValue(addTag.output.value)
+      }
+    }
+  }, [addTag.fired, addTag.output?.value, tagAdded, inputValue])
+
+  const [tagRemoved, setTagRemoved] = useState(0)
+  const removeTag = useConnectedSignal<{value: string}>(target + 'RemoveTag')
+
+
+  useEffect(() => {
+    if (removeTag.fired != tagRemoved && removeTag.output?.value) {
+      setTagRemoved(removeTag.fired)
+      if (inputValue.includes(" / " + removeTag.output.value)) {
+        updateInputValue(inputValue.replace(" / " + removeTag.output.value, ""))
+      } else if (inputValue.includes(" " + removeTag.output.value)) {
+        updateInputValue(inputValue.replace(" " + removeTag.output.value, ""))
+      } else if (inputValue.includes(removeTag.output.value)) {
+        updateInputValue(inputValue.replace(removeTag.output.value, ""))
+      }
+
+    }
+  }, [removeTag.fired, removeTag.output?.value, tagRemoved, inputValue])
+
   const onInput = (e:ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
+    if (value != inputValue) updateInputValue(value, false)
+  }
+  const updateInputValue = (value: string, finalize = true) => {
+    setInputValue(value)
     const words = value.split(" ")
     setHasInput(words[words.length-1].trim() !== "")
     if (words.length > 1) setPreVal(words.slice(0, words.length-1).join(" "))
     if (typeof target == 'undefined') return
-    emitSignal(target + 'SearchUpdated', {value: e.target.value})
+    emitSignal(target + 'SearchUpdated', {value: value})
+    if (finalize) finalizeSearch()
   }
   const finalizeSearch = () => {
     if (typeof target == 'undefined') return
@@ -36,7 +74,7 @@ export const Searchbar = ({
             if (event.key === 'Enter') {
               finalizeSearch()
             }
-          }}/>
+          }} value={inputValue}/>
         <img src={'/portfolio/icons/search.svg'} onClick={() => finalizeSearch()}/>
       </div>
       <datalist id={id+"-suggestions"}>
@@ -47,7 +85,7 @@ export const Searchbar = ({
 }
 
 export const useSearchInput = (target: PortfolioPageTarget) => {
-  const [searchInput, setSearchInput] = useState<{words: string[][], timestamp: number, finalized: boolean}>({words: [], timestamp: 0, finalized: true})
+  const [searchInput, setSearchInput] = useState<{words: string[][], timestamp: number, finalized: boolean, raw: string}>({words: [], timestamp: 0, finalized: true, raw: ""})
   const update = useConnectedSignal<{value: string}>(target + 'SearchUpdated')
   const finalized = useConnectedSignal<{value: string}>(target + 'SearchFinalized')
   useEffect(() => {
@@ -57,7 +95,7 @@ export const useSearchInput = (target: PortfolioPageTarget) => {
         const ands = v.trim().replace(/\/\s+/g, "/").replace(/\s+\//g, "/").split(" ")
         const words = ands.map((s) => s.split("/"))
         //console.log(words)
-        setSearchInput({words: words, timestamp: update.fired, finalized: finalized.fired >= update.fired})
+        setSearchInput({words: words, timestamp: update.fired, finalized: finalized.fired >= update.fired, raw: v})
       }, 500)
       return () => {
         clearTimeout(timer)

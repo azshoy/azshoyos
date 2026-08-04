@@ -23,11 +23,11 @@
   --bgLogo: url("/portfolio/greenlogo.svg");
 }
 .purple{
-  --color-ud: var(--purple-ultradark);
-  --color-md: var(--purple-megadark);
-  --color-d: var(--purple-dark);
-  --color-sd: var(--purple-semidark);
-  --color-b: var(--purple);
+  --color-ud: var(--purple-megadark);
+  --color-md: var(--purple-dark);
+  --color-d: var(--purple-semidark);
+  --color-sd: var(--purple);
+  --color-b: var(--purple-light);
   --color-l: var(--purple-light);
 
   --bg: var(--color-ud);
@@ -112,6 +112,8 @@ div.mainTab {
   background-attachment: local;
   color: var(--txt);
   --inactiveTabWidth: 220px;
+  --slideDur: 1.2s;
+  --slideHalf: calc(var(--slideDur) * 0.5);
   max-height: 100vh;
   .dynamicContent {
     position: relative;
@@ -127,19 +129,19 @@ div.mainTab {
     margin-left: auto;
     margin-right: auto;
     width: 100%;
-    transition: max-width 1s ease-in-out;
+    transition: max-width var(--slideHalf) ease-in-out;
   }
   background-color: var(--bg);
   &.active{
     background-position: bottom 0 right -1px;
-    transition: flex 2s ease-in-out, background-position 2s ease-in-out, padding-left 1s 1s ease-in-out, background-color 2s ease-in-out;
+    transition: flex var(--slideDur) ease-in-out, background-position var(--slideDur) ease-in-out, padding-left var(--slideHalf) var(--slideHalf) ease-in-out, background-color var(--slideDur) ease-in-out;
     .static, .dynamicContent > .activeTab > div{
       max-width: var(--contentSize)
     }
   }
   &.inactive{
     background-position: bottom 0 right -500px;
-    transition: flex 2s ease-in-out, background-position 2s ease-in-out, padding-left 1s 0s ease-in-out, background-color 0.4s ease-in-out;
+    transition: flex var(--slideDur) ease-in-out, background-position var(--slideDur) ease-in-out, padding-left var(--slideHalf) 0s ease-in-out, background-color 0.4s ease-in-out;
     .static, .dynamicContent > .activeTab > div{
       width: 100%;
       max-width: 100%;
@@ -147,27 +149,27 @@ div.mainTab {
     &:not(.animating) {
       &:hover {
         background-color: var(--inactive-hover);
-        transition: flex 2s ease-in-out, background-position 2s ease-in-out, padding-left 1s 0s ease-in-out, background-color 0.4s ease-in-out;
+        transition: flex var(--slideDur) ease-in-out, background-position var(--slideDur) ease-in-out, padding-left var(--slideHalf) 0s ease-in-out, background-color 0.4s ease-in-out;
       }
 
       &:active {
         background-color: var(--inactive-active);
-        transition: flex 2s ease-in-out, background-position 2s ease-in-out, padding-left 1s 0s ease-in-out, background-color 0.1s ease-in-out;
+        transition: flex var(--slideDur) ease-in-out, background-position var(--slideDur) ease-in-out, padding-left var(--slideHalf) 0s ease-in-out, background-color 0.1s ease-in-out;
       }
     }
   }
 }
 .active {
-  --delay: 2s;
+  --delay: var(--slideDur, 1.2s);
   .itemSelector{
     opacity: 0;
-    --animdelay: calc(var(--index) * 0.2s + var(--delay) * 0.75);
+    --animdelay: calc(var(--index) * 0.18s + var(--delay) * 0.75);
     --animdur: 0.5s;
     animation: fadeIn var(--animdur) var(--animdelay) 1 ease-in-out forwards, riseUp var(--animdur) var(--animdelay)  1 ease-in-out forwards;
   }
   .searchbar{
     opacity: 0.5;
-    animation: fadeIn 1s calc(var(--delay) * 0.75) 1 ease-in-out forwards;
+    animation: fadeIn var(--slideHalf) calc(var(--delay) * 0.75) 1 ease-in-out forwards;
   }
   &.firstLoad{
     --delay: 0s;
