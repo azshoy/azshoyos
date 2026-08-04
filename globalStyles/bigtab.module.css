@@ -57,7 +57,7 @@
     flex: 0 0 var(--inactiveTabWidth);
     .dynamicContent {
       .activeTab, .inactiveTab {
-        transition: width 0.5s 1.5s ease-in-out, opacity 0.5s 1.5s ease-in-out;
+        transition: width 0.5s 1s ease-in-out, opacity 0.5s 1s ease-in-out;
       }
       .activeTab {
         width: 0;

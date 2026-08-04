@@ -10,6 +10,7 @@ import {
 import {useRouter} from "next/router";
 import {ReactNode, useEffect, useMemo, useState} from "react";
 import {portfolioAPIURL} from "@/components/standalonePages/portfolio/data/dataManager";
+import {Tag} from "@/components/standalonePages/portfolio/tags/tag";
 
 
 
@@ -136,15 +137,15 @@ const FullItem = ({
           {data.links.map((l, i) =>
             <div key={i.toString()} className={styles.url}><a href={l.url} target={'_blank'}>{l.icon ? <img src={l.icon}/> : null}{l.text}</a></div>
           )}
-          {["skills", "stack", "interests"].map((tt) =>
-            data.tags[tt] && data.tags[tt].length > 0 ?
-            <div key={tt}>
-              {tt}
-              <div className={styles.taglist}>
-                {data.tags[tt].map((t) => <div className={styles.tag} key={t}>{t}</div>)}
-              </div>
-            </div> : null
-          )}
+
+          <div className={styles.taglist}>
+          {["skills", "stack", "interests"].map((tt) => {
+            return data.tags[tt] && data.tags[tt].length > 0 ? [
+              <div className={styles.tagHead} key={tt}>{tt}</div>,
+              ...(data.tags[tt].map((t) => <Tag key={t} tag={t} target={target}/>))
+            ] : null
+          })}
+          </div>
         </div>
       </div>
       <div className={styles.expandButton} onClick={() => fullOpen()}>

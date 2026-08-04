@@ -14,6 +14,8 @@ import {useSearchInput} from "@/components/standalonePages/portfolio/searchbar/s
 import {WordByWord} from "@/components/standalonePages/portfolio/wordbyword/wordByWord";
 import {useRouter} from "next/router";
 import {fillInImages} from "@/components/standalonePages/portfolio/items/selected";
+import * as sea from "node:sea";
+import {Tag} from "@/components/standalonePages/portfolio/tags/tag";
 
 
 type ItemListProps = {
@@ -68,7 +70,9 @@ export const ItemList = ({
 }:ItemListProps) => {
   const [selected, setSelected] = useState<string | null>(null)
   const router = useRouter()
-  useConnectedSignal('tabChanged', () => selectItem(null))
+  const [skipAnim, setSkipAnim] = useState<boolean>()
+  const search = useSearchInput(target)
+  useConnectedSignal('tabChanged', () => onTabChange())
   useEffect(() => {
     if (selected && list.values.findIndex((i) => i.id == selected) == -1) {
       setSelected(null)
@@ -78,6 +82,14 @@ export const ItemList = ({
     const selParam = Array.isArray(router.query.selection) ? router.query.selection[0] : router.query.selection
     if (selParam) setSelected(selParam)
   }, [router.query.selection, list])
+  useEffect(() => {
+    if (search.timestamp != 0) setSkipAnim(true)
+  }, [search.timestamp])
+
+  const onTabChange = () => {
+    selectItem(null)
+    setSkipAnim(false)
+  }
 
   const selectItem = (s: string | null, c?:string | null) => {
     if (s != c) {
@@ -90,7 +102,7 @@ export const ItemList = ({
   }
 
   return (
-    <div className={styles.itemList}>
+    <div className={cls(styles.itemList, skipAnim ? styles.skipAnim : "")}>
       <div className={cls(styles.notFound, list.values.length > 0 && list.found == 0 ? styles.notFoundVisible : "")}>
         {list.values.length > 0 && list.found == 0 ?
           <WordByWord delay={0.08} startDelay={0.5} lines={["Sorry, we didn't find anything matching your search.|||", "Showing everything else instead|.||.||."]}/>
@@ -98,7 +110,7 @@ export const ItemList = ({
       </div>
       {
         list.values.map((i, index) =>
-          <ItemSelector key={i.id} {...i} index={index} isSelected={selected==i.id} onSelect={() => selectItem(i.id, selected)}/>
+          <ItemSelector key={i.id} {...i} target={target} index={index} isSelected={selected==i.id} onSelect={() => selectItem(i.id, selected)}/>
         )
       }
     </div>
@@ -109,6 +121,7 @@ type ItemSelectorProps = ListItem & {
   index: number
   isSelected: boolean
   onSelect: CallableFunction
+  target: string
 }
 
 
@@ -121,6 +134,7 @@ const ItemSelector = ({
   index,
   isSelected,
   onSelect,
+  target,
 }:ItemSelectorProps) => {
   return (
     <div className={cls(mainStyles.container, mainStyles.itemSelector, styles.itemSelector, isSelected ? styles.selected : "")} style={{'--index': index} as CSSProperties} onClick={() => onSelect()}>
@@ -135,7 +149,7 @@ const ItemSelector = ({
       {subtitle ? <div className={styles.subtitle}>{subtitle}</div> : null}
       {description ? <div className={styles.description}>{fillInImages(description)}</div> : null}
       <div className={styles.taglist}>
-        {["skills", "stack", "interests"].map((tt) => tags[tt] && tags[tt].length > 0 ? tags[tt].map((t) => <div className={styles.tag} key={t}>{t}</div>) : null)}
+        {["skills", "stack", "interests"].map((tt) => tags[tt] && tags[tt].length > 0 ? tags[tt].map((t) => <Tag key={t} tag={t} target={target}/>) : null)}
       </div>
         </div>
     </div>
