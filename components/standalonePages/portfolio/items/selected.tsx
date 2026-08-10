@@ -135,7 +135,7 @@ const FullItem = ({
           {data.subtitle ? <div className={styles.subtitle}>{data.subtitle}</div> : null}
           {data.mainText ? <div className={styles.description}>{handleMainText(data.mainText, data.mainTextImages)}</div> : null}
           {data.links.map((l, i) =>
-            <div key={i.toString()} className={styles.url}><a href={l.url} target={'_blank'}>{l.icon ? <img src={l.icon.startsWith("/") ? `${portfolioAPIURL}${l.icon}` : l.icon}/> : null}{l.text}</a></div>
+            <div key={i.toString()} className={styles.url}><a href={l.url} target={'_blank'}>{l.icon ? <img src={l.icon.startsWith("/") ? `${portfolioAPIURL}${l.icon}` : l.icon} alt={''}/> : null}{l.text}</a></div>
           )}
 
           <div className={styles.taglist}>
