@@ -19,7 +19,7 @@ export const Searchbar = ({
   const [preVal, setPreVal] = useState<string>("")
   const [inputValue, setInputValue] = useState<string>("")
   const [resended, setResended] = useState(0)
-  const resend = useConnectedSignal<{}>(target + 'resendSearchValue')
+  const resend = useConnectedSignal<object>(target + 'resendSearchValue')
   useEffect(() => {
     if (resend.fired != resended) {
       setResended(resend.fired)
@@ -84,7 +84,7 @@ export const Searchbar = ({
               finalizeSearch()
             }
           }} value={inputValue}/>
-        <img src={'/portfolio/icons/search.svg'} onClick={() => finalizeSearch()}/>
+        <img src={'/portfolio/icons/search.svg'} alt={'Search'} onClick={() => finalizeSearch()}/>
       </div>
       <datalist id={id+"-suggestions"}>
         {hasInput ? keywords.map((k) => <option key={k} value={preVal + (preVal ? " " : "") + k}/>) : null}

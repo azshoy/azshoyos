@@ -7,7 +7,7 @@ import {
 import {useEffect, useState} from "react";
 import {PersonData, TagInput} from "@/components/standalonePages/portfolio/data/people";
 
-export type ProjectSpecific = {}
+export type ProjectSpecific = object
 type Project = ListItem & ProjectSpecific
 
 export const useProjects =  () => {
