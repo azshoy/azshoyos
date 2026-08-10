@@ -31,6 +31,7 @@
     display: inline;
     vertical-align: middle;
     margin-right: 0.4em;
+    margin-top: -0.2em;
   }
 }
 @media only screen and (max-width: 1200px) and (orientation: landscape){
