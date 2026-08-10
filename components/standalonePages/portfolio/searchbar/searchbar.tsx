@@ -67,7 +67,11 @@ export const Searchbar = ({
     setInputValue(value)
     const words = value.split(" ")
     setHasInput(words[words.length-1].trim() !== "")
-    if (words.length > 1) setPreVal(words.slice(0, words.length-1).join(" "))
+    if (words.length > 1) {
+      setPreVal(words.slice(0, words.length-1).join(" "))
+    } else {
+      setPreVal("")
+    }
     if (typeof target == 'undefined') return
     emitSignal(target + 'SearchUpdated', {value: value})
     if (finalize) finalizeSearch()
