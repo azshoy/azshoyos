@@ -1,7 +1,7 @@
 import {ItemDict, ListItem} from "@/components/standalonePages/portfolio/types";
 
 
-export const portfolioAPIURL = "http://127.0.0.1:4000"
+export const portfolioAPIURL = process.env.NEXT_PUBLIC_PORTFOLIO_API_URL ?? "http://127.0.0.1:4000"
 
 export const withIdsAndKeywords = <T extends object>(list: (ListItem & T)[]) => {
   const idd: ItemDict = {}
