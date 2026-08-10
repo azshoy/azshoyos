@@ -18,6 +18,15 @@ export const Searchbar = ({
   const [hasInput, setHasInput] = useState<boolean>(false)
   const [preVal, setPreVal] = useState<string>("")
   const [inputValue, setInputValue] = useState<string>("")
+  const [resended, setResended] = useState(0)
+  const resend = useConnectedSignal<{}>(target + 'resendSearchValue')
+  useEffect(() => {
+    if (resend.fired != resended) {
+      setResended(resend.fired)
+      emitSignal(target + 'SearchUpdated', {value: inputValue})
+    }
+  }, [resend.fired, inputValue])
+
   const [tagAdded, setTagAdded] = useState(0)
   const addTag = useConnectedSignal<{value: string}>(target + 'AddTag')
 
@@ -84,13 +93,18 @@ export const Searchbar = ({
   )
 }
 
-export const useSearchInput = (target: PortfolioPageTarget) => {
+export const useSearchInput = (target: PortfolioPageTarget, callOnInit=false) => {
   const [searchInput, setSearchInput] = useState<{words: string[][], timestamp: number, finalized: boolean, raw: string}>({words: [], timestamp: 0, finalized: true, raw: ""})
   const update = useConnectedSignal<{value: string}>(target + 'SearchUpdated')
   const finalized = useConnectedSignal<{value: string}>(target + 'SearchFinalized')
   useEffect(() => {
+    if (callOnInit) {
+      emitSignal(target + 'resendSearchValue')
+    }
+  }, [])
+  useEffect(() => {
     const v = update.output?.value
-    if (typeof v !== 'undefined'){
+    if (typeof v !== 'undefined' && v != searchInput.raw){
       const timer = setTimeout(() => {
         const ands = v.trim().replace(/\/\s+/g, "/").replace(/\s+\//g, "/").split(" ")
         const words = ands.map((s) => s.split("/"))
@@ -101,6 +115,6 @@ export const useSearchInput = (target: PortfolioPageTarget) => {
         clearTimeout(timer)
       }
     }
-  }, [update.fired, update.output, finalized.fired])
+  }, [update.fired, update.output, finalized.fired, searchInput.raw])
   return searchInput
 }

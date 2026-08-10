@@ -3,18 +3,23 @@
   font-size: 2em;
   border-radius: 0.5em;
   position: relative;
+  max-width: 100%;
   & > div {
+    max-width: 100%;
     display: flex;
     flex-direction: row;
     height: 1.5em;
     align-items: center;
     & > img {
       height: 1.2em;
+      width: 1.2em;
       cursor: pointer;
       margin-right: 0.4em;
     }
     & > input {
-      flex-grow: 1;
+      max-height: 100%;
+      width: calc(100% - 1.2em);
+      flex: 1 0.9 calc(100% - 1.2em);
       border-radius: 0.5em;
       padding: 0.2em 0.4em;
       font-size: inherit;

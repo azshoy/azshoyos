@@ -10,18 +10,49 @@
   background-size: contain;
   cursor: pointer;
 }
-
 .itemList{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: space-around;
   gap: 0.5em;
+  --itemsPerRow: 4;
   & img {
     -webkit-user-drag: none;
     -khtml-user-drag: none;
     -moz-user-drag: none;
     -o-user-drag: none;
     user-drag: none;
+  }
+}
+@media only screen and (max-width: 1200px) and (orientation: landscape){
+  .itemList{
+    --itemsPerRow: 3;
+  }
+}
+@media only screen and (max-width: 900px) and (orientation: landscape){
+  .itemList{
+    --itemsPerRow: 2;
+  }
+}
+@media only screen and (max-width: 660px) and (orientation: landscape){
+  .itemList{
+    --itemsPerRow: 1;
+  }
+}
+@media only screen and (max-width: 1000px) and (orientation: portrait){
+  .itemList{
+    --itemsPerRow: 3;
+  }
+}
+@media only screen and (max-width: 680px) and (orientation: portrait){
+  .itemList{
+    --itemsPerRow: 2;
+  }
+}
+@media only screen and (max-width: 440px) and (orientation: portrait){
+  .itemList{
+    --itemsPerRow: 1;
   }
 }
 .notFound{
@@ -94,11 +125,16 @@
     --animdelay: 0s;
   }
 }
+.dummy {
+  width: calc(100% / var(--itemsPerRow) - 0.5em * ((var(--itemsPerRow) - 1) / var(--itemsPerRow)));
+  max-width: 300px;
+  height: 0;
+}
 .itemSelector{
   --index: 0;
   border-radius: 1em;
-  width: calc(25% - 0.5em * 0.75);
-  min-width: 240px;
+  width: calc(100% / var(--itemsPerRow) - 0.5em * ((var(--itemsPerRow) - 1) / var(--itemsPerRow)));
+  max-width: 320px;
   height: 320px;
   color: var(--txt);
   background-color: var(--bg);
