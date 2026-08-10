@@ -1,10 +1,11 @@
 import styles from '@/components/standalonePages/portfolio/portfolio.module.css'
 import {PortfolioPageConfig} from "@/components/standalonePages/portfolio/types";
-import {ReactNode} from "react";
+import {ReactNode, useEffect, useRef} from "react";
 import {TabComponentStyling} from "@/components/layouts/layout_bigtabs";
 import {Searchbar} from "@/components/standalonePages/portfolio/searchbar/searchbar";
 import {getKeywordOptionsForSearch} from "@/components/standalonePages/portfolio/data/dataManager";
 import { SelectedItem } from "./items/selected";
+import {useConnectedSignal} from "@/components/standalonePages/portfolio/signals";
 
 
 

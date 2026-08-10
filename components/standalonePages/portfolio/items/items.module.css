@@ -118,8 +118,11 @@
     max-height: 350px;
     &.fullOpen{
       height: auto;
-      min-height: 400px;
+      min-height: unset;
       max-height: 5000px;
+      .slide{
+        min-height: 400px;
+      }
     }
   }
   &.hidden{
@@ -288,6 +291,7 @@
     width: 20em;
     flex: 0 0 20em;
     overflow: hidden;
+    max-height: 400px;
     & > img{
       width: 100%;
       height: 100%;
@@ -307,6 +311,7 @@
   }
   .subtitle{
     font-size: 1.1em;
+    margin-bottom: 0.6em;
   }
   .taglist{
     display: flex;
@@ -314,32 +319,58 @@
     flex-direction: row;
     gap: 0.2em;
     overflow: hidden;
+    margin-top: 0.1em;
+    transition: margin-top 0.3s ease-in-out;
   }
   .description {
     flex: 1 0 2em;
     overflow: hidden;
     mask: linear-gradient(0deg, transparent 0%, rgba(255, 255, 255, 0.6) 20%, rgba(255, 255, 255, 1) 60%);
     mask-type: alpha;
+    margin-bottom: 0.1em;
+    transition: margin-bottom 0.3s ease-in-out;
   }
 }
 
+
 .fullOpen{
+  height: unset;
+  .slide {
+    overflow: unset;
+    height: 100%;
+  }
   .fullItem {
+    overflow: unset;
+    height: 100%;
     .content {
       height: 100%;
+      min-height: 100%;
       padding-bottom: 0.8em;
     }
 
     .expandButton {
       height: 0;
+      &:hover {
+        background: none;
+      }
     }
 
     .taglist {
+      margin-top: 0.6em;
       .tagHead {
         height: 1em;
         opacity: 1;
         flex: 1 1 100%;
       }
+    }
+    .info {
+      overflow: unset;
+    }
+    .description{
+      overflow: unset;
+      mask: none;
+      mask-type: unset;
+      margin-bottom: 0.6em;
     }
   }
 }
@@ -389,4 +420,51 @@
 
 .mainTextImage {
   max-width: 100%;
+}
+
+
+@media only screen and (orientation: portrait){
+  .fullOpen{
+    .slide{
+      height: unset;
+    }
+    .fullItem{
+      height: unset;
+    }
+  }
+  .fullItem{
+    height: unset;
+    .content {
+      flex-direction: column;
+      .icon {
+        max-width: 100%;
+        flex: 0 0 10em;
+      }
+    }
+  }
+  .fullItemRow {
+    display: flex;
+    flex-direction: row;
+    transition: height 0.5s 0s ease-in-out, margin-bottom 0.5s ease-in-out, max-height 0.5s 0s ease-in-out, min-height 0.5s 0s ease-in-out;
+    justify-content: space-around;
+    min-height: unset;
+    margin-bottom: 0;
+
+    &.visible {
+    margin-bottom: 0.5em;
+      height: unset;
+      min-height: unset;
+      max-height: unset;
+
+      &.fullOpen {
+        height: auto;
+        min-height: unset;
+        max-height: unset;
+
+        .slide {
+          min-height: unset;
+        }
+      }
+    }
+  }
 }
