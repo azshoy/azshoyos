@@ -76,6 +76,9 @@ export const ItemList = ({
   useEffect(() => {
     if (selected && list.values.findIndex((i) => i.id == selected) == -1) {
       setSelected(null)
+    } else {
+
+      emitSignal("scrollToTop")
     }
   }, [selected, list])
   useEffect(() => {

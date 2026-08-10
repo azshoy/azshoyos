@@ -3,10 +3,10 @@ import styles from '@/globalStyles/bigtab.module.css'
 import {Scaler} from "@/components/layouts/components/scaler";
 import {Header} from "@/components/layouts/components/header";
 
-import {ReactNode, useEffect, useState} from "react";
+import {ReactNode, useEffect, useRef, useState} from "react";
 import {cls} from "@/util/misc";
 import {useRouter} from "next/router";
-import {emitSignal} from "@/components/standalonePages/portfolio/signals";
+import {emitSignal, useConnectedSignal} from "@/components/standalonePages/portfolio/signals";
 
 export type BigLayoutPage = {(): ReactNode, tab: TabComponents}
 
@@ -101,11 +101,19 @@ const TabComponent = ({
     setFirstLoad(false)
     activate()
   }
+  const ref = useRef<HTMLDivElement>(null)
+  const scroll = useConnectedSignal("scrollToTop")
+  useEffect(() => {
+    if (ref.current && scroll.fired) {
+      console.log("scrolling")
+      ref.current.scrollTo({top: 0, behavior: "smooth"})
+    }
+  }, [ref, scroll.fired])
   return (
     <div className={cls(styles.mainTab, styling?.styleClass, styleModule.mainTab, firstLoad ? cls(styles.firstLoad, styleModule.firstLoad) : undefined, animating ? cls(styles.animating, styleModule.animating) : undefined, isActive ? cls(styles.active, styleModule.active) : cls(styles.inactive, styleModule.inactive))} onClick={() => onClick(!isActive)}>
       {staticContent?.before ? <div className={cls(styles.static, styleModule.static)}>{staticContent.before}</div> : null}
       <div className={cls(styles.dynamicContent, styleModule.dynamicContent)}>
-        <div className={cls(styles.activeTab, styleModule.activeTab)} style={disable ? {display: 'none'} : {}}>
+        <div ref={ref} className={cls(styles.activeTab, styleModule.activeTab)} style={disable ? {display: 'none'} : {}}>
           {active}
         </div>
         <div className={cls(styles.inactiveTab, styleModule.inactiveTab)}>
