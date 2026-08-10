@@ -20,7 +20,7 @@
   display: flex;
   flex-direction: column;
   transition: flex 2s ease-in-out;
-  --inactiveTabWidth: 200px;
+  --inactiveTabSize: 200px;
   .static {
     width: auto;
   }
@@ -54,7 +54,7 @@
     }
   }
   &.inactive {
-    flex: 0 0 var(--inactiveTabWidth);
+    flex: 0 0 var(--inactiveTabSize);
     .dynamicContent {
       .activeTab, .inactiveTab {
         transition: width 0.5s 1s ease-in-out, opacity 0.5s 1s ease-in-out;
@@ -66,6 +66,69 @@
       .inactiveTab {
         width: 100%;
         opacity: 1;
+      }
+    }
+  }
+}
+@media only screen and (orientation: portrait) {
+  .main {
+    flex-direction: column;
+    min-height: 100%;
+    width: 100%;
+  }
+  .mainTab {
+    flex-direction: column;
+    --inactiveTabSize: 100px;
+    .static {
+      width: auto;
+    }
+    .dynamicContent{
+      flex-grow: 1;
+      .activeTab, .inactiveTab{
+        overflow-x: hidden;
+        overflow-y: visible;
+      }
+    }
+    &:nth-child(even){
+      .dynamicContent{
+        flex-direction: row-reverse;
+      }
+    }
+    &.active{
+      flex: 1 1 100%;
+      .dynamicContent {
+        .activeTab, .inactiveTab {
+          transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        }
+        .activeTab {
+          width: 100%;
+          height: 100%;
+          opacity: 1;
+        }
+
+        .inactiveTab {
+          width: 100%;
+          height: 0;
+          opacity: 0;
+        }
+      }
+    }
+    &.inactive {
+      flex: 0 0 var(--inactiveTabSize);
+      .dynamicContent {
+        .activeTab, .inactiveTab {
+          transition: height 0.5s 1s ease-in-out, opacity 0.5s 1s ease-in-out;
+        }
+        .activeTab {
+          width: 100%;
+          height: 0;
+          opacity: 0;
+        }
+        .inactiveTab {
+          width: 100%;
+          height: 100%;
+          opacity: 1;
+        }
       }
     }
   }

@@ -48,10 +48,6 @@
   --bgLogo: url("/portfolio/purplelogo.svg");
 }
 
-.tab {
-  width: 100%;
-  max-height: 100%;
-}
 
 
 /* width */
@@ -68,13 +64,15 @@
 /* Handle */
 .scrollbox::-webkit-scrollbar-thumb {
   background: transparent;
-  box-shadow: inset 10px 0 var(--black);
+  box-shadow: inset 10px 0 rgba(0, 0, 0, 0.36);
   border-left: solid transparent 3px;
   border-radius: 5px 3px 3px 5px;
 }
 
 
 .tab {
+  width: 100%;
+  max-height: 100%;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -90,8 +88,6 @@
       flex-grow: 1;
       overflow-x: hidden;
       gap: 0.8em;
-      margin-right: var(--sidePadding);
-      width: min(var(--contentSize), calc(var(--window-x, 100vw) - var(--inactiveTabWidth) - var(--sidePadding) * 3));
 
     }
   }
@@ -103,6 +99,20 @@
   padding-bottom: 0.2em;
 }
 
+
+@media only screen and (orientation: landscape) {
+  div.mainTab {
+    --inactiveTabSize: 220px;
+  }
+  .tab {
+    .tabContent {
+      margin-right: var(--sidePadding);
+      & > * {
+        width: min(var(--contentSize) - var(--sidePadding), calc(var(--window-x, 100vw) - var(--inactiveTabSize) - var(--sidePadding) * 3));
+      }
+    }
+  }
+}
 div.mainTab {
   --sidePadding: 16px;
   --contentSize: 1040px;
@@ -111,7 +121,6 @@ div.mainTab {
   background-repeat: no-repeat;
   background-attachment: local;
   color: var(--txt);
-  --inactiveTabWidth: 220px;
   --slideDur: 1.2s;
   --slideHalf: calc(var(--slideDur) * 0.5);
   max-height: 100vh;
@@ -182,4 +191,87 @@ div.mainTab {
 @keyframes riseUp {
   0% {transform: translate(0, 30px)}
   100% {transform: translate(0, 0)}
+}
+
+@media only screen and (orientation: portrait) {
+  div.mainTab {
+    --inactiveTabSize: 100px;
+  }
+  .tab {
+    .tabContent {
+      .scrollbox{
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+        gap: 0.8em;
+        width: 100%;
+        height: 100%;
+        margin-right: 0;
+        padding-bottom: var(--sidePadding);
+      }
+    }
+  }
+
+  div.mainTab {
+    --sidePadding: 16px;
+    padding: 10px 10px 0 10px;
+    background-image: var(--bgLogo, url("/portfolio/transparentlogo.svg"));
+    background-repeat: no-repeat;
+    background-attachment: local;
+    color: var(--txt);
+    --slideDur: 1.2s;
+    --slideHalf: calc(var(--slideDur) * 0.5);
+    --max-height: 100%;
+    max-height: var(--max-height);
+    .dynamicContent {
+      position: relative;
+      flex: 1 1 100%;
+      & > .activeTab{
+        position: absolute;
+        height: 100%;
+        & > div{
+          height: 100%;
+        }
+      }
+    }
+    .static, .dynamicContent > .activeTab > div{
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      height: 100%;
+      max-height: 100%;
+      transition: max-height var(--slideHalf) ease-in-out;
+    }
+    background-color: var(--bg);
+    &.active{
+      background-position: bottom 0 right -1px;
+      transition: flex var(--slideDur) ease-in-out, background-position var(--slideDur) ease-in-out, padding-bottom var(--slideHalf) var(--slideHalf) ease-in-out, background-color var(--slideDur) ease-in-out;
+      .static, .dynamicContent > .activeTab > div{
+        max-height: var(--max-height);
+        max-width: unset;
+      }
+    }
+    .tabContent{
+      overflow: hidden;
+    }
+    &.inactive{
+      background-position: bottom -500px right -1px;
+      transition: flex var(--slideDur) ease-in-out, background-position var(--slideDur) ease-in-out, padding-bottom var(--slideHalf) 0s ease-in-out, background-color 0.4s ease-in-out;
+      .static, .dynamicContent > .activeTab > div{
+        width: 100%;
+        max-width: unset;
+        max-height: 100%;
+        overflow-y: hidden;
+      }
+      &:not(.animating) {
+        &:hover {
+          transition: flex var(--slideDur) ease-in-out, background-position var(--slideDur) ease-in-out, padding-top var(--slideHalf) 0s ease-in-out, background-color 0.4s ease-in-out;
+        }
+
+        &:active {
+          transition: flex var(--slideDur) ease-in-out, background-position var(--slideDur) ease-in-out, padding-top var(--slideHalf) 0s ease-in-out, background-color 0.1s ease-in-out;
+        }
+      }
+    }
+  }
 }

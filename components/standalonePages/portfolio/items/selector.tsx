@@ -113,6 +113,9 @@ export const ItemList = ({
           <ItemSelector key={i.id} {...i} target={target} index={index} isSelected={selected==i.id} onSelect={() => selectItem(i.id, selected)}/>
         )
       }
+      <div className={styles.dummy}></div>
+      <div className={styles.dummy}></div>
+      <div className={styles.dummy}></div>
     </div>
   )
 }
