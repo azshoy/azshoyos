@@ -11,6 +11,7 @@ import {useRouter} from "next/router";
 import {ReactNode, useEffect, useMemo, useState} from "react";
 import {portfolioAPIURL} from "@/components/standalonePages/portfolio/data/dataManager";
 import {Tag} from "@/components/standalonePages/portfolio/tags/tag";
+import {TitleAltTitle} from "@/components/standalonePages/portfolio/items/titleAltTitle";
 
 
 
@@ -131,7 +132,7 @@ const FullItem = ({
       <div className={styles.content}>
         <div className={cls(styles.icon, styles.subcontainer)}><img src={data.icon} alt={`Picture of ${data.title}`}/></div>
         <div className={styles.info}>
-          <div className={styles.title}>{data.title}</div>
+          <TitleAltTitle title={data.title} altTitle={data.alternateTitle}/>
           {data.subtitle ? <div className={styles.subtitle}>{data.subtitle}</div> : null}
           {data.mainText ? <div className={styles.description}>{handleMainText(data.mainText, data.mainTextImages)}</div> : null}
           {data.links.map((l, i) =>
