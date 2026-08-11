@@ -54,7 +54,6 @@
 .scrollbox::-webkit-scrollbar, .activeTab::-webkit-scrollbar {
   width: 9px;
 }
-
 /* Track */
 .scrollbox::-webkit-scrollbar-track, .activeTab::-webkit-scrollbar-track {
   border-radius: 3px;
@@ -178,7 +177,7 @@ div.mainTab {
     opacity: 0;
     --animdelay: calc(var(--index) * 0.18s + var(--delay) * 0.75);
     --animdur: 0.5s;
-    animation: fadeIn var(--animdur) var(--animdelay) 1 ease-in-out forwards, riseUp var(--animdur) var(--animdelay)  1 ease-in-out forwards;
+    animation: fadeIn var(--animdur) var(--animdelay) 1 ease-in-out forwards, riseUp var(--animdur) var(--animdelay) 1 ease-in-out forwards;
   }
   .searchbar{
     opacity: 0.5;
@@ -193,13 +192,20 @@ div.mainTab {
   100% {opacity: 1}
 }
 @keyframes riseUp {
-  0% {transform: translate(0, 30px)}
-  100% {transform: translate(0, 0)}
+  0% {
+    transform: translate(0, 30px)
+  }
+  100% {
+    transform: translate(0, 0)
+  }
 }
 
 @media only screen and (orientation: portrait) {
   div.mainTab {
     --inactiveTabSize: 100px;
+  }
+  .scrollbox::-webkit-scrollbar {
+    width: 0px;
   }
   .tab {
     .tabContent {
@@ -266,7 +272,6 @@ div.mainTab {
         width: 100%;
         max-width: unset;
         max-height: 100%;
-        overflow-y: hidden;
       }
       &:not(.animating) {
         &:hover {
