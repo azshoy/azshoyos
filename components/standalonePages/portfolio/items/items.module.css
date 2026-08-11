@@ -164,7 +164,7 @@
   &:not(.selected){
     cursor: pointer;
   }
-  .title{
+  .title, .altTitle{
     font-size: 1.3em;
   }
   .subtitle{
@@ -306,7 +306,7 @@
     max-height: 100%;
     overflow: hidden;
   }
-  .title{
+  .title, .altTitle{
     font-size: 1.3em;
   }
   .subtitle{
@@ -331,7 +331,37 @@
     transition: margin-bottom 0.3s ease-in-out;
   }
 }
+.titleAltTitle {
+  --titleHide: 0.2s;
+  --titleShow: 0.6s;
+  .altTitle {
+    height: 0;
+    opacity: 0;
+    transition: opacity var(--titleHide) 0s linear, height 0s 0s linear;
+  }
 
+  .title {
+    height: auto;
+    opacity: 1;
+    transition: opacity var(--titleShow) var(--titleHide) linear, height 0s var(--titleHide) linear;
+  }
+
+  .title, .altTitle {
+    overflow: hidden;
+  }
+}
+.itemSelector:hover .titleAltTitle, .fullItem .titleAltTitle:hover {
+  .altTitle{
+    height: auto;
+    opacity: 1;
+    transition: opacity var(--titleShow) var(--titleHide) linear, height 0s var(--titleHide) linear;
+  }
+  .title {
+    height: 0;
+    opacity: 0;
+    transition: opacity var(--titleHide) 0s linear, height 0s 0s linear;
+  }
+}
 
 .fullOpen{
   height: unset;

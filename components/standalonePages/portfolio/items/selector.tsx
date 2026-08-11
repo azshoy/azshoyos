@@ -16,6 +16,7 @@ import {useRouter} from "next/router";
 import {fillInImages} from "@/components/standalonePages/portfolio/items/selected";
 import * as sea from "node:sea";
 import {Tag} from "@/components/standalonePages/portfolio/tags/tag";
+import {TitleAltTitle} from "@/components/standalonePages/portfolio/items/titleAltTitle";
 
 
 type ItemListProps = {
@@ -134,6 +135,7 @@ type ItemSelectorProps = ListItem & {
 const ItemSelector = ({
   title,
   subtitle,
+  alternateTitle,
   icon,
   description,
   tags,
@@ -145,19 +147,19 @@ const ItemSelector = ({
   return (
     <div className={cls(mainStyles.container, mainStyles.itemSelector, styles.itemSelector, isSelected ? styles.selected : "")} style={{'--index': index} as CSSProperties} onClick={() => onSelect()}>
       <div className={styles.content}>
-      <div className={styles.title}>{title}</div>
-      <div className={cls(styles.icon, styles.subcontainer)}>
-        <img src={icon} alt={`Picture of ${title}`}/>
-        <div className={styles.imageHolder}>
-          <img src={icon} alt={``}/>
+        <TitleAltTitle title={title} altTitle={alternateTitle}/>
+        <div className={cls(styles.icon, styles.subcontainer)}>
+          <img src={icon} alt={`Picture of ${title}`}/>
+          <div className={styles.imageHolder}>
+            <img src={icon} alt={``}/>
+          </div>
+        </div>
+        {subtitle ? <div className={styles.subtitle}>{subtitle}</div> : null}
+        {description ? <div className={styles.description}>{fillInImages(description)}</div> : null}
+        <div className={styles.taglist}>
+          {["skills", "stack", "interests"].map((tt) => tags[tt] && tags[tt].length > 0 ? tags[tt].map((t) => <Tag key={t} tag={t} target={target}/>) : null)}
         </div>
       </div>
-      {subtitle ? <div className={styles.subtitle}>{subtitle}</div> : null}
-      {description ? <div className={styles.description}>{fillInImages(description)}</div> : null}
-      <div className={styles.taglist}>
-        {["skills", "stack", "interests"].map((tt) => tags[tt] && tags[tt].length > 0 ? tags[tt].map((t) => <Tag key={t} tag={t} target={target}/>) : null)}
-      </div>
-        </div>
     </div>
   )
 }
