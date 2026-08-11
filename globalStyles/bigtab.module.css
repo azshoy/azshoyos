@@ -79,6 +79,7 @@
   .mainTab {
     flex-direction: column;
     --inactiveTabSize: 100px;
+    min-height: var(--inactiveTabSize);
     .static {
       width: auto;
     }
@@ -94,8 +95,9 @@
         flex-direction: row-reverse;
       }
     }
+
     &.active{
-      flex: 1 1 100%;
+      flex: 1 1 calc(100% - var(--inactiveTabSize));
       .dynamicContent {
         .activeTab, .inactiveTab {
           transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
