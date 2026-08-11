@@ -8,6 +8,7 @@ import {shutdownCommand} from "@/components/Program/Console/Commands/shutdown";
 import {csCommand} from "@/components/Program/Console/Commands/cs";
 import {challengeCommand} from "@/components/Program/Console/Commands/challenge/challenge";
 import {retroCommand} from "@/components/Program/Console/Commands/retro";
+import {delCommand} from "@/components/Program/Console/Commands/del";
 
 //import {TemplateCommand} from "@/components/Program/Console/Commands/TEMPLATE";
 
@@ -25,7 +26,8 @@ export const commands:{[key: string]: Command} = {
   shutdown: shutdownCommand,
   pesti: alias.pesti,
   challenge:challengeCommand,
-  retro: retroCommand
+  retro: retroCommand,
+  del: delCommand
 
   //template: TemplateCommand,
 }
