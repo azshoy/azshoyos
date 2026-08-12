@@ -51,17 +51,17 @@
 
 
 /* width */
-.scrollbox::-webkit-scrollbar, .activeTab::-webkit-scrollbar {
+.scrollbox::-webkit-scrollbar, .tabContent::-webkit-scrollbar, .activeTab::-webkit-scrollbar {
   width: 9px;
 }
 /* Track */
-.scrollbox::-webkit-scrollbar-track, .activeTab::-webkit-scrollbar-track {
+.scrollbox::-webkit-scrollbar-track, .tabContent::-webkit-scrollbar-track, .activeTab::-webkit-scrollbar-track {
   border-radius: 3px;
   border-left: solid transparent 3px;
 }
 
 /* Handle */
-.scrollbox::-webkit-scrollbar-thumb, .activeTab::-webkit-scrollbar-track {
+.scrollbox::-webkit-scrollbar-thumb, .tabContent::-webkit-scrollbar-thumb, .activeTab::-webkit-scrollbar-thumb {
   background: transparent;
   box-shadow: inset 10px 0 rgba(0, 0, 0, 0.36);
   border-left: solid transparent 3px;
@@ -80,7 +80,7 @@
   flex-direction: column;
   height: 100%;
   .tabContent {
-    overflow: hidden;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     gap: 0.5em;
@@ -91,6 +91,7 @@
       flex-grow: 1;
       overflow-x: hidden;
       gap: 0.8em;
+      min-height: 340px;
 
     }
   }
@@ -174,14 +175,14 @@ div.mainTab {
 .active {
   --delay: var(--slideDur, 1.2s);
   .itemSelector{
-    opacity: 0;
+    --c-opacity: 0;
     --animdelay: calc(var(--index) * 0.18s + var(--delay) * 0.75);
     --animdur: 0.5s;
-    animation: fadeIn var(--animdur) var(--animdelay) 1 ease-in-out forwards, riseUp var(--animdur) var(--animdelay) 1 ease-in-out forwards;
+    --c-animation: fadeIn var(--animdur) var(--animdelay) 1 ease-in-out forwards, riseUp var(--animdur) var(--animdelay) 1 ease-in-out forwards;
   }
   .searchbar{
-    opacity: 0.5;
-    animation: fadeInHalf var(--slideHalf) calc(var(--delay) * 0.75) 1 ease-in-out forwards;
+    --c-opacity: 0.5;
+    --c-animation: fadeInHalf var(--slideHalf) calc(var(--delay) * 0.75) 1 ease-in-out forwards;
   }
   &.firstLoad{
     --delay: 0s;

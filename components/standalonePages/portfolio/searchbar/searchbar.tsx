@@ -88,9 +88,10 @@ export const Searchbar = ({
               finalizeSearch()
             }
           }} value={inputValue}/>
+        <img className={inputValue != "" ? "" :  styles.noClear} src={'/portfolio/icons/clear.svg'} alt={'Clear'} onClick={() => updateInputValue("",true)}/>
         <img src={'/portfolio/icons/search.svg'} alt={'Search'} onClick={() => finalizeSearch()}/>
       </div>
-      <datalist id={id+"-suggestions"}>
+      <datalist id={id+"-suggestions"} className={styles.suggestions}>
         {hasInput ? keywords.map((k) => <option key={k} value={preVal + (preVal ? " " : "") + k}/>) : null}
       </datalist>
     </div>
