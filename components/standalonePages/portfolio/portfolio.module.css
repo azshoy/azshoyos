@@ -181,7 +181,7 @@ div.mainTab {
   }
   .searchbar{
     opacity: 0.5;
-    animation: fadeIn var(--slideHalf) calc(var(--delay) * 0.75) 1 ease-in-out forwards;
+    animation: fadeInHalf var(--slideHalf) calc(var(--delay) * 0.75) 1 ease-in-out forwards;
   }
   &.firstLoad{
     --delay: 0s;
@@ -189,6 +189,11 @@ div.mainTab {
 }
 
 @keyframes fadeIn {
+  0% { opacity: 0}
+  100% {opacity: 1}
+}
+@keyframes fadeInHalf {
+  0% { opacity: 0.5}
   100% {opacity: 1}
 }
 @keyframes riseUp {
