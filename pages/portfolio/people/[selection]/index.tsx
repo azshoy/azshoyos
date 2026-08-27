@@ -11,7 +11,7 @@ const ProPerson = () => {
   const item = selection ? people[selection] : undefined
 
   return (
-    <ProLayout active={'people'} title={item ? `${item.title} — az.sh` : "People — az.sh"}>
+    <ProLayout active={'people'} title={item ? `${item.title} · az.sh` : "People · az.sh"}>
       <ItemDetail items={people} id={selection ?? ""} target={'people'}/>
     </ProLayout>
   )

@@ -6,7 +6,7 @@ import {useProjects} from "@/components/standalonePages/portfolio/data/projects"
 const ProProjects = () => {
   const projects = useProjects()
   return (
-    <ProLayout active={'projects'} title={"Projects — az.sh"}>
+    <ProLayout active={'projects'} title={"Projects · az.sh"}>
       <ItemList
         items={projects}
         target={'projects'}
