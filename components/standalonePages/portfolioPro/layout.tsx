@@ -25,12 +25,11 @@ export const ProLayout = ({active, title, children}: ProLayoutProps) => {
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
       </Head>
       {/* Inline, not in <Head>: next/head rejects script tags, and this must run
-          during parse — before the header paints — to avoid a theme flash. */}
+          during parse, before the header paints, to avoid a theme flash. */}
       <script dangerouslySetInnerHTML={{__html: themeBootScript}}/>
       <header className={styles.header}>
-        <Link className={styles.brand} href={"/portfolio/projects"}>
-          <span className={styles.brandMark}>az.sh</span>
-          <span className={styles.brandNote}>Engineering & design</span>
+        <Link className={styles.brand} href={"/portfolio"} aria-label={"az.sh, home"}>
+          <img className={styles.brandLogo} src={"/icons/start.svg"} alt={"az.sh"}/>
         </Link>
         <div className={styles.headerRight}>
           <nav className={styles.nav}>
@@ -48,7 +47,7 @@ export const ProLayout = ({active, title, children}: ProLayoutProps) => {
         </div>
       </header>
       <main className={styles.main}>{children}</main>
-      <footer className={styles.footer}>az.sh — selected work and the people behind it.</footer>
+      <footer className={styles.footer}>az.sh · selected work and the people behind it.</footer>
     </div>
   )
 }

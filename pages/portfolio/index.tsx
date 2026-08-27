@@ -1,3 +1,11 @@
-import ProProjects from "@/pages/portfolio/projects";
+import {ProLayout} from "@/components/standalonePages/portfolioPro/layout";
+import {Landing} from "@/components/standalonePages/portfolioPro/landing";
 
-export default ProProjects
+
+const ProLanding = () => (
+  <ProLayout title={"az.sh · engineering and design"}>
+    <Landing/>
+  </ProLayout>
+)
+
+export default ProLanding

@@ -19,6 +19,18 @@ const isSectionHeading = (line: string) =>
 // The API returns image paths relative to its own origin.
 const absolute = (src: string) => src.startsWith("http") ? src : `${portfolioAPIURL}${src}`
 
+// A line of "·"-separated figures (the SCALE sections) reads better as a strip
+// of numbers than as a sentence. Anything less regular stays a paragraph.
+const statParts = (line: string) => {
+  const parts = line.replace(/\.$/, "").split("·").map((p) => p.trim()).filter(Boolean)
+  if (parts.length < 3) return undefined
+  const stats = parts.map((part) => {
+    const m = part.match(/^(\S+)\s+(.+)$/)
+    return m && /\d/.test(m[1]) ? {value: m[1], label: m[2]} : {value: "", label: part}
+  })
+  return stats.every((st) => st.value) ? stats : undefined
+}
+
 const humanize = (key: string) => {
   const words = key.replace(/[_-]+/g, " ").trim()
   return words.charAt(0).toUpperCase() + words.slice(1)
@@ -47,6 +59,21 @@ export const MainText = ({text, images = {}, lede}: MainTextProps) => {
 
     if (isSectionHeading(line)) {
       blocks.push(<h3 className={styles.sectionHeading} key={i}>{line}</h3>)
+      return
+    }
+
+    const stats = line.includes("·") ? statParts(line) : undefined
+    if (stats) {
+      blocks.push(
+        <div className={styles.statStrip} key={i}>
+          {stats.map((st) => (
+            <div key={st.label}>
+              <span className={styles.statValue}>{st.value}</span>
+              <span className={styles.statLabel}>{st.label}</span>
+            </div>
+          ))}
+        </div>
+      )
       return
     }
 

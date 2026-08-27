@@ -34,11 +34,13 @@ export const ItemDetail = ({items, id, target}: ItemDetailProps) => {
       <Link className={styles.back} href={`/portfolio/${target}`}>← {backLabel[target]}</Link>
 
       <div className={styles.detailHead}>
-        <Avatar src={item.icon} name={item.title} large={true}/>
+        <Avatar src={item.icon} name={item.title} size={target === 'people' ? 'xl' : 'lg'} kind={target === 'people' ? 'person' : 'project'}/>
         <div>
           <h1 className={styles.detailTitle}>{item.title}</h1>
           {item.subtitle ? <p className={styles.detailSubtitle}>{item.subtitle}</p> : null}
-          {item.alternateTitle ? <p className={styles.cardSubtitle}>“{item.alternateTitle}”</p> : null}
+          {item.alternateTitle ? (
+            <p><span className={styles.nickChip} style={{marginLeft: 0}}>{item.alternateTitle}</span></p>
+          ) : null}
         </div>
       </div>
 

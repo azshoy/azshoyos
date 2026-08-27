@@ -11,7 +11,7 @@ const ProProject = () => {
   const item = selection ? projects[selection] : undefined
 
   return (
-    <ProLayout active={'projects'} title={item ? `${item.title} — az.sh` : "Project — az.sh"}>
+    <ProLayout active={'projects'} title={item ? `${item.title} · az.sh` : "Project · az.sh"}>
       <ItemDetail items={projects} id={selection ?? ""} target={'projects'}/>
     </ProLayout>
   )

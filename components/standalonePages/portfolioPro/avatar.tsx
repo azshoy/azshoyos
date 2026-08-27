@@ -3,38 +3,57 @@ import {cls} from "@/util/misc";
 import {useState} from "react";
 
 
+export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl'
+export type AvatarKind = 'person' | 'project'
+
 type AvatarProps = {
   src?: string
   name: string
-  large?: boolean
+  size?: AvatarSize
+  kind?: AvatarKind
 }
 
 // The API hands out a generic placeholder for items without artwork, and people
-// without a photo end up with a ".../undefined" URL. Both become initials.
+// without a photo end up with a ".../undefined" URL. Both fall back to a glyph.
 const isPlaceholder = (src?: string) =>
-  !src || src.endsWith("undefined") || src.endsWith("null") || src.endsWith("/default.svg")
+  !src || src.endsWith("undefined") || src.endsWith("null")
+  || src.endsWith("/default.svg") || src.endsWith("/default-person.svg")
 
-const initials = (name: string) => name
-  .split(" ")
-  .filter((w) => /[a-zA-Z0-9]/.test(w[0] ?? ""))
-  .slice(0, 2)
-  .map((w) => w[0])
-  .join("")
+const sizeClass: Record<AvatarSize, string> = {
+  sm: '',
+  md: styles.avatarMd,
+  lg: styles.avatarLg,
+  xl: styles.avatarXl,
+}
 
-export const Avatar = ({src, name, large}: AvatarProps) => {
+const PersonGlyph = () => (
+  <svg className={styles.avatarGlyph} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" aria-hidden={true}>
+    <circle cx="12" cy="9" r="3.6"/>
+    <path d="M4.9 20a7.1 7.1 0 0 1 14.2 0"/>
+  </svg>
+)
+
+const ProjectGlyph = () => (
+  <svg className={styles.avatarGlyph} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinejoin="round" aria-hidden={true}>
+    <rect x="8.4" y="3.6" width="12" height="12" rx="2.2"/>
+    <path d="M15.6 20.4h-9a3 3 0 0 1-3-3v-9"/>
+  </svg>
+)
+
+export const Avatar = ({src, name, size = 'sm', kind = 'project'}: AvatarProps) => {
   const [failed, setFailed] = useState(false)
-  const size = cls(styles.avatar, large ? styles.avatarLarge : '')
+  const box = cls(styles.avatar, sizeClass[size])
 
   if (failed || isPlaceholder(src)) {
     return (
-      <div className={cls(size, styles.avatarFallback)} aria-hidden={true}>
-        {initials(name)}
+      <div className={cls(box, styles.avatarFallback)} role={"img"} aria-label={name}>
+        {kind === 'person' ? <PersonGlyph/> : <ProjectGlyph/>}
       </div>
     )
   }
   return (
     <img
-      className={size}
+      className={box}
       src={src}
       alt=""
       loading="lazy"
