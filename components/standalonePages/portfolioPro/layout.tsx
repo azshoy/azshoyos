@@ -28,22 +28,24 @@ export const ProLayout = ({active, title, children}: ProLayoutProps) => {
           during parse, before the header paints, to avoid a theme flash. */}
       <script dangerouslySetInnerHTML={{__html: themeBootScript}}/>
       <header className={styles.header}>
-        <Link className={styles.brand} href={"/portfolio"} aria-label={"az.sh, home"}>
-          <img className={styles.brandLogo} src={"/icons/start.svg"} alt={"az.sh"}/>
-        </Link>
-        <div className={styles.headerRight}>
-          <nav className={styles.nav}>
-            {nav.map((n) => (
-              <Link
-                key={n.key}
-                href={n.href}
-                className={cls(styles.navLink, active === n.key ? styles.navLinkActive : '')}
-              >
-                {n.label}
-              </Link>
-            ))}
-          </nav>
-          <ThemeToggle/>
+        <div className={styles.headerInner}>
+          <Link className={styles.brand} href={"/portfolio"} aria-label={"az.sh, home"}>
+            <img className={styles.brandLogo} src={"/icons/start.svg"} alt={"az.sh"}/>
+          </Link>
+          <div className={styles.headerRight}>
+            <nav className={styles.nav}>
+              {nav.map((n) => (
+                <Link
+                  key={n.key}
+                  href={n.href}
+                  className={cls(styles.navLink, active === n.key ? styles.navLinkActive : '')}
+                >
+                  {n.label}
+                </Link>
+              ))}
+            </nav>
+            <ThemeToggle/>
+          </div>
         </div>
       </header>
       <main className={styles.main}>{children}</main>

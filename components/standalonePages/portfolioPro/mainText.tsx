@@ -8,6 +8,7 @@ type MainTextProps = {
   text: string
   images?: {[key: string]: string}
   lede?: boolean
+  skipFirstParagraph?: boolean
 }
 
 const imageToken = /^\{%\s*([^%]+?)\s*%\}$/
@@ -36,7 +37,7 @@ const humanize = (key: string) => {
   return words.charAt(0).toUpperCase() + words.slice(1)
 }
 
-export const MainText = ({text, images = {}, lede}: MainTextProps) => {
+export const MainText = ({text, images = {}, lede, skipFirstParagraph = false}: MainTextProps) => {
   const blocks: ReactNode[] = []
   let paragraph = 0
 
@@ -78,6 +79,7 @@ export const MainText = ({text, images = {}, lede}: MainTextProps) => {
     }
 
     paragraph += 1
+    if (skipFirstParagraph && paragraph === 1) return
     const first = lede && paragraph === 1
     blocks.push(<p className={first ? styles.lede : styles.paragraph} key={i}>{line}</p>)
   })

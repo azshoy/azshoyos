@@ -46,9 +46,16 @@ export const ItemDetail = ({items, id, target}: ItemDetailProps) => {
 
       <div className={styles.detailBody}>
         <article className={styles.article}>
-          {item.mainText
-            ? <MainText text={item.mainText} images={item.mainTextImages} lede={true}/>
-            : <p className={styles.lede}>{item.description}</p>}
+          {person ? (
+            item.mainText
+              ? <MainText text={item.mainText} images={item.mainTextImages} lede={true}/>
+              : <p className={styles.lede}>{item.description}</p>
+          ) : (
+            <>
+              {item.description ? <p className={styles.lede}>{item.description}</p> : null}
+              {item.mainText ? <MainText text={item.mainText} images={item.mainTextImages} skipFirstParagraph={true}/> : null}
+            </>
+          )}
           {person ? <PersonEducation person={person}/> : null}
           {person ? <PersonProjects person={person}/> : null}
         </article>

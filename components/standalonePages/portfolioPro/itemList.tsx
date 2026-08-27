@@ -3,6 +3,7 @@ import {Avatar} from "@/components/standalonePages/portfolioPro/avatar";
 import {TagList} from "@/components/standalonePages/portfolioPro/tags";
 import {ItemDict, IDdAndKeyWorded} from "@/components/standalonePages/portfolio/types";
 import {portfolioAPIURL} from "@/components/standalonePages/portfolio/data/dataManager";
+import {cls} from "@/util/misc";
 import Link from "next/link";
 import {useMemo, useState} from "react";
 
@@ -28,6 +29,7 @@ const coverImage = (item: IDdAndKeyWorded) => {
 export const ItemList = ({items, target, title, lede}: ItemListProps) => {
   const [query, setQuery] = useState("")
   const all = useMemo(() => Object.values(items), [items])
+  const showFilter = target === 'people'
 
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -42,26 +44,41 @@ export const ItemList = ({items, target, title, lede}: ItemListProps) => {
         <p className={styles.pageLede}>{lede}</p>
       </div>
 
-      <div className={styles.toolbar}>
-        <input
-          className={styles.search}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={`Filter ${target}…`}
-          aria-label={`Filter ${target}`}
-        />
-        <span className={styles.count}>{shown.length} of {all.length}</span>
-      </div>
+      {showFilter ? (
+        <div className={styles.toolbar}>
+          <input
+            className={styles.search}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={`Filter ${target}…`}
+            aria-label={`Filter ${target}`}
+            disabled={all.length === 0}
+          />
+          <span className={styles.count}>{all.length > 0 ? `${shown.length} of ${all.length}` : "\u00a0"}</span>
+        </div>
+      ) : null}
 
-      {all.length === 0 ? <p className={styles.empty}>Loading…</p> : null}
+      {all.length === 0 ? (
+        <div className={styles.loadingGrid} aria-label={`Loading ${target}`}>
+          {[0, 1, 2].map((n) => (
+            <div className={cls(styles.loadingCard, target === 'projects' ? styles.loadingCardProject : '')} key={n}/>
+          ))}
+        </div>
+      ) : null}
       {all.length > 0 && shown.length === 0 ? <p className={styles.empty}>Nothing matches “{query}”.</p> : null}
 
-      <div className={styles.grid}>
+      <div className={styles.grid} aria-live={"polite"}>
         {shown.map((item) => (
           <Link className={styles.card} key={item.id} href={`/portfolio/${target}/${item.id}`}>
-            {coverImage(item) ? (
+            {target === 'projects' ? (
               <div className={styles.cardCover}>
-                <img className={styles.cardCoverImage} src={coverImage(item)} alt="" loading="lazy"/>
+                {coverImage(item) ? (
+                  <img className={styles.cardCoverImage} src={coverImage(item)} alt="" loading="lazy"/>
+                ) : (
+                  <div className={styles.cardCoverFallback}>
+                    <Avatar src={item.icon} name={item.title} size={'lg'} kind={'project'}/>
+                  </div>
+                )}
               </div>
             ) : null}
             <div className={styles.cardHead}>
@@ -72,7 +89,7 @@ export const ItemList = ({items, target, title, lede}: ItemListProps) => {
               </div>
             </div>
             {item.description ? <p className={styles.cardBody}>{item.description}</p> : null}
-            <TagList tags={item.tags} limit={5}/>
+            <TagList tags={item.tags} limit={3}/>
           </Link>
         ))}
       </div>
