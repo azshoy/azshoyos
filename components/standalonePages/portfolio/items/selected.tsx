@@ -12,6 +12,7 @@ import {ReactNode, useEffect, useMemo, useState} from "react";
 import {portfolioAPIURL} from "@/components/standalonePages/portfolio/data/dataManager";
 import {Tag} from "@/components/standalonePages/portfolio/tags/tag";
 import {TitleAltTitle} from "@/components/standalonePages/portfolio/items/titleAltTitle";
+import {MainTextImage} from "@/components/standalonePages/portfolio/items/mainTextImage";
 
 
 
@@ -173,7 +174,7 @@ export const fillInImages = (txt: string, images: {[key: string]: string} = {}) 
     if (pt.length == 2) {
       const k = "{% " + pt[0] + " %}"
       if (k in images){
-        textcontent.push(<img className={styles.maintextImage} key={pt[0]} src={`${portfolioAPIURL}${images[k]}`} alt={pt[0]}/>)
+        textcontent.push(<MainTextImage key={pt[0]} src={`${portfolioAPIURL}${images[k]}`} alt={pt[0]}/>)
       }
       textcontent.push(pt[1])
     } else {
