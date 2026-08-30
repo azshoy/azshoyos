@@ -1,20 +1,29 @@
 import {ProLayout} from "@/components/standalonePages/portfolioPro/layout";
 import {ItemDetail} from "@/components/standalonePages/portfolioPro/itemDetail";
-import {usePeople} from "@/components/standalonePages/portfolio/data/people";
-import {useRouter} from "next/router";
+import {fetchPeople} from "@/components/standalonePages/portfolio/data/people";
+import {ItemDict} from "@/components/standalonePages/portfolio/types";
+import {GetStaticPaths, GetStaticProps} from "next";
 
 
-const ProPerson = () => {
-  const people = usePeople()
-  const router = useRouter()
-  const selection = Array.isArray(router.query.selection) ? router.query.selection[0] : router.query.selection
-  const item = selection ? people[selection] : undefined
+type Props = {people: ItemDict, selection: string}
 
+const ProPerson = ({people, selection}: Props) => {
+  const item = people[selection]
   return (
     <ProLayout active={'people'} title={item ? `${item.title} · az.sh` : "People · az.sh"}>
-      <ItemDetail items={people} id={selection ?? ""} target={'people'}/>
+      <ItemDetail items={people} id={selection} target={'people'}/>
     </ProLayout>
   )
 }
+
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: Object.keys(await fetchPeople()).map((selection) => ({params: {selection}})),
+  fallback: 'blocking',
+})
+
+export const getStaticProps: GetStaticProps<Props> = async ({params}) => ({
+  props: {people: await fetchPeople(), selection: String(params?.selection ?? "")},
+  revalidate: 300,
+})
 
 export default ProPerson

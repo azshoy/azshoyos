@@ -22,6 +22,19 @@ export const usePeople =  () => {
 }
 
 
+// Server-side twin of usePeople, for getStaticProps. See fetchProjects.
+export const fetchPeople = async ():Promise<ItemDict> => {
+  try {
+    const response = await fetch(`${portfolioAPIURL}/people`)
+    if (!response.ok) return {}
+    const d = await response.json()
+    return "people" in d ? personsToListItem(d.people as PersonData[]) : {}
+  } catch {
+    return {}
+  }
+}
+
+
 const personsToListItem = (ppl: PersonData[]) => {
   const listItems:ItemDict = {}
   ppl.forEach((p) => {

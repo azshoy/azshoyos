@@ -1,6 +1,4 @@
 import styles from "@/components/standalonePages/portfolioPro/pro.module.css";
-import {useProjects} from "@/components/standalonePages/portfolio/data/projects";
-import {usePeople} from "@/components/standalonePages/portfolio/data/people";
 import Link from "next/link";
 
 
@@ -15,9 +13,12 @@ const Count = ({n, singular, plural}: {n: number, singular: string, plural: stri
   <span className={styles.landingCount}>{n > 0 ? `${n} ${n === 1 ? singular : plural}` : " "}</span>
 )
 
-export const Landing = () => {
-  const projects = useProjects()
-  const people = usePeople()
+type LandingProps = {
+  projectCount: number
+  peopleCount: number
+}
+
+export const Landing = ({projectCount, peopleCount}: LandingProps) => {
 
   return (
     <div className={styles.landing}>
@@ -31,13 +32,13 @@ export const Landing = () => {
         <Link className={styles.landingCard} href={"/portfolio/projects"}>
           <span className={styles.landingCardTitle}>Projects <Arrow/></span>
           <span className={styles.landingCardText}>What we have built, and how it was engineered.</span>
-          <Count n={Object.keys(projects).length} singular={"case study"} plural={"case studies"}/>
+          <Count n={projectCount} singular={"case study"} plural={"case studies"}/>
         </Link>
 
         <Link className={styles.landingCard} href={"/portfolio/people"}>
           <span className={styles.landingCardTitle}>People <Arrow/></span>
           <span className={styles.landingCardText}>The engineers and designers who do the work.</span>
-          <Count n={Object.keys(people).length} singular={"person"} plural={"people"}/>
+          <Count n={peopleCount} singular={"person"} plural={"people"}/>
         </Link>
       </div>
     </div>

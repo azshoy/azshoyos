@@ -1,20 +1,24 @@
 import {ProLayout} from "@/components/standalonePages/portfolioPro/layout";
 import {ItemList} from "@/components/standalonePages/portfolioPro/itemList";
-import {usePeople} from "@/components/standalonePages/portfolio/data/people";
+import {fetchPeople} from "@/components/standalonePages/portfolio/data/people";
+import {ItemDict} from "@/components/standalonePages/portfolio/types";
+import {GetStaticProps} from "next";
 
 
-const ProPeople = () => {
-  const people = usePeople()
-  return (
-    <ProLayout active={'people'} title={"People · az.sh"}>
-      <ItemList
-        items={people}
-        target={'people'}
-        title={"People"}
-        lede={"The engineers and designers who do the work."}
-      />
-    </ProLayout>
-  )
-}
+const ProPeople = ({people}: {people: ItemDict}) => (
+  <ProLayout active={'people'} title={"People · az.sh"}>
+    <ItemList
+      items={people}
+      target={'people'}
+      title={"People"}
+      lede={"The engineers and designers who do the work."}
+    />
+  </ProLayout>
+)
+
+export const getStaticProps: GetStaticProps = async () => ({
+  props: {people: await fetchPeople()},
+  revalidate: 300,
+})
 
 export default ProPeople

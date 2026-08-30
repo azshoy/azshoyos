@@ -27,6 +27,21 @@ export const useProjects =  () => {
 }
 
 
+// Server-side twin of useProjects, for getStaticProps. Failures return an
+// empty dict so a cold or unreachable API cannot break the build; the next
+// revalidation fills it in.
+export const fetchProjects = async ():Promise<ItemDict> => {
+  try {
+    const response = await fetch(`${portfolioAPIURL}/projects`)
+    if (!response.ok) return {}
+    const d = await response.json()
+    return "projects" in d ? projectsToListItem(d.projects as ProjectData[]) : {}
+  } catch {
+    return {}
+  }
+}
+
+
 const projectsToListItem = (ppl: ProjectData[]) => {
   const listItems:ItemDict = {}
   ppl.forEach((p) => {
