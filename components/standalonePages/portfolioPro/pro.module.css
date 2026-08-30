@@ -23,6 +23,9 @@
   --pro-faint: #737d89;
   --pro-accent: #5d33b9;
   --pro-accent-soft: #f0ebfb;
+  --pro-tag-skills: #5d33b9;
+  --pro-tag-stack: #2a6b89;
+  --pro-tag-interests: #268c43;
   --pro-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
 
   --pro-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -50,6 +53,9 @@
     --pro-faint: #818c99;
     --pro-accent: #b49af0;
     --pro-accent-soft: #241347;
+    --pro-tag-skills: #b49af0;
+    --pro-tag-stack: #7bbddb;
+    --pro-tag-interests: #7bdb98;
     --pro-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
     color-scheme: dark;
   }
@@ -66,6 +72,9 @@
   --pro-faint: #818c99;
   --pro-accent: #b49af0;
   --pro-accent-soft: #241347;
+  --pro-tag-skills: #b49af0;
+  --pro-tag-stack: #7bbddb;
+  --pro-tag-interests: #7bdb98;
   --pro-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
   color-scheme: dark;
 }
@@ -210,6 +219,62 @@
   letter-spacing: -0.015em;
   max-width: 32ch;
   margin-bottom: 2.75rem;
+}
+
+.landingContact {
+  margin-top: 2rem;
+  color: var(--pro-muted);
+  font-size: 0.95rem;
+}
+
+/* A copy action, not a link: dashed underline hints that clicking does not
+   navigate. The value stays selectable for anyone who prefers highlighting. */
+.page .copyValue {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: var(--pro-accent);
+  cursor: copy;
+}
+
+.page .copyText {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-color: color-mix(in srgb, var(--pro-accent) 40%, transparent);
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color var(--pro-motion);
+}
+
+.page .copyValue:hover .copyText,
+.page .copyValue:focus-visible .copyText {
+  text-decoration-style: solid;
+  text-decoration-color: var(--pro-accent);
+}
+
+.page .copyValue:focus-visible {
+  outline: none;
+}
+
+.copyHint {
+  color: var(--pro-faint);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.page a.contactLink {
+  color: var(--pro-accent);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--pro-accent) 35%, transparent);
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color var(--pro-motion);
+}
+
+.page a.contactLink:hover {
+  text-decoration-color: var(--pro-accent);
 }
 
 .landingChoices {
@@ -549,6 +614,21 @@
   transition: background-color var(--pro-motion), border-color var(--pro-motion);
 }
 
+.tagSkills {
+  border-color: color-mix(in srgb, var(--pro-tag-skills) 45%, var(--pro-border));
+  background-color: color-mix(in srgb, var(--pro-tag-skills) 8%, var(--pro-surface));
+}
+
+.tagStack {
+  border-color: color-mix(in srgb, var(--pro-tag-stack) 45%, var(--pro-border));
+  background-color: color-mix(in srgb, var(--pro-tag-stack) 8%, var(--pro-surface));
+}
+
+.tagInterests {
+  border-color: color-mix(in srgb, var(--pro-tag-interests) 45%, var(--pro-border));
+  background-color: color-mix(in srgb, var(--pro-tag-interests) 8%, var(--pro-surface));
+}
+
 /* Hover is a bonus on pointer devices; legibility above does not depend on it. */
 @media (hover: hover) {
   .tag:hover {
@@ -638,12 +718,12 @@
   text-transform: uppercase;
 }
 
-.asideLink {
+.page a.asideLink {
   color: var(--pro-accent);
   transition: opacity var(--pro-motion);
 }
 
-.asideLink:hover { opacity: 0.75; }
+.page a.asideLink:hover { opacity: 0.75; }
 
 /* ---------- main text ---------- */
 
@@ -823,6 +903,62 @@
 .educationMeta {
   color: var(--pro-faint);
   font-size: 0.88rem;
+}
+
+/* Cross-links between a person and their projects, in both directions. */
+.relatedRows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.page a.relatedRow,
+.page a.teamRow {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+  color: inherit;
+  transition: border-color var(--pro-motion), background-color var(--pro-motion);
+}
+
+.page a.relatedRow {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--pro-border);
+  border-radius: var(--pro-radius-sm);
+  background-color: var(--pro-bg);
+}
+
+.page a.relatedRow:hover {
+  border-color: var(--pro-accent);
+  background-color: var(--pro-surface);
+}
+
+.page a.teamRow:hover .relatedRowTitle {
+  color: var(--pro-accent);
+}
+
+.relatedRowText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.relatedRowTitle {
+  font-size: 0.92rem;
+  font-weight: 550;
+  line-height: 1.3;
+  transition: color var(--pro-motion);
+}
+
+.relatedRowSub {
+  color: var(--pro-faint);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .relatedList {

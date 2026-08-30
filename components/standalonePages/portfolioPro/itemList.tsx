@@ -31,13 +31,17 @@ export const ItemList = ({items, target, title, lede}: ItemListProps) => {
   const all = useMemo(() => Object.values(items), [items])
   const showFilter = target === 'people'
 
+
   // One placeholder per expected card: nine people, three case studies.
   const placeholders = target === 'people' ? 9 : 3
 
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return all
-    return all.filter((i) => i.keywords.some((k) => k.includes(q)))
+    // Tag keywords are stored with underscores for spaces, so "Smart contract
+    // architecture" has to be matched in both forms.
+    const underscored = q.replace(/\s+/g, "_")
+    return all.filter((i) => i.keywords.some((k) => k.includes(q) || k.includes(underscored)))
   }, [all, query])
 
   return (

@@ -1,7 +1,6 @@
 import styles from "@/components/standalonePages/portfolioPro/pro.module.css";
 import {PersonData} from "@/components/standalonePages/portfolio/data/people";
-import {useProjects} from "@/components/standalonePages/portfolio/data/projects";
-import Link from "next/link";
+import {CopyValue} from "@/components/standalonePages/portfolioPro/copyValue";
 
 
 // People and projects share one list shape; only people carry contact details.
@@ -26,8 +25,8 @@ export const PersonFacts = ({person}: {person: PersonData}) => {
           <div className={styles.asideHead}>Contact</div>
           <div className={styles.factList}>
             {location && location.length > 0 ? <span>{location.join(" · ")}</span> : null}
-            {email ? <a href={`mailto:${email}`}>{email}</a> : null}
-            {phone ? <a href={`tel:${phone.replace(/\s/g, "")}`}>{phone}</a> : null}
+            {email ? <CopyValue value={email} label={"email address"}/> : null}
+            {phone ? <CopyValue value={phone} label={"phone number"}/> : null}
           </div>
         </div>
       ) : null}
@@ -57,26 +56,6 @@ export const PersonEducation = ({person}: {person: PersonData}) => {
               {e.institute} · {e.graduated ? e.year : `expected ${e.year}`}
             </div>
           </div>
-        ))}
-      </div>
-    </>
-  )
-}
-
-export const PersonProjects = ({person}: {person: PersonData}) => {
-  const projects = useProjects()
-  const refs = (person.projects ?? []) as PersonProjectRef[]
-  const linked = refs.map((r) => r.id).filter((id): id is string => !!id)
-  if (linked.length === 0) return null
-
-  return (
-    <>
-      <h3 className={styles.sectionHeading}>Worked on</h3>
-      <div className={styles.relatedList}>
-        {linked.map((id) => (
-          <Link className={styles.relatedLink} key={id} href={`/portfolio/projects/${id}`}>
-            {projects[id]?.title ?? id}
-          </Link>
         ))}
       </div>
     </>

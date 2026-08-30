@@ -8,7 +8,10 @@ import {GetStaticProps} from "next";
 type Props = {projectCount: number, peopleCount: number}
 
 const ProLanding = ({projectCount, peopleCount}: Props) => (
-  <ProLayout title={"az.sh · engineering and design"}>
+  <ProLayout
+    title={"az.sh · engineering and design"}
+    description={"We build and run software end to end: architecture, implementation, infrastructure and design."}
+  >
     <Landing projectCount={projectCount} peopleCount={peopleCount}/>
   </ProLayout>
 )

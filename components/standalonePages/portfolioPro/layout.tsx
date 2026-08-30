@@ -4,25 +4,37 @@ import Head from "next/head";
 import Link from "next/link";
 import {ThemeToggle, themeBootScript} from "@/components/standalonePages/portfolioPro/themeToggle";
 import {ReactNode} from "react";
+import {CopyValue} from "@/components/standalonePages/portfolioPro/copyValue";
 
 
 type ProLayoutProps = {
   active?: 'projects' | 'people'
   title: string
+  // Shown in search results and in link previews on Slack, LinkedIn etc.
+  description?: string
   children: ReactNode
 }
+
+const defaultDescription = "Software engineering and design: selected work and the people behind it."
 
 const nav = [
   {href: "/portfolio/projects", label: "Projects", key: "projects"},
   {href: "/portfolio/people", label: "People", key: "people"},
 ]
 
-export const ProLayout = ({active, title, children}: ProLayoutProps) => {
+export const ProLayout = ({active, title, description, children}: ProLayoutProps) => {
+  const summary = description ?? defaultDescription
   return (
     <div className={styles.page}>
       <Head>
         <title>{title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta name="description" content={summary}/>
+        <meta property="og:title" content={title}/>
+        <meta property="og:description" content={summary}/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:site_name" content="az.sh"/>
+        <meta name="twitter:card" content="summary"/>
       </Head>
       {/* Inline, not in <Head>: next/head rejects script tags, and this must run
           during parse, before the header paints, to avoid a theme flash. */}
@@ -49,7 +61,10 @@ export const ProLayout = ({active, title, children}: ProLayoutProps) => {
         </div>
       </header>
       <main className={styles.main}>{children}</main>
-      <footer className={styles.footer}>az.sh · selected work and the people behind it.</footer>
+      <footer className={styles.footer}>
+        az.sh · selected work and the people behind it.{" "}
+        <CopyValue value={"contact@azsh.fi"} label={"email address"}/>
+      </footer>
     </div>
   )
 }

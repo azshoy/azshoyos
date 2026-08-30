@@ -1,5 +1,6 @@
 import styles from "@/components/standalonePages/portfolioPro/pro.module.css";
 import Link from "next/link";
+import {CopyValue} from "@/components/standalonePages/portfolioPro/copyValue";
 
 
 const Arrow = () => (
@@ -41,6 +42,13 @@ export const Landing = ({projectCount, peopleCount}: LandingProps) => {
           <Count n={peopleCount} singular={"person"} plural={"people"}/>
         </Link>
       </div>
+
+      <p className={styles.landingContact}>
+        Work with us:{" "}
+        <CopyValue value={"contact@azsh.fi"} label={"email address"}/>
+        {" · "}
+        <CopyValue value={"+358 44 055 4838"} label={"phone number"}/>
+      </p>
     </div>
   )
 }

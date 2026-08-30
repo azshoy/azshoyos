@@ -6,7 +6,11 @@ import {GetStaticProps} from "next";
 
 
 const ProProjects = ({projects}: {projects: ItemDict}) => (
-  <ProLayout active={'projects'} title={"Projects · az.sh"}>
+  <ProLayout
+    active={'projects'}
+    title={"Projects · az.sh"}
+    description={"Selected engagements, written up in enough detail to judge the engineering behind them."}
+  >
     <ItemList
       items={projects}
       target={'projects'}
