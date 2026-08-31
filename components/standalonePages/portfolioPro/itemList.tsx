@@ -6,7 +6,7 @@ import {portfolioAPIURL} from "@/components/standalonePages/portfolio/data/dataM
 import {cls} from "@/util/misc";
 import Link from "next/link";
 import {useRouter} from "next/router";
-import {useEffect, useMemo, useRef, useState} from "react";
+import {CSSProperties, useEffect, useMemo, useRef, useState} from "react";
 
 
 type ItemListProps = {
@@ -125,8 +125,11 @@ export const ItemList = ({items, target, title, lede}: ItemListProps) => {
       {all.length > 0 && shown.length === 0 ? <p className={styles.empty}>Nothing matches “{query}”.</p> : null}
 
       <div className={styles.grid} aria-live={"polite"}>
-        {shown.map((item) => (
-          <div className={styles.card} key={item.id}>
+        {shown.map((item, n) => (
+          // Cards cascade in on mount, the way they did when the list was
+          // fetched in the browser. Filtering only remounts what actually
+          // changed, so surviving cards sit still.
+          <div className={styles.card} key={item.id} style={{'--index': n} as CSSProperties}>
             {target === 'projects' ? (
               <div className={styles.cardCover}>
                 {coverImage(item) ? (
