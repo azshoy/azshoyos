@@ -42,6 +42,10 @@ const ProjectGlyph = () => (
 
 export const Avatar = ({src, name, size = 'sm', kind = 'project'}: AvatarProps) => {
   const [failed, setFailed] = useState(false)
+  // Chrome paints the scanlines it has so far stretched to the whole box, so a
+  // half-downloaded portrait shows up squashed. Hold the photo back until it is
+  // decoded and fade it in instead.
+  const [loaded, setLoaded] = useState(false)
   const box = cls(styles.avatar, sizeClass[size])
 
   if (failed || isPlaceholder(src)) {
@@ -53,10 +57,14 @@ export const Avatar = ({src, name, size = 'sm', kind = 'project'}: AvatarProps) 
   }
   return (
     <img
-      className={box}
+      className={cls(box, styles.avatarFade, loaded ? styles.avatarShown : undefined)}
+      // A cached image can finish before React attaches onLoad.
+      ref={(el) => { if (el?.complete) setLoaded(true) }}
       src={src}
       alt=""
       loading="lazy"
+      data-fade={true}
+      onLoad={() => setLoaded(true)}
       onError={() => setFailed(true)}
     />
   )

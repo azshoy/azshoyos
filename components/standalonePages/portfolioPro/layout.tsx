@@ -39,6 +39,9 @@ export const ProLayout = ({active, title, description, children}: ProLayoutProps
       {/* Inline, not in <Head>: next/head rejects script tags, and this must run
           during parse, before the header paints, to avoid a theme flash. */}
       <script dangerouslySetInnerHTML={{__html: themeBootScript}}/>
+      {/* Photos fade in once decoded, which needs the load handler. Without JS
+          there is nothing to flip them back on, so show them outright. */}
+      <noscript><style dangerouslySetInnerHTML={{__html: "img[data-fade]{opacity:1!important}"}}/></noscript>
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <Link className={styles.brand} href={"/portfolio"} aria-label={"az.sh, home"}>

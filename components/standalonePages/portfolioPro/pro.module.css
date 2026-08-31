@@ -647,6 +647,15 @@
   border-radius: var(--pro-radius);
 }
 
+.avatarFade {
+  opacity: 0;
+  transition: opacity var(--pro-motion) ease-out;
+}
+
+.avatarShown {
+  opacity: 1;
+}
+
 .avatarFallback {
   display: inline-flex;
   align-items: center;
