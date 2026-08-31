@@ -57,6 +57,7 @@ export const ItemDetail = ({items, id, target, related = [], team = []}: ItemDet
             <p><span className={styles.nickChip} style={{marginLeft: 0}}>{item.alternateTitle}</span></p>
           ) : null}
         </div>
+        {person ? <div className={styles.headFacts}><PersonFacts person={person}/></div> : null}
       </div>
 
       <div className={styles.detailBody}>
@@ -88,10 +89,21 @@ export const ItemDetail = ({items, id, target, related = [], team = []}: ItemDet
               </div>
             </>
           ) : null}
+          {item.links && item.links.length > 0 ? (
+            <>
+              <h3 className={styles.sectionHeading}>Links</h3>
+              <div className={styles.mainLinks}>
+                {item.links.map((l) => (
+                  <a className={styles.asideLink} key={l.url} href={l.url} target="_blank" rel="noreferrer noopener">
+                    {l.text || l.url}
+                  </a>
+                ))}
+              </div>
+            </>
+          ) : null}
         </article>
 
         <aside className={styles.aside}>
-          {person ? <PersonFacts person={person}/> : null}
           {team.length > 0 ? (
             <div className={styles.asideBlock}>
               <div className={styles.asideHead}>Team</div>
@@ -113,21 +125,15 @@ export const ItemDetail = ({items, id, target, related = [], team = []}: ItemDet
               <div className={styles.asideHead}>{group}</div>
               <div className={styles.tags}>
                 {values.map((v) => (
-                  <span className={cls(styles.tag, tagGroupClass(group))} key={v}>{v}</span>
+                  <Link
+                    className={cls(styles.tag, styles.tagButton, tagGroupClass(group))}
+                    key={v}
+                    href={`/portfolio/${target}?tag=${encodeURIComponent(v)}`}
+                  >{v}</Link>
                 ))}
               </div>
             </div>
           ))}
-          {item.links && item.links.length > 0 ? (
-            <div className={styles.asideBlock}>
-              <div className={styles.asideHead}>Links</div>
-              {item.links.map((l) => (
-                <a className={styles.asideLink} key={l.url} href={l.url} target="_blank" rel="noreferrer noopener">
-                  {l.text || l.url}
-                </a>
-              ))}
-            </div>
-          ) : null}
         </aside>
       </div>
     </div>

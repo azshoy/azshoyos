@@ -5,6 +5,9 @@ import {cls} from "@/util/misc";
 type TagListProps = {
   tags: {[key: string]: string[]}
   limit?: number
+  // Passing a handler turns the chips into filter buttons.
+  onSelect?: (value: string) => void
+  active?: string
 }
 
 export type TaggedValue = {value: string, group: string}
@@ -32,17 +35,28 @@ const groupClasses: {[key: string]: string} = {
 
 export const tagGroupClass = (group: string) => groupClasses[group] ?? ''
 
-export const TagList = ({tags, limit}: TagListProps) => {
+export const TagList = ({tags, limit, onSelect, active}: TagListProps) => {
   const all = flattenTags(tags)
   if (all.length === 0) return null
-  const shown = limit ? all.slice(0, limit) : all
+  // The tag a card matched on has to be among the ones it shows, or the card
+  // looks like it turned up in a filtered list for no reason.
+  const ordered = active ? [...all].sort((a, b) => Number(b.value === active) - Number(a.value === active)) : all
+  const shown = limit ? ordered.slice(0, limit) : ordered
   const rest = all.length - shown.length
 
   return (
     <div className={styles.tags}>
-      {shown.map((t) => (
+      {shown.map((t) => (onSelect ? (
+        <button
+          className={cls(styles.tag, styles.tagButton, tagGroupClass(t.group), t.value === active ? styles.tagActive : undefined)}
+          key={t.value}
+          type={"button"}
+          aria-pressed={t.value === active}
+          onClick={() => onSelect(t.value)}
+        >{t.value}</button>
+      ) : (
         <span className={cls(styles.tag, tagGroupClass(t.group))} key={t.value}>{t.value}</span>
-      ))}
+      )))}
       {rest > 0 ? <span className={styles.tagMore}>+{rest}</span> : null}
     </div>
   )

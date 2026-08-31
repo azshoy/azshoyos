@@ -375,11 +375,16 @@
   margin-bottom: 1.5rem;
 }
 
-.search {
+.searchWrap {
+  position: relative;
   flex: 1 1 auto;
   min-width: 0;
   max-width: 26rem;
-  padding: 0.55rem 0.8rem;
+}
+
+.search {
+  width: 100%;
+  padding: 0.55rem 2.2rem 0.55rem 0.8rem;
   border: 1px solid var(--pro-border);
   border-radius: var(--pro-radius-sm);
   background-color: var(--pro-bg);
@@ -393,6 +398,51 @@
   outline: none;
   border-color: var(--pro-accent);
   box-shadow: 0 0 0 3px var(--pro-accent-soft);
+}
+
+/* Sits inside the field and fades in with the first character typed, so the
+   toolbar keeps the same width whether or not a filter is active. */
+.searchClear {
+  position: absolute;
+  top: 50%;
+  right: 0.45rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.45rem;
+  height: 1.45rem;
+  border: 0;
+  border-radius: 50%;
+  background-color: transparent;
+  color: var(--pro-faint);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(-50%) scale(0.8);
+  pointer-events: none;
+  transition: opacity var(--pro-motion), transform var(--pro-motion),
+    background-color var(--pro-motion), color var(--pro-motion);
+}
+
+.searchClearShown {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+  pointer-events: auto;
+}
+
+.searchClear svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.searchClear:hover {
+  background-color: var(--pro-surface-hover);
+  color: var(--pro-text);
+}
+
+.searchClear:focus-visible {
+  outline: 2px solid var(--pro-accent);
+  outline-offset: 1px;
+  color: var(--pro-text);
 }
 
 .count {
@@ -410,6 +460,7 @@
 }
 
 .card {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -430,6 +481,20 @@
   display: flex;
   align-items: center;
   gap: 0.9rem;
+}
+
+/* The title link covers the whole card, so the tag buttons can sit outside the
+   anchor and still leave the rest of the card clickable. */
+.cardLink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--pro-radius);
+}
+
+.card:has(.cardLink:focus-visible) {
+  outline: 2px solid var(--pro-accent);
+  outline-offset: 3px;
 }
 
 .cardTitle {
@@ -576,8 +641,9 @@
 }
 
 .avatarXl {
-  width: 7rem;
-  height: 7rem;
+  width: min(11rem, 32vw);
+  height: auto;
+  aspect-ratio: 1;
   border-radius: var(--pro-radius);
 }
 
@@ -597,6 +663,7 @@
 /* ---------- tags ---------- */
 
 .tags {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
@@ -637,6 +704,22 @@
   }
 }
 
+.tagButton {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.tagActive {
+  border-color: var(--pro-accent);
+  background-color: var(--pro-accent-soft);
+  color: var(--pro-accent);
+}
+
+.tagButton:focus-visible {
+  outline: 2px solid var(--pro-accent);
+  outline-offset: 2px;
+}
+
 .tagMore {
   color: var(--pro-muted);
   font-size: 0.8rem;
@@ -658,9 +741,21 @@
 .detailHead {
   display: flex;
   align-items: flex-start;
+  flex-wrap: wrap;
   gap: 1.25rem;
   padding-bottom: 1.75rem;
   border-bottom: 1px solid var(--pro-border);
+}
+
+/* Contact sits in the header, in the same 15rem column the tags occupy below,
+   so the page reads as two columns from the photo down. */
+.headFacts {
+  flex: 0 0 15rem;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  font-size: 0.9rem;
 }
 
 .detailTitle {
@@ -743,6 +838,12 @@
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--pro-faint);
+}
+
+.mainLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
 }
 
 .paragraph {
@@ -988,6 +1089,13 @@
     grid-template-columns: minmax(0, 1fr);
     gap: 2rem;
   }
+  .headFacts {
+    flex: 1 1 100%;
+    margin-left: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem 2.5rem;
+  }
   .aside {
     position: static;
     border-top: 1px solid var(--pro-border);
@@ -996,7 +1104,6 @@
 }
 
 @media (max-width: 40rem) {
-  .avatarXl { width: 5.5rem; height: 5.5rem; }
   .headerInner { padding: 0.75rem 1rem; gap: 0.5rem; }
   .brandLogo { width: 1.9rem; height: 1.9rem; }
   .headerRight { gap: 0.25rem; min-width: 0; }
@@ -1004,7 +1111,7 @@
   .themeOption { width: 1.6rem; }
   .main { padding: 1.75rem 1rem 3.5rem; }
   .toolbar { flex-direction: column; align-items: stretch; gap: 0.5rem; }
-  .search { width: 100%; max-width: none; }
+  .searchWrap { max-width: none; }
   .count { align-self: flex-end; }
   .grid { grid-template-columns: minmax(0, 1fr); }
   .loadingGrid { grid-template-columns: minmax(0, 1fr); }
