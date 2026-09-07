@@ -1,5 +1,6 @@
 import styles from "@/components/standalonePages/portfolioPro/pro.module.css";
 import {cls} from "@/util/misc";
+import Image from "next/image";
 import {useState} from "react";
 
 
@@ -18,6 +19,14 @@ type AvatarProps = {
 const isPlaceholder = (src?: string) =>
   !src || src.endsWith("undefined") || src.endsWith("null")
   || src.endsWith("/default.svg") || src.endsWith("/default-person.svg")
+
+// Tells the optimizer which width to serve; matches the box widths below.
+const sizePx: Record<AvatarSize, string> = {
+  sm: '44px',
+  md: '68px',
+  lg: '80px',
+  xl: '176px',
+}
 
 const sizeClass: Record<AvatarSize, string> = {
   sm: '',
@@ -40,6 +49,9 @@ const ProjectGlyph = () => (
   </svg>
 )
 
+// The optimizer refuses SVG, and there is nothing to gain from resizing one.
+const isVector = (src?: string) => src?.split("?")[0].endsWith(".svg") ?? false
+
 export const Avatar = ({src, name, size = 'sm', kind = 'project'}: AvatarProps) => {
   const [failed, setFailed] = useState(false)
   // Chrome paints the scanlines it has so far stretched to the whole box, so a
@@ -47,6 +59,9 @@ export const Avatar = ({src, name, size = 'sm', kind = 'project'}: AvatarProps) 
   // decoded and fade it in instead.
   const [loaded, setLoaded] = useState(false)
   const box = cls(styles.avatar, sizeClass[size])
+  // Project icons are logos on their own backdrop, so cropping them to fill the
+  // square slices the artwork. Photos still fill the frame.
+  const logo = kind === 'project'
 
   if (failed || isPlaceholder(src)) {
     return (
@@ -56,16 +71,32 @@ export const Avatar = ({src, name, size = 'sm', kind = 'project'}: AvatarProps) 
     )
   }
   return (
-    <img
-      className={cls(box, styles.avatarFade, loaded ? styles.avatarShown : undefined)}
-      // A cached image can finish before React attaches onLoad.
-      ref={(el) => { if (el?.complete) setLoaded(true) }}
-      src={src}
-      alt=""
-      loading="lazy"
-      data-fade={true}
-      onLoad={() => setLoaded(true)}
-      onError={() => setFailed(true)}
-    />
+    <span className={cls(box, styles.avatarSlot, loaded ? styles.avatarSlotLoaded : undefined)} data-slot={true}>
+      {isVector(src) ? (
+        <img
+          className={cls(styles.avatarImg, logo ? styles.avatarLogo : undefined, loaded ? styles.avatarShown : undefined)}
+          // A cached image can finish before React attaches onLoad.
+          ref={(el) => { if (el?.complete) setLoaded(true) }}
+          src={src}
+          alt=""
+          loading="lazy"
+          data-fade={true}
+          onLoad={() => setLoaded(true)}
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <Image
+          className={cls(styles.avatarImg, logo ? styles.avatarLogo : undefined, loaded ? styles.avatarShown : undefined)}
+          src={src as string}
+          alt=""
+          fill={true}
+          sizes={sizePx[size]}
+          loading="lazy"
+          data-fade={true}
+          onLoad={() => setLoaded(true)}
+          onError={() => setFailed(true)}
+        />
+      )}
+    </span>
   )
 }

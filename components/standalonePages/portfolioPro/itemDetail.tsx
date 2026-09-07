@@ -63,9 +63,14 @@ export const ItemDetail = ({items, id, target, related = [], team = []}: ItemDet
       <div className={styles.detailBody}>
         <article className={styles.article}>
           {person ? (
-            item.mainText
-              ? <MainText text={item.mainText} images={item.mainTextImages} lede={true}/>
-              : <p className={styles.lede}>{item.description}</p>
+            <>
+              {/* The short pitch is the positioning line; the pitch below it is
+                  the bio. When there is no short pitch the bio leads instead. */}
+              {person.shortPitch ? <p className={styles.lede}>{person.shortPitch}</p> : null}
+              {item.mainText
+                ? <MainText text={item.mainText} images={item.mainTextImages} lede={!person.shortPitch}/>
+                : (person.shortPitch ? null : <p className={styles.lede}>{item.description}</p>)}
+            </>
           ) : (
             <>
               {item.description ? <p className={styles.lede}>{item.description}</p> : null}

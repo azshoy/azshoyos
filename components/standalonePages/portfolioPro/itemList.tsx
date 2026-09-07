@@ -4,6 +4,7 @@ import {TagList} from "@/components/standalonePages/portfolioPro/tags";
 import {ItemDict, IDdAndKeyWorded} from "@/components/standalonePages/portfolio/types";
 import {portfolioAPIURL} from "@/components/standalonePages/portfolio/data/dataManager";
 import {cls} from "@/util/misc";
+import Image from "next/image";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {CSSProperties, useEffect, useMemo, useRef, useState} from "react";
@@ -133,7 +134,19 @@ export const ItemList = ({items, target, title, lede}: ItemListProps) => {
             {target === 'projects' ? (
               <div className={styles.cardCover}>
                 {coverImage(item) ? (
-                  <img className={styles.cardCoverImage} src={coverImage(item)} alt="" loading="lazy"/>
+                  // Vector covers skip the optimizer, which refuses SVG.
+                  coverImage(item)!.split("?")[0].endsWith(".svg") ? (
+                    <img className={styles.cardCoverImage} src={coverImage(item)} alt="" loading="lazy"/>
+                  ) : (
+                    <Image
+                      className={styles.cardCoverImage}
+                      src={coverImage(item)!}
+                      alt=""
+                      fill={true}
+                      sizes={"(max-width: 40rem) 100vw, 21rem"}
+                      loading="lazy"
+                    />
+                  )
                 ) : (
                   <div className={styles.cardCoverFallback}>
                     <Avatar src={item.icon} name={item.title} size={'lg'} kind={'project'}/>

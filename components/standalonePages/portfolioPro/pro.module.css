@@ -520,11 +520,14 @@
 .cardBody {
   color: var(--pro-muted);
   font-size: 0.92rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
+
+/* Cards in a row stretch to the tallest, so pinning the tags to the bottom keeps
+   the chip rows on one line even when the pitches differ in length. */
+.card .tags {
+  margin-top: auto;
+}
+
 
 .empty {
   padding: 3rem 0;
@@ -555,6 +558,8 @@
 }
 
 .cardCover {
+  position: relative;
+  aspect-ratio: 16 / 9;
   margin: -1.25rem -1.25rem 0.25rem;
   border-radius: var(--pro-radius) var(--pro-radius) 0 0;
   overflow: hidden;
@@ -564,7 +569,7 @@
 .cardCoverImage {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 100%;
   object-fit: cover;
   object-position: top center;
   border-bottom: 1px solid var(--pro-border);
@@ -654,9 +659,33 @@
   border-radius: var(--pro-radius);
 }
 
-.avatarFade {
+/* The photo slot shimmers like the card skeletons until the image is decoded,
+   then the photo fades in over it. */
+.avatarSlot {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  background: linear-gradient(100deg, var(--pro-surface) 30%, var(--pro-surface-hover) 45%, var(--pro-surface) 60%);
+  background-size: 220% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.avatarSlotLoaded {
+  background: var(--pro-surface);
+  animation: none;
+}
+
+.avatarImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   opacity: 0;
-  transition: opacity var(--pro-motion) ease-out;
+  transition: opacity 260ms ease-out;
+}
+
+.avatarLogo {
+  object-fit: contain;
 }
 
 .avatarShown {
@@ -1072,10 +1101,6 @@
   color: var(--pro-faint);
   font-size: 0.78rem;
   line-height: 1.35;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
 }
 
 .relatedList {
