@@ -896,6 +896,19 @@
   color: var(--pro-text);
 }
 
+.bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  padding-left: 1.15rem;
+  color: var(--pro-text);
+}
+
+.bullets li::marker {
+  color: var(--pro-faint);
+}
+
 .paragraph:last-child { margin-bottom: 0; }
 
 /* ---------- figures ---------- */

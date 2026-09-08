@@ -32,6 +32,13 @@ const statParts = (line: string) => {
   return stats.every((st) => st.value) ? stats : undefined
 }
 
+// Lines written as "a · b · c" are lists, not sentences: the stat strip above
+// takes the ones that are all figures, these are the prose ones.
+const listParts = (line: string) => {
+  const parts = line.replace(/\.$/, "").split("·").map((p) => p.trim()).filter(Boolean)
+  return parts.length >= 3 ? parts : undefined
+}
+
 const humanize = (key: string) => {
   const words = key.replace(/[_-]+/g, " ").trim()
   return words.charAt(0).toUpperCase() + words.slice(1)
@@ -74,6 +81,16 @@ export const MainText = ({text, images = {}, lede, skipFirstParagraph = false}: 
             </div>
           ))}
         </div>
+      )
+      return
+    }
+
+    const items = line.includes("·") ? listParts(line) : undefined
+    if (items) {
+      blocks.push(
+        <ul className={styles.bullets} key={i}>
+          {items.map((item) => <li key={item}>{item}</li>)}
+        </ul>
       )
       return
     }
