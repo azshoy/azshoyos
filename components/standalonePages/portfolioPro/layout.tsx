@@ -20,6 +20,7 @@ const defaultDescription = "Software engineering and design: selected work and t
 const nav = [
   {href: "/portfolio/projects", label: "Projects", key: "projects"},
   {href: "/portfolio/people", label: "People", key: "people"},
+  {href: "/", label: "Desktop", key: "desktop"},
 ]
 
 export const ProLayout = ({active, title, description, children}: ProLayoutProps) => {

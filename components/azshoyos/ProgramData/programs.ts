@@ -272,5 +272,16 @@ export const programData:{[key: string]: ProgramConstructor} = {
       position: {x: 0.4, y: 0.3},
       showInStartMenu: true,
     }
+  },
+  portfolio: {
+    title: "Portfolio",
+    description: "az.sh portfolio",
+    type: ProgramType.RUNNABLE_SCRIPT,
+    func: () => { window.location.href = "/portfolio" },
+    shortcut: {
+      icon: "/icons/portfolio_projects.svg",
+      position: {x: 0.5, y: 0.8},
+      showInStartMenu: true,
+    }
   }
 }
