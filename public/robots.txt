@@ -1,0 +1,5 @@
+# Everything is public, for search engines and AI assistants alike.
+User-agent: *
+Allow: /
+
+Sitemap: https://azsh.fi/sitemap.xml

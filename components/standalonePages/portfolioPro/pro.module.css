@@ -214,6 +214,7 @@
 
 .landingLede {
   font-family: var(--pro-display);
+  font-weight: inherit; /* it is the h1 now, but should look like the paragraph it was */
   font-size: 1.5rem;
   line-height: 1.45;
   letter-spacing: -0.015em;

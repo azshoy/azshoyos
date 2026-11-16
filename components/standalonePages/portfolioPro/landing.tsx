@@ -25,9 +25,9 @@ export const Landing = ({projectCount, peopleCount}: LandingProps) => {
     <div className={styles.landing}>
       <img className={styles.landingLogo} src={"/icons/start.svg"} alt={"az.sh"}/>
 
-      <p className={styles.landingLede}>
+      <h1 className={styles.landingLede}>
         We build and run software end to end: architecture, implementation, infrastructure and design.
-      </p>
+      </h1>
 
       <div className={styles.landingChoices}>
         <Link className={styles.landingCard} href={"/portfolio/projects"}>

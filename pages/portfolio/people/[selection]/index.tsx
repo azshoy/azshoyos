@@ -5,6 +5,7 @@ import {fetchProjects} from "@/components/standalonePages/portfolio/data/project
 import {ItemDict} from "@/components/standalonePages/portfolio/types";
 import {asPerson} from "@/components/standalonePages/portfolioPro/personSections";
 import {GetStaticPaths, GetStaticProps} from "next";
+import {personLd} from "@/util/seo";
 
 
 type Props = {people: ItemDict, selection: string, related: RelatedItem[]}
@@ -16,6 +17,7 @@ const ProPerson = ({people, selection, related}: Props) => {
       active={'people'}
       title={item ? `${item.title} · az.sh` : "People · az.sh"}
       description={item ? [item.subtitle, item.description].filter(Boolean).join(" — ") : undefined}
+      jsonLd={item ? [personLd(item, related)] : []}
     >
       <ItemDetail items={people} id={selection} target={'people'} related={related}/>
     </ProLayout>
@@ -31,6 +33,8 @@ export const getStaticProps: GetStaticProps<Props> = async ({params}) => {
   const [people, projects] = await Promise.all([fetchPeople(), fetchProjects()])
   const selection = String(params?.selection ?? "")
   const entry = people[selection]
+  // See the project page: 404 only when the API answered and the id is not in it.
+  if (Object.keys(people).length > 0 && !entry) return {notFound: true, revalidate: 300}
   const refs = ((entry ? asPerson(entry)?.projects : undefined) ?? []) as {id?: string}[]
 
   // Resolve the person's project ids against the project list; ids with no

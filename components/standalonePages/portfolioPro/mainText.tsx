@@ -47,6 +47,9 @@ const humanize = (key: string) => {
 export const MainText = ({text, images = {}, lede, skipFirstParagraph = false}: MainTextProps) => {
   const blocks: ReactNode[] = []
   let paragraph = 0
+  // Section headings sit under the page's h1, or under a part heading (h2) when
+  // the text is split into parts, so the outline never skips a level.
+  const SectionHeading = text.split("\n").some((l) => partHeading.test(l.trim())) ? 'h3' : 'h2'
 
   text.split("\n").forEach((raw, i) => {
     const line = raw.trim()
@@ -66,7 +69,7 @@ export const MainText = ({text, images = {}, lede, skipFirstParagraph = false}: 
     }
 
     if (isSectionHeading(line)) {
-      blocks.push(<h3 className={styles.sectionHeading} key={i}>{line}</h3>)
+      blocks.push(<SectionHeading className={styles.sectionHeading} key={i}>{line}</SectionHeading>)
       return
     }
 

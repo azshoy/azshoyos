@@ -18,15 +18,18 @@ const nextConfig: NextConfig = {
     }],
     minimumCacheTTL: 60 * 60 * 24 * 30,
   },
+  // Permanent so search engines move any old /people and /projects links over.
   // The old big-tab portfolio at /people and /projects is hidden, not deleted:
   // the desktop app still renders those components, and dropping the redirects
   // brings the routes straight back.
   async redirects() {
     return [
-      {source: "/people", destination: "/portfolio/people", permanent: false},
-      {source: "/people/:path*", destination: "/portfolio/people", permanent: false},
-      {source: "/projects", destination: "/portfolio/projects", permanent: false},
-      {source: "/projects/:path*", destination: "/portfolio/projects", permanent: false},
+      {source: "/people", destination: "/portfolio/people", permanent: true},
+      {source: "/people/:path*", destination: "/portfolio/people", permanent: true},
+      {source: "/projects", destination: "/portfolio/projects", permanent: true},
+      {source: "/projects/:path*", destination: "/portfolio/projects", permanent: true},
+      // Leftover stub of the old people portal; nothing links to it.
+      {source: "/something", destination: "/portfolio/people", permanent: true},
     ]
   },
 };

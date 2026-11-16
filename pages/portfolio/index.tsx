@@ -9,7 +9,7 @@ type Props = {projectCount: number, peopleCount: number}
 
 const ProLanding = ({projectCount, peopleCount}: Props) => (
   <ProLayout
-    title={"az.sh · engineering and design"}
+    title={"az.sh · software engineering and design, Finland"}
     description={"We build and run software end to end: architecture, implementation, infrastructure and design."}
   >
     <Landing projectCount={projectCount} peopleCount={peopleCount}/>

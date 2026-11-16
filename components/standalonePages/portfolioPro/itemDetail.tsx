@@ -80,7 +80,7 @@ export const ItemDetail = ({items, id, target, related = [], team = []}: ItemDet
           {person ? <PersonEducation person={person}/> : null}
           {related.length > 0 ? (
             <>
-              <h3 className={styles.sectionHeading}>Worked on</h3>
+              <h2 className={styles.sectionHeading}>Worked on</h2>
               <div className={styles.relatedRows}>
                 {related.map((r) => (
                   <Link className={styles.relatedRow} key={r.id} href={`/portfolio/projects/${r.id}`}>
@@ -96,7 +96,7 @@ export const ItemDetail = ({items, id, target, related = [], team = []}: ItemDet
           ) : null}
           {item.links && item.links.length > 0 ? (
             <>
-              <h3 className={styles.sectionHeading}>Links</h3>
+              <h2 className={styles.sectionHeading}>Links</h2>
               <div className={styles.mainLinks}>
                 {item.links.map((l) => (
                   <a className={styles.asideLink} key={l.url} href={l.url} target="_blank" rel="noreferrer noopener">
