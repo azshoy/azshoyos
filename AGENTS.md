@@ -49,7 +49,7 @@ npm run desktop-check -- http://localhost:3000  # headless Chrome: the desktop h
 
 Package manager: use npm locally and in CI. `pnpm-lock.yaml` is also committed, and Vercel picks its installer from the lockfiles unless the project overrides the install command; the first lines of a Vercel build log say which one it ran. CI builds both trees. If you change dependencies, update both lockfiles (`npm install` and `pnpm install`). The `allowBuilds` placeholders in `pnpm-workspace.yaml` ("set this to true or false") are the owner's decision; do not change them.
 
-Environment: `NEXT_PUBLIC_PORTFOLIO_API_URL` (portfolio content) and `NEXT_PUBLIC_API_URL` (the desktop console challenge's backend, `util/session.ts`); see `.env.example`.
+Environment: `NEXT_PUBLIC_PORTFOLIO_API_URL` (portfolio content) and `NEXT_PUBLIC_API_URL` (the desktop console challenge's backend, `util/session.ts`); see `.env.example`. In Vercel both must be set for Preview as well as Production: a preview without the portfolio URL builds an empty portfolio, and its text routes answer 503. To check a preview, run `npm run smoke -- <preview URL>`.
 
 ## How to verify a change
 
