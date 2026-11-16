@@ -359,6 +359,7 @@
 }
 
 .landingCard:focus-visible,
+.page a.serviceProof:focus-visible,
 .card:focus-visible,
 .back:focus-visible,
 .relatedLink:focus-visible,

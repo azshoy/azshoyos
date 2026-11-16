@@ -22,12 +22,14 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   const {projects, people} = await loadPortfolio()
   // Each service links to the case study that proves it; one whose case study
   // is missing from the API links to the team instead.
-  const withProof: ServiceProof[] = services.map((s) => {
+  const withProof: ServiceProof[] = services.map((s): ServiceProof => {
     const project = "project" in s.evidence ? projects[s.evidence.project] : undefined
     const proof = project ? {label: `Case study: ${project.title}`, href: itemPath('projects', project), external: false}
       : "url" in s.evidence ? {label: "This site's source code", href: s.evidence.url, external: true}
       : {label: "The team", href: "/portfolio/people", external: false}
-    return {name: s.name, detail: `${s.detail.charAt(0).toUpperCase()}${s.detail.slice(1)}.`, proof}
+    // Two services can share a case study; screen readers list links by name, so each gets its own.
+    const ariaLabel = `${proof.label} (evidence for ${s.name})`
+    return {name: s.name, proof: {...proof, ariaLabel}, detail: `${s.detail.charAt(0).toUpperCase()}${s.detail.slice(1)}.`}
   })
   return {
     props: {projectCount: Object.keys(projects).length, peopleCount: Object.keys(people).length, services: withProof},
