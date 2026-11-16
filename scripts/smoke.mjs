@@ -54,13 +54,15 @@ const main = async () => {
 
   const portfolio = await htmlPage("/portfolio", ["CollectionPage", "BreadcrumbList"])
   check("/portfolio shows the services as text", /What we do/.test(portfolio.body) && /AI-assisted delivery/.test(portfolio.body))
-  check("/portfolio sends Vary: Accept", /accept/i.test(portfolio.vary), portfolio.vary)
+  // No Vary check on HTML: on Vercel, Next.js sets its own Vary on pages. The
+  // HTML-or-Markdown choice happens in middleware.ts, before Vercel's cache.
 
   // Markdown twins of the non-item pages, by .md URL and by Accept header.
   for (const [path, md, canonical] of [["/", "/index.md", site], ["/portfolio", "/portfolio.md", `${site}/portfolio`],
     ["/portfolio/projects", "/portfolio/projects.md", `${site}/portfolio/projects`], ["/portfolio/people", "/portfolio/people.md", `${site}/portfolio/people`]]) {
     const r = await get(md)
     check(`${md} is Markdown with canonical ${canonical}`, r.status === 200 && r.type.includes("text/markdown") && r.body.startsWith("# ") && r.link.includes(`<${canonical}>`), `${r.status} ${r.type} ${r.link}`)
+    check(`${md} sends Vary: Accept`, /accept/i.test(r.vary), r.vary)
     const neg = await get(path, {accept: "text/markdown"})
     check(`${path} with Accept: text/markdown returns Markdown`, neg.type.includes("text/markdown"), neg.type)
   }

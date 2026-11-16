@@ -22,16 +22,6 @@ const nextConfig: NextConfig = {
   // The old big-tab portfolio at /people and /projects is hidden, not deleted:
   // the desktop app still renders those components, and dropping the redirects
   // brings the routes straight back.
-  // Pages that answer Markdown to "Accept: text/markdown" (middleware.ts) say
-  // so, so no cache in front of Vercel hands Markdown to a browser.
-  async headers() {
-    const vary = [{key: "Vary", value: "Accept"}]
-    return [
-      {source: "/", headers: vary},
-      {source: "/portfolio", headers: vary},
-      {source: "/portfolio/:path*", headers: vary},
-    ]
-  },
   async redirects() {
     return [
       {source: "/people", destination: "/portfolio/people", permanent: true},
