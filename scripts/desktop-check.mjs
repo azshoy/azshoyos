@@ -25,21 +25,38 @@ if (!chrome) { console.error("No Chrome found; set CHROME_PATH."); process.exit(
 // hydration (checked below), means something new broke.
 const CLOCK_MISMATCH = /Minified React error #418/
 
-const port = 9300 + Math.floor(Math.random() * 500)
+// Port 0: Chrome picks a free port and prints the DevTools address on stderr,
+// which is read below; no guessing or polling a fixed port.
 const browser = spawn(chrome, ["--headless=new", "--disable-gpu", "--no-first-run", "--no-sandbox",
-  `--remote-debugging-port=${port}`, "--window-size=1280,800", `--user-data-dir=${mkdtempSync(join(tmpdir(), "desktop-check-"))}`, "about:blank"],
-  {stdio: "ignore"})
+  "--disable-dev-shm-usage", "--remote-debugging-port=0", "--window-size=1280,800",
+  `--user-data-dir=${mkdtempSync(join(tmpdir(), "desktop-check-"))}`, "about:blank"],
+  {stdio: ["ignore", "ignore", "pipe"]})
+let chromeLog = ""
+const devtools = new Promise((resolve, reject) => {
+  const timer = setTimeout(() => reject(new Error(`Chrome did not start within 30 s: ${chromeLog.slice(-600)}`)), 30000)
+  browser.stderr.on("data", (d) => {
+    chromeLog += d
+    const m = chromeLog.match(/DevTools listening on (ws:\/\/[^\s]+)/)
+    if (m) { clearTimeout(timer); resolve(new URL(m[1])) }
+  })
+  browser.on("exit", (code) => { clearTimeout(timer); reject(new Error(`Chrome exited with ${code}: ${chromeLog.slice(-600)}`)) })
+})
+devtools.catch(() => {})  // reported where it is awaited, never as an unhandled rejection
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
 const results = []
 const check = (name, ok, detail = "") => results.push({name, ok: !!ok, detail})
 
 try {
-  let tabs
-  for (let i = 0; i < 50 && !tabs; i++) {
-    try { tabs = await (await fetch(`http://127.0.0.1:${port}/json`)).json() } catch { await sleep(200) }
+  const {host} = await devtools
+  let tabs = []
+  for (let i = 0; i < 50 && !tabs.some((t) => t.type === "page"); i++) {
+    try { tabs = await (await fetch(`http://${host}/json`)).json() } catch { /* not ready yet */ }
+    if (!tabs.some((t) => t.type === "page")) await sleep(200)
   }
-  const ws = new WebSocket(tabs.find((t) => t.type === "page").webSocketDebuggerUrl)
+  const page = tabs.find((t) => t.type === "page")
+  if (!page) throw new Error(`no page target from Chrome at ${host}`)
+  const ws = new WebSocket(page.webSocketDebuggerUrl)
   await new Promise((r) => (ws.onopen = r))
   let id = 0
   const pending = {}
