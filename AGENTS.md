@@ -30,13 +30,14 @@ And a machine-readable layer for search engines and AI agents:
    The `SiteSummary` in `pages/index.tsx` is visually hidden on purpose: it gives crawlers and screen readers the text the JS desktop lacks. Keep it hidden, keep its links at `tabIndex={-1}` and `prefetch={false}`, and only put text in it that people can also read on the site (it reuses the desktop's Readme text from `companyText.ts`). Hidden text that appears nowhere else is cloaking.
 2. **Company facts live in one place: `util/site.ts`.** Every meta tag, JSON-LD node, llms.txt line and the hidden summary read from it. Each fact there must be backed by the trade register (business ID 3474773-5), the desktop's Readme/Contact files, or the portfolio API. Do not invent claims, clients or numbers.
 3. **Content comes from the portfolio API**, not from this repo: the `behind-azsh` repo (Encore app) at `NEXT_PUBLIC_PORTFOLIO_API_URL`. To change a case study or a bio, change it there.
-4. **URLs are slugs from titles** (`util/portfolio.ts`, `slugOf`). Old API-id URLs (`/portfolio/people/AleksiSeppnen`) 308 to the slug. If a title changes, its slug changes: add a redirect, or give the item a fixed `slug` field in the API.
+4. **URLs are slugs from titles** (`util/slug.ts`, `slugOf`; `util/portfolio.ts` builds the paths). Old API-id URLs (`/portfolio/people/AleksiSeppnen`) 308 to the slug. If a title changes, its slug changes: add a redirect, or give the item a fixed `slug` field in the API.
 5. **Never publish an empty portfolio.** `loadPortfolio()` (`util/portfolio.ts`) decides what an empty API response means: in `next dev` it renders empty so the desktop works offline; in a Vercel production build it retries once, then fails the deploy (the previous deployment stays live); at production runtime it throws, so ISR keeps the last good page and the text routes answer 503. Server code always goes through `loadPortfolio()`; the `useProjects`/`usePeople` hooks in `standalonePages/portfolio/data/` are only for the desktop's in-browser Portfolio app.
 6. Do not commit `.env.local` or secrets. Everything `NEXT_PUBLIC_*` ships to the browser.
 
 ## Setup and commands
 
 ```bash
+# Node 22.6+ (.nvmrc): the unit tests strip TypeScript types and the desktop check uses the built-in WebSocket
 cp .env.example .env.local     # points at the production portfolio API (read-only GETs)
 npm ci                         # npm is the package manager for local work and CI
 npm run dev                    # http://localhost:3000
@@ -65,7 +66,7 @@ pages/
   index.tsx                 the desktop + hidden SiteSummary + home SEO
   portfolio/**              portfolio pages (getStaticProps + ISR)
   404.tsx                   portfolio-styled not-found page (noindex)
-  sitemap.xml.tsx, llms.txt.tsx, llms-full.txt.tsx, md/[target]/[slug].tsx
+  sitemap.xml.tsx, llms.txt.tsx, llms-full.txt.tsx, md/[target]/index.tsx, md/[target]/[slug].tsx
                             text routes, see util/textRoute.ts
   people/, projects/        old big-tab portfolio; redirected to /portfolio/* in next.config.ts,
                             but the desktop's Portfolio app still renders these components

@@ -58,7 +58,7 @@ const header = (data: Portfolio) => [
   `- Contact: ${org.email}, ${org.telephone}`,
   `- Team: ${Object.keys(data.people).length} engineers, designers and writers in ${org.locations.join(" and ")}`,
   `- Source code of this site: ${org.repository}`,
-  `- Generated from the live portfolio on ${new Date().toISOString().slice(0, 10)}`,
+  `- Content: built from the live portfolio API, refreshed hourly; case studies carry no publication dates yet`,
   "",
   "## Services",
   "",

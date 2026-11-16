@@ -20,8 +20,10 @@ const chrome = [process.env.CHROME_PATH, "/Applications/Google Chrome.app/Conten
 if (!chrome) { console.error("No Chrome found; set CHROME_PATH."); process.exit(1) }
 
 // React error #418 is a text-hydration mismatch from the taskbar clock (server
-// time vs browser time). It is on production too and predates this check.
-const KNOWN_ERRORS = [/Minified React error #418/]
+// time vs browser time). It is on production too and predates this check, so
+// one is allowed; a second one, or the hidden summary's text changing during
+// hydration (checked below), means something new broke.
+const CLOCK_MISMATCH = /Minified React error #418/
 
 const port = 9300 + Math.floor(Math.random() * 500)
 const browser = spawn(chrome, ["--headless=new", "--disable-gpu", "--no-first-run", "--no-sandbox",
@@ -55,6 +57,11 @@ try {
     await send("Input.dispatchKeyEvent", {type: "keyUp", key: k, code, windowsVirtualKeyCode: vk})
   }
 
+  // The hidden summary as the server sent it, to compare after hydration.
+  const serverHtml = await (await fetch(`${base}/`)).text()
+  const serverSummary = (serverHtml.match(/<section[^>]*aria-labelledby="site-summary-title"[^>]*>([\s\S]*?)<\/section>/)?.[1] ?? "")
+    .replace(/<!-- -->/g, "").replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").replace(/&#x27;/g, "'").replace(/&quot;/g, '"').replace(/\s+/g, "")
+
   await send("Runtime.enable")
   await send("Page.enable")
   await send("Page.navigate", {url: `${base}/`})
@@ -67,6 +74,8 @@ try {
   const hidden = await evaluate(`(() => { const s = document.querySelector('section[aria-labelledby="site-summary-title"]'); if (!s) return null; const r = s.getBoundingClientRect(); return {w: r.width, h: r.height, links: s.querySelectorAll('a').length, focusable: s.querySelectorAll('a:not([tabindex="-1"])').length} })()`)
   check("hidden summary exists and is 1x1px", hidden && hidden.w <= 1 && hidden.h <= 1, JSON.stringify(hidden))
   check("hidden summary links are not focusable", hidden && hidden.links > 0 && hidden.focusable === 0, JSON.stringify(hidden))
+  const clientSummary = await evaluate(`(document.querySelector('section[aria-labelledby="site-summary-title"]')?.textContent ?? "").replace(/\\s+/g, "")`)
+  check("hidden summary text survives hydration unchanged", serverSummary.length > 50 && clientSummary === serverSummary, `${serverSummary.length} vs ${clientSummary?.length}`)
 
   for (let i = 0; i < 4; i++) await key("Tab", "Tab", 9)
   check("Tab focuses nothing on the desktop (as on production)", (await evaluate("document.activeElement.tagName")) === "BODY")
@@ -84,8 +93,10 @@ try {
   const readmeOpen = await evaluate(`[...document.querySelectorAll('#__next *')].some(e => !e.closest('section[aria-labelledby]') && e.offsetParent !== null && e.textContent.includes('high ownership in product based projects') && e.children.length < 20)`)
   check("double-clicking Readme.md opens its window", readmeOpen)
 
-  const unknown = errors.filter((e) => !KNOWN_ERRORS.some((re) => re.test(e)))
+  const clock = errors.filter((e) => CLOCK_MISMATCH.test(e))
+  const unknown = errors.filter((e) => !CLOCK_MISMATCH.test(e))
   check("no unexpected console errors", unknown.length === 0, unknown.join(" | ").slice(0, 400))
+  check("at most the one known hydration mismatch (taskbar clock)", clock.length <= 1, `${clock.length} × #418`)
   ws.close()
 } catch (e) {
   check("browser session ran", false, String(e))
