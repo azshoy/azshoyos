@@ -1,14 +1,8 @@
-import {GetServerSideProps} from "next";
-import {fetchProjects} from "@/components/standalonePages/portfolio/data/projects";
-import {fetchPeople} from "@/components/standalonePages/portfolio/data/people";
-import {llmsText} from "@/util/llms";
-import {sendText} from "@/util/plainText";
+import {textRoute, NoPage} from "@/util/textRoute";
+import {llmsTxt} from "@/util/markdown";
 
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const [projects, people] = await Promise.all([fetchProjects(), fetchPeople()])
-  return sendText(ctx, "text/plain; charset=utf-8", llmsText(projects, people, false), Object.keys(projects).length === 0)
-}
+// https://llmstxt.org: the site index for AI assistants and coding agents.
+export const getServerSideProps = textRoute("text/plain; charset=utf-8", (data) => ({body: llmsTxt(data)}))
 
-const Llms = () => null
-export default Llms
+export default NoPage

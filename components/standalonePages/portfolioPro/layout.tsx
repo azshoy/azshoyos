@@ -5,8 +5,8 @@ import Link from "next/link";
 import {ThemeToggle, themeBootScript} from "@/components/standalonePages/portfolioPro/themeToggle";
 import {ReactNode} from "react";
 import {CopyValue} from "@/components/standalonePages/portfolioPro/copyValue";
-import {useRouter} from "next/router";
-import {absoluteUrl, ldJson, org, organizationLd} from "@/util/seo";
+import {SeoHead} from "@/components/seo/SeoHead";
+import {org} from "@/util/site";
 
 
 type ProLayoutProps = {
@@ -14,8 +14,11 @@ type ProLayoutProps = {
   title: string
   // Shown in search results and in link previews on Slack, LinkedIn etc.
   description?: string
-  // Structured data for this page. The organization is always added.
-  jsonLd?: object[]
+  // Structured data for this page, from util/structuredData.
+  jsonLd?: object
+  // This page's Markdown twin (see pages/md), for agents.
+  markdownPath?: string
+  image?: string
   noindex?: boolean
   children: ReactNode
 }
@@ -28,28 +31,20 @@ const nav = [
   {href: "/", label: "Desktop", key: "desktop"},
 ]
 
-export const ProLayout = ({active, title, description, jsonLd = [], noindex, children}: ProLayoutProps) => {
-  const summary = description ?? defaultDescription
-  // Tag filters (?tag=) and other query strings all canonicalise to the bare path.
-  const canonical = absoluteUrl(useRouter().asPath.split(/[?#]/)[0])
+export const ProLayout = ({active, title, description, jsonLd, markdownPath, image, noindex, children}: ProLayoutProps) => {
   return (
     <div className={styles.page}>
       <Head>
-        <title>{title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <meta name="description" content={summary}/>
-        <link rel="canonical" href={canonical}/>
-        {noindex ? <meta name="robots" content="noindex"/> : null}
-        <meta property="og:url" content={canonical}/>
-        <meta property="og:title" content={title}/>
-        <meta property="og:description" content={summary}/>
-        <meta property="og:type" content="website"/>
-        <meta property="og:site_name" content="az.sh"/>
-        <meta name="twitter:card" content="summary"/>
-        {[organizationLd(), ...jsonLd].map((d, i) => (
-          <script key={`ld${i}`} type="application/ld+json" dangerouslySetInnerHTML={{__html: ldJson(d)}}/>
-        ))}
       </Head>
+      <SeoHead
+        title={title}
+        description={description ?? defaultDescription}
+        jsonLd={jsonLd}
+        markdownPath={markdownPath}
+        image={image}
+        noindex={noindex}
+      />
       {/* Inline, not in <Head>: next/head rejects script tags, and this must run
           during parse, before the header paints, to avoid a theme flash. */}
       <script dangerouslySetInnerHTML={{__html: themeBootScript}}/>
@@ -79,7 +74,7 @@ export const ProLayout = ({active, title, description, jsonLd = [], noindex, chi
       </header>
       <main className={styles.main}>{children}</main>
       <footer className={styles.footer}>
-        az.sh · software engineering and design from Finland.{" "}
+        az.sh · selected work and the people behind it.{" "}
         <CopyValue value={org.email} label={"email address"}/>
       </footer>
     </div>

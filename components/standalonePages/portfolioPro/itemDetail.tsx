@@ -6,16 +6,12 @@ import Link from "next/link";
 import {asPerson, PersonEducation, PersonFacts} from "@/components/standalonePages/portfolioPro/personSections";
 import {orderedGroups, tagGroupClass} from "@/components/standalonePages/portfolioPro/tags";
 import {cls} from "@/util/misc";
+import {RelatedItem} from "@/util/portfolio";
 
 
 // The link between people and projects lives on the person entry. Both sides are
-// resolved at build time so neither page has to fetch the other list.
-export type RelatedItem = {
-  id: string
-  title: string
-  subtitle: string | null
-  icon: string
-}
+// resolved at build time (util/portfolio.ts) so neither page has to fetch the other list.
+export type {RelatedItem} from "@/util/portfolio";
 
 type ItemDetailProps = {
   items: ItemDict
@@ -83,7 +79,7 @@ export const ItemDetail = ({items, id, target, related = [], team = []}: ItemDet
               <h2 className={styles.sectionHeading}>Worked on</h2>
               <div className={styles.relatedRows}>
                 {related.map((r) => (
-                  <Link className={styles.relatedRow} key={r.id} href={`/portfolio/projects/${r.id}`}>
+                  <Link className={styles.relatedRow} key={r.id} href={r.href}>
                     <Avatar src={r.icon} name={r.title} size={'sm'} kind={'project'}/>
                     <span className={styles.relatedRowText}>
                       <span className={styles.relatedRowTitle}>{r.title}</span>
@@ -111,10 +107,10 @@ export const ItemDetail = ({items, id, target, related = [], team = []}: ItemDet
         <aside className={styles.aside}>
           {team.length > 0 ? (
             <div className={styles.asideBlock}>
-              <div className={styles.asideHead}>Team</div>
+              <h2 className={styles.asideHead}>Team</h2>
               <div className={styles.relatedRows}>
                 {team.map((m) => (
-                  <Link className={styles.teamRow} key={m.id} href={`/portfolio/people/${m.id}`}>
+                  <Link className={styles.teamRow} key={m.id} href={m.href}>
                     <Avatar src={m.icon} name={m.title} size={'sm'} kind={'person'}/>
                     <span className={styles.relatedRowText}>
                       <span className={styles.relatedRowTitle}>{m.title}</span>
@@ -127,7 +123,7 @@ export const ItemDetail = ({items, id, target, related = [], team = []}: ItemDet
           ) : null}
           {tagGroups.map(([group, values]) => (
             <div className={styles.asideBlock} key={group}>
-              <div className={styles.asideHead}>{group}</div>
+              <h2 className={styles.asideHead}>{group}</h2>
               <div className={styles.tags}>
                 {values.map((v) => (
                   <Link

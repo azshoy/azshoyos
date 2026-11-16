@@ -11,10 +11,11 @@ type MainTextProps = {
   skipFirstParagraph?: boolean
 }
 
-const imageToken = /^\{%\s*([^%]+?)\s*%\}$/
-const partHeading = /^PART\s+\d+\s*·/i
+// Exported for util/markdown.ts, which renders the same text format as Markdown.
+export const imageToken = /^\{%\s*([^%]+?)\s*%\}$/
+export const partHeading = /^PART\s+\d+\s*·/i
 // Section headings are written in caps in the project data ("SCOPE", "3 · CORRECTNESS...").
-const isSectionHeading = (line: string) =>
+export const isSectionHeading = (line: string) =>
   line.length < 70 && /[A-Z]/.test(line) && line === line.toUpperCase() && !/[.?!]$/.test(line)
 
 // The API returns image paths relative to its own origin.
@@ -34,7 +35,7 @@ const statParts = (line: string) => {
 
 // Lines written as "a · b · c" are lists, not sentences: the stat strip above
 // takes the ones that are all figures, these are the prose ones.
-const listParts = (line: string) => {
+export const listParts = (line: string) => {
   const parts = line.replace(/\.$/, "").split("·").map((p) => p.trim()).filter(Boolean)
   return parts.length >= 3 ? parts : undefined
 }

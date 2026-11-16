@@ -1,52 +1,44 @@
 import {ProLayout} from "@/components/standalonePages/portfolioPro/layout";
-import {ItemDetail, RelatedItem} from "@/components/standalonePages/portfolioPro/itemDetail";
-import {fetchPeople} from "@/components/standalonePages/portfolio/data/people";
-import {fetchProjects} from "@/components/standalonePages/portfolio/data/projects";
+import {ItemDetail} from "@/components/standalonePages/portfolioPro/itemDetail";
 import {ItemDict} from "@/components/standalonePages/portfolio/types";
-import {asPerson} from "@/components/standalonePages/portfolioPro/personSections";
 import {GetStaticPaths, GetStaticProps} from "next";
-import {personLd} from "@/util/seo";
+import {hasData, itemPath, loadPortfolio, projectsOf, RelatedItem, resolveItem, slugOf, summaryOf} from "@/util/portfolio";
+import {personGraph} from "@/util/structuredData";
 
 
-type Props = {people: ItemDict, selection: string, related: RelatedItem[]}
+// `selection` is the URL slug; `id` is the API id the components key on.
+type Props = {people: ItemDict, id: string, related: RelatedItem[]}
 
-const ProPerson = ({people, selection, related}: Props) => {
-  const item = people[selection]
+const ProPerson = ({people, id, related}: Props) => {
+  const item = people[id]
+  // Machine-readable text uses the bio, not the playful card one-liner.
+  const description = item ? `${[item.subtitle, "az.sh"].filter(Boolean).join(" at ")}. ${summaryOf(item)}` : ""
   return (
     <ProLayout
       active={'people'}
       title={item ? `${item.title} · az.sh` : "People · az.sh"}
-      description={item ? [item.subtitle, item.description].filter(Boolean).join(" — ") : undefined}
-      jsonLd={item ? [personLd(item, related)] : []}
+      description={description}
+      jsonLd={item ? personGraph(item, description, related) : undefined}
+      markdownPath={item ? `${itemPath('people', item)}.md` : undefined}
     >
-      <ItemDetail items={people} id={selection} target={'people'} related={related}/>
+      <ItemDetail items={people} id={id} target={'people'} related={related}/>
     </ProLayout>
   )
 }
 
-export const getStaticPaths: GetStaticPaths = async () => ({
-  paths: Object.keys(await fetchPeople()).map((selection) => ({params: {selection}})),
-  fallback: 'blocking',
-})
+export const getStaticPaths: GetStaticPaths = async () => {
+  const {people} = await loadPortfolio()
+  return {paths: Object.values(people).map((p) => ({params: {selection: slugOf(p)}})), fallback: 'blocking'}
+}
 
 export const getStaticProps: GetStaticProps<Props> = async ({params}) => {
-  const [people, projects] = await Promise.all([fetchPeople(), fetchProjects()])
-  const selection = String(params?.selection ?? "")
-  const entry = people[selection]
-  // See the project page: 404 only when the API answered and the id is not in it.
-  if (Object.keys(people).length > 0 && !entry) return {notFound: true, revalidate: 300}
-  const refs = ((entry ? asPerson(entry)?.projects : undefined) ?? []) as {id?: string}[]
-
-  // Resolve the person's project ids against the project list; ids with no
-  // matching project are dropped rather than rendered as a dead link.
-  const related: RelatedItem[] = refs
-    .map((r) => r.id)
-    .filter((id): id is string => !!id)
-    .map((id) => projects[id])
-    .filter(Boolean)
-    .map((p) => ({id: p.id, title: p.title, subtitle: p.subtitle ?? null, icon: p.icon}))
-
-  return {props: {people, selection, related}, revalidate: 300}
+  const data = await loadPortfolio()
+  const {item, redirect} = resolveItem(data.people, String(params?.selection ?? ""))
+  // Old API-id URLs move to the readable slug for good.
+  if (redirect && item) return {redirect: {destination: itemPath('people', item), permanent: true}, revalidate: 300}
+  // A real 404 for unknown slugs, unless the build ran with the API down.
+  if (!item) return hasData(data) ? {notFound: true, revalidate: 300} : {props: {people: {}, id: "", related: []}, revalidate: 60}
+  return {props: {people: data.people, id: item.id, related: projectsOf(item, data.projects)}, revalidate: 300}
 }
 
 export default ProPerson
