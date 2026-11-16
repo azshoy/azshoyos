@@ -5,6 +5,7 @@ import {fetchPeople} from "@/components/standalonePages/portfolio/data/people";
 import {ItemDict} from "@/components/standalonePages/portfolio/types";
 import {asPerson} from "@/components/standalonePages/portfolioPro/personSections";
 import {GetStaticPaths, GetStaticProps} from "next";
+import {projectLd} from "@/util/seo";
 
 
 type Props = {projects: ItemDict, selection: string, team: RelatedItem[]}
@@ -16,6 +17,7 @@ const ProProject = ({projects, selection, team}: Props) => {
       active={'projects'}
       title={item ? `${item.title} · az.sh` : "Project · az.sh"}
       description={item?.description}
+      jsonLd={item ? [projectLd(item, team)] : []}
     >
       <ItemDetail items={projects} id={selection} target={'projects'} team={team}/>
     </ProLayout>
@@ -30,6 +32,9 @@ export const getStaticPaths: GetStaticPaths = async () => ({
 export const getStaticProps: GetStaticProps<Props> = async ({params}) => {
   const [projects, people] = await Promise.all([fetchProjects(), fetchPeople()])
   const selection = String(params?.selection ?? "")
+  // A real 404 for unknown ids. Skipped when the list came back empty, which
+  // means the API was unreachable, so a cold API cannot 404 a real project.
+  if (Object.keys(projects).length > 0 && !projects[selection]) return {notFound: true, revalidate: 300}
 
   // Only people carry the link, so the project's team is found by inverting it.
   const team: RelatedItem[] = Object.values(people)

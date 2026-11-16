@@ -3,11 +3,13 @@ import {ItemList} from "@/components/standalonePages/portfolioPro/itemList";
 import {fetchPeople} from "@/components/standalonePages/portfolio/data/people";
 import {ItemDict} from "@/components/standalonePages/portfolio/types";
 import {GetStaticProps} from "next";
+import {itemListLd} from "@/util/seo";
 
 
 const ProPeople = ({people}: {people: ItemDict}) => (
   <ProLayout
     active={'people'}
+    jsonLd={[itemListLd(people, 'people')]}
     title={"People · az.sh"}
     description={"The engineers and designers who do the work."}
   >

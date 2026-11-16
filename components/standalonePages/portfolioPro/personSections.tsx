@@ -47,7 +47,7 @@ export const PersonEducation = ({person}: {person: PersonData}) => {
 
   return (
     <>
-      <h3 className={styles.sectionHeading}>Education</h3>
+      <h2 className={styles.sectionHeading}>Education</h2>
       <div className={styles.education}>
         {education.map((e) => (
           <div className={styles.educationItem} key={`${e.institute}${e.year}`}>
