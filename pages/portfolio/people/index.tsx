@@ -16,7 +16,7 @@ const ProPeople = ({people}: {people: ItemDict}) => (
     title={title}
     description={description}
     jsonLd={listGraph('people', people, title, description)}
-    markdownPath={"/llms.txt"}
+    markdownPath={"/portfolio/people.md"}
   >
     <ItemList items={people} target={'people'} title={"People"} lede={"The engineers and designers who do the work."}/>
   </ProLayout>

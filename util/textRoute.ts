@@ -23,6 +23,8 @@ export const textRoute = (contentType: string, render: Render): GetServerSidePro
   if (!out) return {notFound: true}
   res.setHeader("Content-Type", contentType)
   res.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=86400")
+  // The same URL can answer HTML or Markdown depending on Accept (middleware.ts).
+  res.setHeader("Vary", "Accept")
   // The HTML page is the one to index; this is the same content for agents.
   if (out.canonical) res.setHeader("Link", `<${out.canonical}>; rel="canonical"`)
   res.end(out.body)

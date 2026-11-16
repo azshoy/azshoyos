@@ -222,6 +222,63 @@
   margin-bottom: 2.75rem;
 }
 
+/* "What we do" on /portfolio: each service with the page that proves it. */
+.services {
+  width: 100%;
+  margin-top: 2.75rem;
+}
+
+.serviceList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--pro-border);
+}
+
+.serviceItem {
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  gap: 0.25rem 1.5rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--pro-border);
+}
+
+.serviceName {
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.serviceDetail {
+  color: var(--pro-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.page a.serviceProof {
+  grid-column: 2;
+  justify-self: start;
+  font-size: 0.85rem;
+  color: var(--pro-accent);
+}
+
+.page a.serviceProof:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.serviceNote {
+  margin-top: 1rem;
+  max-width: var(--pro-measure);
+  color: var(--pro-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 40rem) {
+  .serviceItem { grid-template-columns: minmax(0, 1fr); }
+  .page a.serviceProof { grid-column: 1; }
+}
+
 .landingContact {
   margin-top: 2rem;
   color: var(--pro-muted);

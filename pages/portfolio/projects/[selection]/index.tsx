@@ -2,7 +2,7 @@ import {ProLayout} from "@/components/standalonePages/portfolioPro/layout";
 import {ItemDetail} from "@/components/standalonePages/portfolioPro/itemDetail";
 import {ItemDict} from "@/components/standalonePages/portfolio/types";
 import {GetStaticPaths, GetStaticProps} from "next";
-import {hasData, itemPath, loadPortfolio, RelatedItem, resolveItem, slugOf, teamOf} from "@/util/portfolio";
+import {itemPath, loadPortfolio, RelatedItem, resolveItem, slugOf, teamOf} from "@/util/portfolio";
 import {projectGraph} from "@/util/structuredData";
 import {portfolioAPIURL} from "@/components/standalonePages/portfolio/data/dataManager";
 
@@ -43,8 +43,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({params}) => {
   const {item, redirect} = resolveItem(data.projects, String(params?.selection ?? ""))
   // Old API-id URLs move to the readable slug for good.
   if (redirect && item) return {redirect: {destination: itemPath('projects', item), permanent: true}, revalidate: 300}
-  // A real 404 for unknown slugs, unless the build ran with the API down.
-  if (!item) return hasData(data) ? {notFound: true, revalidate: 300} : {props: {projects: {}, id: "", team: []}, revalidate: 60}
+  if (!item) return {notFound: true, revalidate: 300}
   return {props: {projects: data.projects, id: item.id, team: teamOf(item.id, data.people)}, revalidate: 300}
 }
 

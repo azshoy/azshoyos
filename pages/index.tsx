@@ -31,7 +31,7 @@ export const Home = ({caseStudies, jsonLd}: {caseStudies: CaseStudy[], jsonLd: o
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
       </Head>
-      <SeoHead title={title} description={description} jsonLd={jsonLd} markdownPath={"/llms.txt"}/>
+      <SeoHead title={title} description={description} jsonLd={jsonLd} markdownPath={"/index.md"}/>
       <SiteSummary caseStudies={caseStudies}/>
       <TaskManagerProvider>
         <div className={styles.main} style={{'--uiScale': String(uiScale)} as CSSProperties}>
@@ -94,7 +94,7 @@ const SiteLink = ({href, children}: {href: string, children: string}) =>
 
 const SiteSummary = ({caseStudies}: {caseStudies: CaseStudy[]}) => (
   <section style={srOnly} aria-labelledby={"site-summary-title"}>
-    <h1 id={"site-summary-title"}>{org.legalName}: {org.tagline.toLowerCase()}</h1>
+    <h1 id={"site-summary-title"}>{org.legalName}: {org.tagline}</h1>
     {readme.paragraphs.map((p) => <p key={p}>{p}</p>)}
     {caseStudies.length > 0 ? (
       <>

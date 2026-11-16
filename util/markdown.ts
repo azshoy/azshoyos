@@ -56,7 +56,7 @@ const header = (data: Portfolio) => [
   `- Company: ${org.legalName}, business ID (Y-tunnus) ${org.businessId}, founded ${org.foundingDate}, ${org.address.addressLocality}, Finland`,
   `- Website: ${absoluteUrl("/")} (the brand is az.sh; the website is azsh.fi)`,
   `- Contact: ${org.email}, ${org.telephone}`,
-  `- Team: ${Object.keys(data.people).length} engineers and designers in ${org.locations.join(" and ")}`,
+  `- Team: ${Object.keys(data.people).length} engineers, designers and writers in ${org.locations.join(" and ")}`,
   `- Source code of this site: ${org.repository}`,
   `- Generated from the live portfolio on ${new Date().toISOString().slice(0, 10)}`,
   "",
@@ -147,3 +147,20 @@ export const personMarkdown = (p: Item, worksOn: RelatedItem[]) => {
   ].filter((l, i, all) => l !== "" || all[i - 1] !== "").join("\n")
 }
 
+
+export const listMarkdown = (target: 'projects' | 'people', data: Portfolio) => {
+  const projects = target === 'projects'
+  return [
+    projects ? `# Case studies by ${org.name}` : `# People at ${org.name}`,
+    "",
+    projects
+      ? "> Selected engagements, written up in enough detail to judge the engineering behind them."
+      : `> The engineers, designers and writers at ${org.name} in ${org.locations.join(" and ")}, Finland.`,
+    "",
+    ...(projects
+      ? Object.values(data.projects).map((p) =>
+        `- ${link(p.title, `${itemPath('projects', p)}.md`)}: ${inline(p.description ?? p.subtitle ?? "")}`)
+      : Object.values(data.people).map(personLine)),
+    ...footer(`/portfolio/${target}`),
+  ].join("\n")
+}
