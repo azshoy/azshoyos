@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+# Proves a change before Vercel ships it: types, lint, a production build
+# against the live portfolio API, and the smoke test of everything robots and
+# agents read (scripts/smoke.mjs).
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_PUBLIC_PORTFOLIO_API_URL: ${{ vars.PORTFOLIO_API_URL || 'https://prod-behind-azsh-424i.encr.app' }}
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+      - name: Smoke test the production build
+        run: |
+          npm start -- -p 3000 &
+          for i in $(seq 1 60); do curl -sf -o /dev/null http://localhost:3000/robots.txt && break; sleep 1; done
+          npm run smoke -- http://localhost:3000

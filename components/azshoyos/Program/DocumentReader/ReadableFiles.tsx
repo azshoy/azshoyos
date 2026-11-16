@@ -4,6 +4,7 @@ import bidsJSON from './downloads/bids.json';
 import usersJSON from './downloads/users.json';
 import vehiclesJSON from './downloads/vehicles.json';
 import styles from './document.module.css'
+import {readme} from './companyText'
 
 export type Readable = {
   type: "ReactNode"
@@ -29,22 +30,20 @@ export const readableFiles:{[key:string]: Readable} = {
     type: "ReactNode",
     content: (
       <div>
-        <h2>## az.sh oy</h2>
+        <h2>{readme.heading}</h2>
         <br/>
-        As a company, az.sh has high ownership in product based projects in both SaaS and web3 platforms.
-        <br/>
-        <br/>
-        We do everything from smart contract development to full stack web, code audits and testing,
-        technical writing, UI/UX design, and media production with a focus on end-to-end product and platform delivery.
+        {readme.paragraphs[0]}
         <br/>
         <br/>
-        The main projects currently are related to the automotive market and robust commercial platforms and decentralized finance in the form of yield products,
-         automation, platforms, and protocols both in tech and leadership.
+        {readme.paragraphs[1]}
         <br/>
         <br/>
-        You can send your free form application to apply@azsh.fi
+        {readme.paragraphs[2]}
         <br/>
-        Just tell us a bit of your skills and interests. No need to overdo it!
+        <br/>
+        {readme.apply[0]}
+        <br/>
+        {readme.apply[1]}
       </div>
     )
   },

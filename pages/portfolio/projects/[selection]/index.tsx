@@ -1,47 +1,51 @@
 import {ProLayout} from "@/components/standalonePages/portfolioPro/layout";
-import {ItemDetail, RelatedItem} from "@/components/standalonePages/portfolioPro/itemDetail";
-import {fetchProjects} from "@/components/standalonePages/portfolio/data/projects";
-import {fetchPeople} from "@/components/standalonePages/portfolio/data/people";
+import {ItemDetail} from "@/components/standalonePages/portfolioPro/itemDetail";
 import {ItemDict} from "@/components/standalonePages/portfolio/types";
-import {asPerson} from "@/components/standalonePages/portfolioPro/personSections";
 import {GetStaticPaths, GetStaticProps} from "next";
-import {projectLd} from "@/util/seo";
+import {hasData, itemPath, loadPortfolio, RelatedItem, resolveItem, slugOf, teamOf} from "@/util/portfolio";
+import {projectGraph} from "@/util/structuredData";
+import {portfolioAPIURL} from "@/components/standalonePages/portfolio/data/dataManager";
 
 
-type Props = {projects: ItemDict, selection: string, team: RelatedItem[]}
+// `selection` is the URL slug; `id` is the API id the components key on.
+type Props = {projects: ItemDict, id: string, team: RelatedItem[]}
 
-const ProProject = ({projects, selection, team}: Props) => {
-  const item = projects[selection]
+// A raster image for link previews, if the case study has one.
+const previewImage = (images: {[key: string]: string} = {}) => {
+  const src = Object.values(images).find((s) => /\.(png|jpe?g|webp)$/i.test(s))
+  return src ? (/^https?:\/\//.test(src) ? src : `${portfolioAPIURL}${src}`) : undefined
+}
+
+const ProProject = ({projects, id, team}: Props) => {
+  const item = projects[id]
+  const description = item?.description ?? ""
   return (
     <ProLayout
       active={'projects'}
       title={item ? `${item.title} · az.sh` : "Project · az.sh"}
-      description={item?.description}
-      jsonLd={item ? [projectLd(item, team)] : []}
+      description={description}
+      jsonLd={item ? projectGraph(item, description, team) : undefined}
+      markdownPath={item ? `${itemPath('projects', item)}.md` : undefined}
+      image={item ? previewImage(item.mainTextImages) : undefined}
     >
-      <ItemDetail items={projects} id={selection} target={'projects'} team={team}/>
+      <ItemDetail items={projects} id={id} target={'projects'} team={team}/>
     </ProLayout>
   )
 }
 
-export const getStaticPaths: GetStaticPaths = async () => ({
-  paths: Object.keys(await fetchProjects()).map((selection) => ({params: {selection}})),
-  fallback: 'blocking',
-})
+export const getStaticPaths: GetStaticPaths = async () => {
+  const {projects} = await loadPortfolio()
+  return {paths: Object.values(projects).map((p) => ({params: {selection: slugOf(p)}})), fallback: 'blocking'}
+}
 
 export const getStaticProps: GetStaticProps<Props> = async ({params}) => {
-  const [projects, people] = await Promise.all([fetchProjects(), fetchPeople()])
-  const selection = String(params?.selection ?? "")
-  // A real 404 for unknown ids. Skipped when the list came back empty, which
-  // means the API was unreachable, so a cold API cannot 404 a real project.
-  if (Object.keys(projects).length > 0 && !projects[selection]) return {notFound: true, revalidate: 300}
-
-  // Only people carry the link, so the project's team is found by inverting it.
-  const team: RelatedItem[] = Object.values(people)
-    .filter((p) => ((asPerson(p)?.projects ?? []) as {id?: string}[]).some((r) => r.id === selection))
-    .map((p) => ({id: p.id, title: p.title, subtitle: p.subtitle ?? null, icon: p.icon}))
-
-  return {props: {projects, selection, team}, revalidate: 300}
+  const data = await loadPortfolio()
+  const {item, redirect} = resolveItem(data.projects, String(params?.selection ?? ""))
+  // Old API-id URLs move to the readable slug for good.
+  if (redirect && item) return {redirect: {destination: itemPath('projects', item), permanent: true}, revalidate: 300}
+  // A real 404 for unknown slugs, unless the build ran with the API down.
+  if (!item) return hasData(data) ? {notFound: true, revalidate: 300} : {props: {projects: {}, id: "", team: []}, revalidate: 60}
+  return {props: {projects: data.projects, id: item.id, team: teamOf(item.id, data.people)}, revalidate: 300}
 }
 
 export default ProProject

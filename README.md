@@ -1,46 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# azsh.fi
 
-## Getting Started
+The website of [az.sh](https://azsh.fi), a software engineering and design consultancy from Oulu and Helsinki, Finland.
 
-First, run the development server:
+- **`/`** is a retro desktop OS you can click around in: windows, a console with commands, a file explorer, a game.
+- **[`/portfolio`](https://azsh.fi/portfolio)** has the case studies and the team.
+- **For agents:** [`/llms.txt`](https://azsh.fi/llms.txt), [`/llms-full.txt`](https://azsh.fi/llms-full.txt), and a Markdown version of every portfolio page (add `.md`, or send `Accept: text/markdown`).
+
+Next.js 15 (pages router), React 19, TypeScript, deployed on Vercel. Content comes from the portfolio API in the `behind-azsh` repo.
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
+npm ci
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Before opening a pull request:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run verify                              # typecheck + lint
+npm run build && npm start &
+npm run smoke -- http://localhost:3000      # what robots and agents see
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+CI runs the same checks on every pull request. Merging to `master` deploys to production.
 
-## Learn More
+## Working on it
 
-To learn more about Next.js, take a look at the following resources:
+Read [AGENTS.md](AGENTS.md) first, whether you are a person or a coding agent. It has the route map, the rules (the desktop must not change; company facts live in `util/site.ts`), and how to verify a change.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Add a console command
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-## Adding Commands
-You can add your own commands to be used on az.sh console. 
-
-- Copy the file at `components/Program/Console/Commands/TEMPLATE.tsx` and name the copy as `<yourCommand>.tsx`
-- Read the comments in the file and fill in parameters and your command logic.
-- Add your command to the `commands` dict at `components/Program/Console/availableCommands.tsx` and remember to import it.
-- ???
-- Profit.
-
+1. Copy `components/azshoyos/Program/Console/Commands/TEMPLATE.tsx` to `<yourCommand>.tsx` and fill it in.
+2. Register it in the `commands` dict in `components/azshoyos/Program/Console/availableCommands.tsx`.
+3. ???
+4. Profit.

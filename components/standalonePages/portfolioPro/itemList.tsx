@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {CSSProperties, useEffect, useMemo, useRef, useState} from "react";
+import {itemPath} from "@/util/portfolio";
 
 
 type ItemListProps = {
@@ -158,7 +159,7 @@ export const ItemList = ({items, target, title, lede}: ItemListProps) => {
               <Avatar src={item.icon} name={item.title} size={target === 'people' ? 'md' : 'sm'} kind={target === 'people' ? 'person' : 'project'}/>
               <div>
                 <div className={styles.cardTitle}>
-                  <Link className={styles.cardLink} href={`/portfolio/${target}/${item.id}`}>{item.title}</Link>
+                  <Link className={styles.cardLink} href={itemPath(target, item)}>{item.title}</Link>
                 </div>
                 {item.subtitle ? <div className={styles.cardSubtitle}>{item.subtitle}</div> : null}
               </div>

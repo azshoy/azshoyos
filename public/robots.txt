@@ -1,5 +1,22 @@
-# Everything is public, for search engines and AI assistants alike.
+# azsh.fi is public, for search engines and AI assistants alike.
+# Agents: /llms.txt is the site index in Markdown, /llms-full.txt has every
+# case study in full, and any portfolio page has a Markdown twin at <url>.md.
+
 User-agent: *
+Allow: /
+
+# Named so the intent is explicit: AI crawlers and assistants are welcome.
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
 Allow: /
 
 Sitemap: https://azsh.fi/sitemap.xml
