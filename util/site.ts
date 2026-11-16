@@ -19,6 +19,7 @@ export const org = {
   legalName: "az.sh Oy",
   businessId: "3474773-5",
   foundingDate: "2024-09-17",
+  // The one public email and phone (owner decision, Nov 2026); the desktop Contact file uses the same pair.
   email: "contact@azsh.fi",
   telephone: "+358 44 055 4838",
   address: {streetAddress: "Asemakatu 18 as. 2", postalCode: "90100", addressLocality: "Oulu", addressCountry: "FI"},

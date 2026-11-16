@@ -59,10 +59,10 @@ export const readableFiles:{[key:string]: Readable} = {
         3474773-5<br/>
         <br/>
         email:<br/>
-        info@azsh.fi<br/>
+        contact@azsh.fi<br/>
         apply@azsh.fi<br/>
         Phone:<br/>
-        050 432 4719<br/>
+        +358 44 055 4838<br/>
         <br/>
         Post address:<br/>
         az.sh oy<br/>
