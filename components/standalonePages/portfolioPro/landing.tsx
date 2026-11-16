@@ -15,12 +15,17 @@ const Count = ({n, singular, plural}: {n: number, singular: string, plural: stri
   <span className={styles.landingCount}>{n > 0 ? `${n} ${n === 1 ? singular : plural}` : " "}</span>
 )
 
+// A service and the page that proves it, resolved by the page from util/site.ts.
+export type ServiceProof = {name: string, detail: string, proof: {label: string, href: string, external: boolean}}
+
 type LandingProps = {
   projectCount: number
   peopleCount: number
+  services: ServiceProof[]
+  howWeWork: string
 }
 
-export const Landing = ({projectCount, peopleCount}: LandingProps) => {
+export const Landing = ({projectCount, peopleCount, services, howWeWork}: LandingProps) => {
 
   return (
     <div className={styles.landing}>
@@ -43,6 +48,24 @@ export const Landing = ({projectCount, peopleCount}: LandingProps) => {
           <Count n={peopleCount} singular={"person"} plural={"people"}/>
         </Link>
       </div>
+
+      {services.length > 0 ? (
+        <section className={styles.services} aria-labelledby={"services-title"}>
+          <h2 id={"services-title"} className={styles.sectionHeading}>What we do</h2>
+          <ul className={styles.serviceList}>
+            {services.map((s) => (
+              <li key={s.name} className={styles.serviceItem}>
+                <span className={styles.serviceName}>{s.name}</span>
+                <span className={styles.serviceDetail}>{s.detail}</span>
+                {s.proof.external
+                  ? <a className={styles.serviceProof} href={s.proof.href} target="_blank" rel="noreferrer noopener">{s.proof.label} ↗</a>
+                  : <Link className={styles.serviceProof} href={s.proof.href}>{s.proof.label} →</Link>}
+              </li>
+            ))}
+          </ul>
+          <p className={styles.serviceNote}>{howWeWork}</p>
+        </section>
+      ) : null}
 
       <p className={styles.landingContact}>
         Work with us:{" "}

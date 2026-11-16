@@ -9,7 +9,9 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "smoke": "node scripts/smoke.mjs",
-    "verify": "npm run typecheck && npm run lint"
+    "verify": "npm run typecheck && npm run lint && npm test",
+    "test": "node --experimental-strip-types --no-warnings --test tests/*.test.mjs",
+    "desktop-check": "node scripts/desktop-check.mjs"
   },
   "dependencies": {
     "next": "15.1.9",

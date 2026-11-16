@@ -2,9 +2,16 @@ import {ProLayout} from "@/components/standalonePages/portfolioPro/layout";
 import {ItemDetail} from "@/components/standalonePages/portfolioPro/itemDetail";
 import {ItemDict} from "@/components/standalonePages/portfolio/types";
 import {GetStaticPaths, GetStaticProps} from "next";
-import {hasData, itemPath, loadPortfolio, projectsOf, RelatedItem, resolveItem, slugOf, summaryOf} from "@/util/portfolio";
+import {itemPath, loadPortfolio, projectsOf, RelatedItem, resolveItem, slugOf, summaryOf} from "@/util/portfolio";
 import {personGraph} from "@/util/structuredData";
 
+
+// "Oula Kuuva, Dev and Ops Expert · az.sh"; the role is left out when it would
+// push the title past what search results show.
+const personTitle = (name: string, role?: string) => {
+  const full = `${name}, ${role} · az.sh`
+  return role && full.length <= 65 ? full : `${name} · az.sh`
+}
 
 // `selection` is the URL slug; `id` is the API id the components key on.
 type Props = {people: ItemDict, id: string, related: RelatedItem[]}
@@ -16,9 +23,9 @@ const ProPerson = ({people, id, related}: Props) => {
   return (
     <ProLayout
       active={'people'}
-      title={item ? `${item.title} · az.sh` : "People · az.sh"}
+      title={item ? personTitle(item.title, item.subtitle) : "People · az.sh"}
       description={description}
-      jsonLd={item ? personGraph(item, description, related) : undefined}
+      jsonLd={item ? personGraph(item, description) : undefined}
       markdownPath={item ? `${itemPath('people', item)}.md` : undefined}
     >
       <ItemDetail items={people} id={id} target={'people'} related={related}/>
@@ -36,8 +43,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({params}) => {
   const {item, redirect} = resolveItem(data.people, String(params?.selection ?? ""))
   // Old API-id URLs move to the readable slug for good.
   if (redirect && item) return {redirect: {destination: itemPath('people', item), permanent: true}, revalidate: 300}
-  // A real 404 for unknown slugs, unless the build ran with the API down.
-  if (!item) return hasData(data) ? {notFound: true, revalidate: 300} : {props: {people: {}, id: "", related: []}, revalidate: 60}
+  if (!item) return {notFound: true, revalidate: 300}
   return {props: {people: data.people, id: item.id, related: projectsOf(item, data.projects)}, revalidate: 300}
 }
 

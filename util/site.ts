@@ -75,8 +75,8 @@ export const services: Service[] = [
     evidence: {project: "Tiedotwebsitedesignandtestingqualityassurance"},
   },
   {
-    name: "AI agent engineering",
-    detail: "agent-assisted delivery with human review, LLM agents with deterministic guardrails, and agent-ready codebases, docs and websites",
+    name: "AI-assisted delivery and agent-ready software",
+    detail: "delivery with AI coding agents under human review and CI quality gates, plus codebases, docs and websites that agents can read and work in (llms.txt, Markdown twins, JSON-LD, AGENTS.md)",
     evidence: {url: "https://github.com/azshoy/azshoyos"},
   },
   {

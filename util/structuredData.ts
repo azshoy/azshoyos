@@ -16,7 +16,8 @@ type Item = ItemDict[string]
 const ids = {
   org: `${siteUrl}/#organization`,
   website: `${siteUrl}/#website`,
-  page: (url: string) => `${url}#webpage`,
+  // The home URL is "https://azsh.fi"; its fragments get the slash like #website.
+  page: (url: string) => `${url === siteUrl ? `${siteUrl}/` : url}#webpage`,
   breadcrumb: (url: string) => `${url}#breadcrumb`,
   person: (url: string) => `${url}#person`,
   article: (url: string) => `${url}#article`,
@@ -137,7 +138,7 @@ export const listGraph = (target: Target, items: ItemDict, title: string, descri
   )
 }
 
-export const personGraph = (item: Item, description: string, worksOn: RelatedItem[]) => {
+export const personGraph = (item: Item, description: string) => {
   const url = absoluteUrl(itemPath('people', item))
   const p = asPerson(item)
   return graph(
@@ -163,8 +164,6 @@ export const personGraph = (item: Item, description: string, worksOn: RelatedIte
       knowsAbout: allTags(item),
       knowsLanguage: p?.languages,
       sameAs: (p?.links ?? []).map((l) => l.url).filter((u) => /^https?:\/\//.test(u)),
-      // The case studies this person contributed to (the Article side names them as contributor).
-      subjectOf: worksOn.map((r) => ref(ids.article(absoluteUrl(r.href)))),
     },
     crumbs(url, [portfolioCrumb, listCrumb('people'), {name: item.title, path: itemPath('people', item)}]),
   )

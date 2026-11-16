@@ -18,7 +18,7 @@ const check = (name, ok, detail = "") => results.push({name, ok: !!ok, detail})
 const get = async (path, headers = {}) => {
   const res = await fetch(base + path, {redirect: "manual", headers})
   return {status: res.status, type: res.headers.get("content-type") ?? "", location: res.headers.get("location") ?? "",
-    link: res.headers.get("link") ?? "", body: await res.text()}
+    link: res.headers.get("link") ?? "", vary: res.headers.get("vary") ?? "", body: await res.text()}
 }
 
 const attr = (html, re) => (html.match(re) ?? [])[1]
@@ -52,7 +52,18 @@ const main = async () => {
   check("/ has the hidden summary h1", /<h1 id="site-summary-title">/.test(home.body))
   check("/ summary links take no Tab stop", !/<section[^>]*aria-labelledby="site-summary-title"[\s\S]*?<a (?![^>]*tabindex="-1")/.test(home.body.split("</section>")[0]))
 
-  await htmlPage("/portfolio", ["CollectionPage", "BreadcrumbList"])
+  const portfolio = await htmlPage("/portfolio", ["CollectionPage", "BreadcrumbList"])
+  check("/portfolio shows the services as text", /What we do/.test(portfolio.body) && /AI-assisted delivery/.test(portfolio.body))
+  check("/portfolio sends Vary: Accept", /accept/i.test(portfolio.vary), portfolio.vary)
+
+  // Markdown twins of the non-item pages, by .md URL and by Accept header.
+  for (const [path, md, canonical] of [["/", "/index.md", site], ["/portfolio", "/portfolio.md", `${site}/portfolio`],
+    ["/portfolio/projects", "/portfolio/projects.md", `${site}/portfolio/projects`], ["/portfolio/people", "/portfolio/people.md", `${site}/portfolio/people`]]) {
+    const r = await get(md)
+    check(`${md} is Markdown with canonical ${canonical}`, r.status === 200 && r.type.includes("text/markdown") && r.body.startsWith("# ") && r.link.includes(`<${canonical}>`), `${r.status} ${r.type} ${r.link}`)
+    const neg = await get(path, {accept: "text/markdown"})
+    check(`${path} with Accept: text/markdown returns Markdown`, neg.type.includes("text/markdown"), neg.type)
+  }
   await htmlPage("/portfolio/projects", ["CollectionPage", "BreadcrumbList"])
   await htmlPage("/portfolio/people", ["CollectionPage", "BreadcrumbList"])
 
